@@ -11,32 +11,32 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Ollama-Native Interface',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Use familiar Ollama workflows to run modern time series foundation
+        models without changing how your team builds and serves models.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'SOTA Time Series Models',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Access high-performing forecasting and representation models tuned for
+        real-world temporal data in research and production settings.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Production-Ready Paths',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Standardize inference, evaluation, and deployment flows so your
+        forecasting stack moves from prototype to operations faster.
       </>
     ),
   },

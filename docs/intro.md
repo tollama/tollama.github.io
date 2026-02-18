@@ -2,46 +2,32 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# tollama Overview
 
-Let's discover **Docusaurus in less than 5 minutes**.
+tollama is **Ollama for SOTA time series foundation models**.
 
-## Getting Started
+It provides a simple, Ollama-style interface for running modern temporal models
+for forecasting, anomaly detection, and downstream time series tasks.
 
-Get started by **creating a new site**.
+## Why tollama
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+- Unified local and server workflows for time series models
+- Faster onboarding with an interface teams already know from Ollama
+- Clean path from experimentation to repeatable production serving
 
-### What you'll need
+## Use Cases
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- Demand and capacity forecasting
+- Sensor and IoT telemetry modeling
+- Financial and operational time series analysis
 
-## Generate a new site
+## What to Expect
 
-Generate a new Docusaurus site using the **classic template**.
+- Consistent model-serving patterns across environments
+- Reproducible inference workflows for temporal workloads
+- A focused foundation for building data and MLOps tooling around time series
 
-The classic template will automatically be added to your project after you run the command:
+## Next Step
 
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+Use this site as the canonical product overview and expand docs with model
+catalog, deployment guides, and benchmark details.

@@ -21,7 +21,12 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            Read Docs
+          </Link>
+          <Link
+            className="button button--outline button--lg"
+            href="https://github.com/tollama/tollama.github.io">
+            View on GitHub
           </Link>
         </div>
       </div>
@@ -33,8 +38,8 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={siteConfig.title}
+      description="Run and serve state-of-the-art time series foundation models with an Ollama-native developer experience.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
