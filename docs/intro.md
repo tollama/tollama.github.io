@@ -4,30 +4,35 @@ sidebar_position: 1
 
 # tollama Overview
 
-tollama is **Ollama for SOTA time series foundation models**.
+tollama is a **local-first forecasting daemon + CLI** for running and serving
+state-of-the-art time series foundation models.
 
-It provides a simple, Ollama-style interface for running modern temporal models
-for forecasting, anomaly detection, and downstream time series tasks.
+Canonical project source: [github.com/tollama/tollama](https://github.com/tollama/tollama)
 
-## Why tollama
+## What It Provides
 
-- Unified local and server workflows for time series models
-- Faster onboarding with an interface teams already know from Ollama
-- Clean path from experimentation to repeatable production serving
+- FastAPI daemon (`tollamad`) exposing `api/*` endpoints
+- Typer CLI (`tollama`) for model lifecycle and forecasting commands
+- Pluggable runner families over stdio JSON-lines protocol
+- Unified covariates contract with `best_effort` and `strict` handling
 
-## Use Cases
+## Core Runner Families
 
-- Demand and capacity forecasting
-- Sensor and IoT telemetry modeling
-- Financial and operational time series analysis
+- `mock`
+- `torch` (Chronos-2 and Granite TTM flows)
+- `timesfm`
+- `uni2ts` (Moirai family)
+- `sundial`
+- `toto`
 
-## What to Expect
+## Key Product Value
 
-- Consistent model-serving patterns across environments
-- Reproducible inference workflows for temporal workloads
-- A focused foundation for building data and MLOps tooling around time series
+- One consistent API and CLI experience across model families
+- Local-first operation with per-family isolated runtimes by default
+- Practical operations support through `tollama info` and `/api/info`
 
-## Next Step
+## Learn More
 
-Use this site as the canonical product overview and expand docs with model
-catalog, deployment guides, and benchmark details.
+- [Products & Models](/docs/products)
+- [Technology & Architecture](/docs/technology)
+- [Quickstart](/docs/quickstart)

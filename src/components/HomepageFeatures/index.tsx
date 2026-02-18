@@ -11,32 +11,32 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Ollama-Native Interface',
+    title: 'Daemon + CLI Workflow',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Use familiar Ollama workflows to run modern time series foundation
-        models without changing how your team builds and serves models.
+        Run <code>tollama serve</code> and use Ollama-style lifecycle commands:
+        pull, list, show, run, ps, and rm.
       </>
     ),
   },
   {
-    title: 'SOTA Time Series Models',
+    title: 'Model Families, One API',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Access high-performing forecasting and representation models tuned for
-        real-world temporal data in research and production settings.
+        Serve Chronos-2, Granite TTM, TimesFM 2.5, Moirai (Uni2TS), Sundial,
+        and Toto through consistent <code>/api/*</code> endpoints.
       </>
     ),
   },
   {
-    title: 'Production-Ready Paths',
+    title: 'Production-Oriented Runtime',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Standardize inference, evaluation, and deployment flows so your
-        forecasting stack moves from prototype to operations faster.
+        Family-level isolated runtimes, unified covariates contract, and
+        diagnostics via <code>/api/info</code> for predictable operations.
       </>
     ),
   },

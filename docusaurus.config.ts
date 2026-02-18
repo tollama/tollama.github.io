@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'tollama',
-  tagline: 'Ollama for SOTA time series foundation models',
+  tagline: 'Ollama for time series: local-first daemon + CLI for SOTA foundation models',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -41,7 +41,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          include: ['intro.md'],
+          include: ['intro.md', 'products.md', 'technology.md', 'quickstart.md'],
         },
         blog: false,
         theme: {
@@ -71,7 +71,7 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          href: 'https://github.com/tollama/tollama.github.io',
+          href: 'https://github.com/tollama/tollama',
           label: 'GitHub',
           position: 'right',
         },
@@ -87,13 +87,21 @@ const config: Config = {
               label: 'Overview',
               to: '/docs/intro',
             },
+            {
+              label: 'Quickstart',
+              to: '/docs/quickstart',
+            },
           ],
         },
         {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
+              label: 'Source Repository',
+              href: 'https://github.com/tollama/tollama',
+            },
+            {
+              label: 'Website Repository',
               href: 'https://github.com/tollama/tollama.github.io',
             },
           ],

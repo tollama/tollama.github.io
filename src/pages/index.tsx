@@ -20,12 +20,12 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Read Docs
+            to="/docs/quickstart">
+            Quickstart
           </Link>
           <Link
             className="button button--outline button--lg"
-            href="https://github.com/tollama/tollama.github.io">
+            href="https://github.com/tollama/tollama">
             View on GitHub
           </Link>
         </div>
@@ -39,7 +39,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={siteConfig.title}
-      description="Run and serve state-of-the-art time series foundation models with an Ollama-native developer experience.">
+      description="Local-first forecasting daemon and CLI for serving Chronos, Granite TTM, TimesFM, Moirai/Uni2TS, Sundial, and Toto with one API.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

@@ -2,7 +2,9 @@
 
 tollama website content and documentation.
 
-**Tagline:** Ollama for SOTA time series foundation models.
+**Tagline:** Ollama for time series: local-first daemon + CLI for SOTA foundation models.
+
+Primary product repository: [https://github.com/tollama/tollama](https://github.com/tollama/tollama)
 
 This site is built using [Docusaurus](https://docusaurus.io/).
 
