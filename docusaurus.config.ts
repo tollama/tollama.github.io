@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'tollama',
-  tagline: 'Ollama for time series: local-first daemon + CLI for SOTA foundation models',
+  tagline: 'Ollama for time series. Run SOTA time series foundation models locally with a forecasting daemon, CLI, and a single unified API.',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

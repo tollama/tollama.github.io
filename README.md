@@ -2,7 +2,7 @@
 
 tollama website content and documentation.
 
-**Tagline:** Ollama for time series: local-first daemon + CLI for SOTA foundation models.
+**Tagline:** Ollama for time series. Run SOTA time series foundation models locally with a forecasting daemon, CLI, and a single unified API.
 
 Primary product repository: [https://github.com/tollama/tollama](https://github.com/tollama/tollama)
 

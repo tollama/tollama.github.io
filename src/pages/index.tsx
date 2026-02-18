@@ -39,7 +39,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={siteConfig.title}
-      description="Local-first forecasting daemon and CLI for serving Chronos, Granite TTM, TimesFM, Moirai/Uni2TS, Sundial, and Toto with one API.">
+      description="Ollama for time series. Run state-of-the-art time series foundation models locally with a forecasting daemon, CLI, and a single unified API.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
