@@ -867,6 +867,7 @@
   <ul class="nav-links">
     <li><a href="#quickstart">Quickstart</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#mcp">MCP</a></li>
     <li><a href="#models">Models</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#api">API</a></li>
@@ -878,7 +879,7 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    v0.1 · Open Source · MIT License · OpenClaw Skills Ready
+    v0.1 · Open Source · MIT License · Skills + MCP Ready
   </div>
 
   <h1>
@@ -891,7 +892,7 @@
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto — all through one CLI and HTTP interface. Now includes the <code class="inline-code">tollama-forecast</code> skill package, successfully validated in <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">OpenClaw</a> on February 19, 2026.
+    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP interface. Includes the <code class="inline-code">tollama-forecast</code> skill package for <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">OpenClaw</a> and the <code class="inline-code">tollama-mcp</code> server for MCP clients, both validated end-to-end on February 20, 2026.
   </p>
 
   <div class="hero-buttons">
@@ -987,7 +988,10 @@ curl -s http://localhost:11435/api/forecast \
         read <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
       </p>
       <p class="qs-note">
-        OpenClaw users can install <code class="inline-code">skills/tollama-forecast</code> and run <code class="inline-code">scripts/e2e_skills_test.sh</code> to verify skill integration end-to-end.
+        OpenClaw users can install <code class="inline-code">skills/tollama-forecast</code> and run <code class="inline-code">scripts/e2e_skills_test.sh</code> to verify skill integration.
+      </p>
+      <p class="qs-note">
+        MCP users can install <code class="inline-code">.[mcp]</code>, run <code class="inline-code">tollama-mcp</code>, and optionally register Claude Desktop via <code class="inline-code">scripts/install_mcp.sh</code>.
       </p>
     </div>
   </div>
@@ -1014,8 +1018,14 @@ curl -s http://localhost:11435/api/forecast \
     </a>
 
     <a class="doc-card" href="https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">OpenClaw skill guide</div>
+      <div class="doc-card-title">OpenClaw skills guide</div>
       <div class="doc-card-desc">How to install and run the <code class="inline-code">tollama-forecast</code> skill package with OpenClaw.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">MCP integration guide</div>
+      <div class="doc-card-desc">Set up <code class="inline-code">tollama-mcp</code> for Claude Code and other MCP clients.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
@@ -1030,27 +1040,78 @@ curl -s http://localhost:11435/api/forecast \
 
 <!-- SKILLS -->
 <section id="skills" class="section" style="padding-top: 30px;">
-  <div class="section-label">// Skill Support</div>
-  <div class="section-title">Tollama skills are now supported in OpenClaw.</div>
+  <div class="section-label">// Skills Support</div>
+  <div class="section-title">OpenClaw skills are first-class in Tollama.</div>
   <p class="section-desc" style="max-width: 860px;">
-    The <code class="inline-code">tollama-forecast</code> skill package is now part of Tollama and was successfully tested end-to-end in OpenClaw on February 19, 2026.
+    Tollama ships <code class="inline-code">skills/tollama-forecast</code> with forecasting, health, models, pull/rm, and info helpers. OpenClaw skill integration was re-validated end-to-end on February 20, 2026.
   </p>
 
   <div class="features-grid" style="margin-top: 36px;">
     <div class="feature-card">
       <span class="feature-icon">🧩</span>
       <div class="feature-title">OpenClaw-ready package</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, helper scripts, and example payloads.</p>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, helper scripts, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openai-tools.json</code>, and example payloads.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">✅</span>
       <div class="feature-title">E2E validated</div>
-      <p class="feature-desc">Verified via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code>, including skill structure and execution checks.</p>
+      <p class="feature-desc">Verified via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code>, including skill structure, execution, and exit code contract checks.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🌐</span>
-      <div class="feature-title">Works with OpenClaw</div>
-      <p class="feature-desc">Run Tollama forecasting skills from OpenClaw workflows. Learn more at <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">openclaw.ai</a>.</p>
+      <span class="feature-icon">⚙️</span>
+      <div class="feature-title">Managed install flow</div>
+      <p class="feature-desc">Symlink into <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.openclaw/skills</code> and confirm eligibility with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openclaw skills list --eligible</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MCP -->
+<section id="mcp" class="section" style="padding-top: 0;">
+  <div class="section-label">// MCP Support</div>
+  <div class="section-title">Native MCP server for assistant clients.</div>
+  <p class="section-desc" style="max-width: 860px;">
+    Tollama includes <code class="inline-code">tollama-mcp</code> for Claude Code and compatible MCP clients. The stdio MCP toolchain was re-validated on February 20, 2026.
+  </p>
+
+  <div class="quickstart-grid" style="margin-top: 34px;">
+    <div class="qs-card">
+      <div class="qs-step-title">Install and run MCP</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>python -m pip install -e &quot;.[mcp]&quot;
+tollama serve
+tollama-mcp</code></pre>
+      </div>
+      <p class="qs-note">Default MCP base URL is <code class="inline-code">http://localhost:11435</code>. Each tool supports optional <code class="inline-code">base_url</code> and <code class="inline-code">timeout</code> overrides.</p>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-step-title">Register in Claude Desktop</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>bash scripts/install_mcp.sh --base-url &quot;http://127.0.0.1:11435&quot;
+# preview only:
+bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&quot;</code></pre>
+      </div>
+      <p class="qs-note">Docs: <a href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">README MCP integration section</a>.</p>
+    </div>
+  </div>
+
+  <div class="features-grid" style="margin-top: 26px;">
+    <div class="feature-card">
+      <span class="feature-icon">🛠️</span>
+      <div class="feature-title">MCP tools included</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_health</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_models</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_show</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_pull</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_forecast</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔌</span>
+      <div class="feature-title">Non-stream tool responses</div>
+      <p class="feature-desc">MCP calls are intentionally non-streaming for deterministic tool outputs and stable automation behavior.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <div class="feature-title">Validated with live daemon</div>
+      <p class="feature-desc">MCP SDK E2E checks passed on February 20, 2026 for health, models, show, and forecast tool paths over stdio.</p>
     </div>
   </div>
 </section>
@@ -1157,6 +1218,16 @@ curl -s http://localhost:11435/api/forecast \
       <span class="feature-icon">🤗</span>
       <div class="feature-title">Hugging Face Integration</div>
       <p class="feature-desc">Native snapshot pull with progress streaming, proxy support, offline mode, and HF token auth.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">OpenClaw Skills</div>
+      <p class="feature-desc">Built-in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama-forecast</code> skill package with health, models, and forecast workflows.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔌</span>
+      <div class="feature-title">MCP Integration</div>
+      <p class="feature-desc">Run Tollama through <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama-mcp</code> with native tools for health, model lifecycle, and forecasting.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔭</span>
