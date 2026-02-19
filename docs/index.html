@@ -865,6 +865,7 @@
     tollama
   </a>
   <ul class="nav-links">
+    <li><a href="#updates">Updates</a></li>
     <li><a href="#quickstart">Quickstart</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#mcp">MCP</a></li>
@@ -879,7 +880,7 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    v0.1 · Open Source · MIT License · Skills + MCP Ready
+    v0.1 · Open Source · MIT License · Metrics + LangChain + Skills + MCP
   </div>
 
   <h1>
@@ -892,7 +893,7 @@
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP interface. Includes the <code class="inline-code">tollama-forecast</code> skill package for <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">OpenClaw</a> and the <code class="inline-code">tollama-mcp</code> server for MCP clients, both validated end-to-end on February 20, 2026.
+    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP interface. Latest updates include expanded forecast metrics (<code class="inline-code">MAPE</code>, <code class="inline-code">MASE</code>, <code class="inline-code">MAE</code>, <code class="inline-code">RMSE</code>, <code class="inline-code">SMAPE</code>), first-party LangChain tools, the <code class="inline-code">tollama-forecast</code> OpenClaw skill package, and <code class="inline-code">tollama-mcp</code> for MCP clients.
   </p>
 
   <div class="hero-buttons">
@@ -939,6 +940,38 @@
   </div>
 </div>
 
+<!-- LATEST UPDATES -->
+<section id="updates" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Latest Updates</div>
+  <div class="section-title">Recently shipped in Tollama.</div>
+  <p class="section-desc" style="max-width: 860px;">
+    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including commits on February 19, 2026 and integration snapshots documented for February 20, 2026.
+  </p>
+
+  <div class="features-grid" style="margin-top: 34px;">
+    <div class="feature-card">
+      <span class="feature-icon">📈</span>
+      <div class="feature-title">Expanded Forecast Metrics</div>
+      <p class="feature-desc">Forecast accuracy now supports <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">mape,mase,mae,rmse,smape</code> via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">series[].actuals</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">parameters.metrics</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🦜</span>
+      <div class="feature-title">LangChain SDK Tools</div>
+      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">get_tollama_tools</code> wrappers for forecast, health, and models. Install with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">pip install -e &quot;.[langchain]&quot;</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✅</span>
+      <div class="feature-title">Skills + MCP E2E</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code> and MCP stdio smoke checks were documented as passing on <strong>February 20, 2026</strong>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <div class="feature-title">All Families Re-validated</div>
+      <p class="feature-desc">Latest regression rerun reports <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_all_families.sh</code> passing and confirms isolated runtimes under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/&lt;family&gt;/venv/</code>.</p>
+    </div>
+  </div>
+</section>
+
 
 <!-- QUICKSTART -->
 <section id="quickstart" class="section quickstart-section">
@@ -964,7 +997,9 @@ python -m pip install -e &quot;.[dev]&quot;</code></pre>
         <button class="copy-btn" type="button">Copy</button>
         <pre><code>tollama serve
 # check:
-curl http://localhost:11435/api/version</code></pre>
+curl http://localhost:11435/api/version
+tollama doctor
+tollama info --json</code></pre>
       </div>
     </div>
 
@@ -992,6 +1027,9 @@ curl -s http://localhost:11435/api/forecast \
       </p>
       <p class="qs-note">
         MCP users can install <code class="inline-code">.[mcp]</code>, run <code class="inline-code">tollama-mcp</code>, and optionally register Claude Desktop via <code class="inline-code">scripts/install_mcp.sh</code>.
+      </p>
+      <p class="qs-note">
+        For evaluation workflows, <code class="inline-code">/api/forecast</code> accepts optional metrics names: <code class="inline-code">mape,mase,mae,rmse,smape</code>.
       </p>
     </div>
   </div>
@@ -1026,6 +1064,12 @@ curl -s http://localhost:11435/api/forecast \
     <a class="doc-card" href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">
       <div class="doc-card-title">MCP integration guide</div>
       <div class="doc-card-desc">Set up <code class="inline-code">tollama-mcp</code> for Claude Code and other MCP clients.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#langchain-integration-python-sdk" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">LangChain SDK guide</div>
+      <div class="doc-card-desc">Use <code class="inline-code">get_tollama_tools</code> wrappers for health, models, and forecast in Python agent stacks.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
@@ -1211,8 +1255,8 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
     </div>
     <div class="feature-card">
       <span class="feature-icon">📊</span>
-      <div class="feature-title">Rich Covariates</div>
-      <p class="feature-desc">Unified past + future covariates contract across all runners. Best-effort or strict validation modes.</p>
+      <div class="feature-title">Covariates + Metrics</div>
+      <p class="feature-desc">Unified past + future covariates contract plus optional forecast metrics: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">mape,mase,mae,rmse,smape</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🤗</span>
@@ -1230,6 +1274,11 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
       <p class="feature-desc">Run Tollama through <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama-mcp</code> with native tools for health, model lifecycle, and forecasting.</p>
     </div>
     <div class="feature-card">
+      <span class="feature-icon">🦜</span>
+      <div class="feature-title">LangChain Integration</div>
+      <p class="feature-desc">Python SDK wrappers via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">get_tollama_tools</code> for health, models, and forecast tool calls.</p>
+    </div>
+    <div class="feature-card">
       <span class="feature-icon">🔭</span>
       <div class="feature-title">Diagnostics Built-in</div>
       <p class="feature-desc">Rich <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info</code> output with daemon health, loaded models, runner statuses, and pull defaults.</p>
@@ -1243,7 +1292,7 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
     <div>
       <div class="section-label">// REST API</div>
       <div class="section-title" style="font-size: 40px;">Forecast with<br>a single POST.</div>
-      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, receive probabilistic forecasts. Consistent request/response schema across all model families.</p>
+      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates and optional actuals, receive probabilistic forecasts and evaluation metrics in one response. Consistent schema across all model families.</p>
     </div>
     <div class="code-block">
       <div class="code-header">
@@ -1253,20 +1302,25 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
       <div class="code-body">
 <span class="brkt">{</span><br>
 &nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"timesfm-2.5-200m"</span>,<br>
-&nbsp;&nbsp;<span class="key">"horizon"</span>: <span class="num">7</span>,<br>
+&nbsp;&nbsp;<span class="key">"horizon"</span>: <span class="num">2</span>,<br>
 &nbsp;&nbsp;<span class="key">"series"</span>: <span class="brkt">[{</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"id"</span>: <span class="str">"store_001"</span>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"freq"</span>: <span class="str">"D"</span>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"target"</span>: <span class="brkt">[</span><span class="num">120, 135, 142</span><span class="brkt">]</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"actuals"</span>: <span class="brkt">[</span><span class="num">141, 145</span><span class="brkt">]</span>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"past_covariates"</span>: <span class="brkt">{</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">0, 1, 0</span><span class="brkt">]</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"future_covariates"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">1,1,0,0,1,0,1</span><span class="brkt">]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">1, 0</span><span class="brkt">]</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span><br>
 &nbsp;&nbsp;<span class="brkt">}]</span>,<br>
 &nbsp;&nbsp;<span class="key">"parameters"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"covariates_mode"</span>: <span class="str">"best_effort"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"covariates_mode"</span>: <span class="str">"best_effort"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"metrics"</span>: <span class="brkt">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"names"</span>: <span class="brkt">[</span><span class="str">"mape"</span>, <span class="str">"mase"</span>, <span class="str">"mae"</span>, <span class="str">"rmse"</span>, <span class="str">"smape"</span><span class="brkt">]</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"mase_seasonality"</span>: <span class="num">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span><br>
 &nbsp;&nbsp;<span class="brkt">}</span><br>
 <span class="brkt">}</span>
       </div>
