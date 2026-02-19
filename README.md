@@ -1,15 +1,18 @@
 # tollama — Ollama for Time Series
 
-`v0.1` · **Open Source** · **MIT License**
+`v0.1` · **Open Source** · **MIT License** · **OpenClaw Skills Ready**
 
 **Ollama for Time Series.**  
 Run state-of-the-art foundation models locally.
 
 `tollama` is a local-first forecasting daemon with a unified REST API. Pull, serve, and query **Chronos**, **TimesFM**, **Moirai**, **Sundial**, **Granite TTM**, and **Toto** — all through one CLI and HTTP interface.
 
+`tollama-forecast` skill support is now available for [OpenClaw](https://openclaw.ai/) and was validated in end-to-end checks on **February 19, 2026**.
+
 <p align="center">
   <a href="#quickstart"><strong>Quickstart</strong></a> ·
   <a href="#want-a-deeper-dive"><strong>Deeper dive</strong></a> ·
+  <a href="#openclaw-skill-support"><strong>Skills</strong></a> ·
   <a href="#model-registry"><strong>Models</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
   <a href="#rest-api"><strong>API</strong></a> ·
@@ -76,6 +79,8 @@ tollama pull chronos2
 tollama run chronos2 --input request.json
 ```
 
+OpenClaw users can install `skills/tollama-forecast` and run `scripts/e2e_skills_test.sh` to verify skill integration end-to-end.
+
 ---
 
 ## Want a deeper dive?
@@ -86,8 +91,28 @@ Documentation lives in the repo — it’s versioned, reviewable, and stays clos
   Install runner families, pull all TSFM registry models, and troubleshoot common issues.
 - **Covariates contract:** [`docs/covariates.md`](docs/covariates.md)  
   Exact rules, family mappings, compatibility matrix, and strict vs best-effort behavior.
+- **OpenClaw skill guide:** [`README.md#openclaw-integration-skill-tollama-forecast`](https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast)  
+  Install and run the `tollama-forecast` skill package with OpenClaw.
 - **Roadmap:** [`roadmap.md`](roadmap.md)  
   Implementation-aware progress tracker and planned v1 hardening items.
+
+---
+
+## OpenClaw skill support
+
+Tollama now ships an OpenClaw-ready skill package at `skills/tollama-forecast/` with:
+
+- `SKILL.md`
+- `bin/tollama-health.sh`
+- `bin/tollama-models.sh`
+- `bin/tollama-forecast.sh`
+- `examples/*.json`
+
+Validation status:
+
+- OpenClaw skill integration E2E: `pass` on **2026-02-19**
+- Validation command: `scripts/e2e_skills_test.sh`
+- Skill platform: [openclaw.ai](https://openclaw.ai/)
 
 ---
 
@@ -124,6 +149,8 @@ tollama pull chronos2
   Unified past + future covariates contract across runners. Best-effort or strict validation modes.
 - **🤗 Hugging Face integration**  
   Snapshot pull with progress streaming, proxy support, offline mode, and HF token auth.
+- **🧩 OpenClaw skill integration**  
+  Built-in support for the `tollama-forecast` skill package, validated with OpenClaw E2E checks.
 - **🔭 Diagnostics built-in**  
   `tollama info` output with daemon health, loaded models, runner statuses, and pull defaults.
 

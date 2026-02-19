@@ -866,6 +866,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#skills">Skills</a></li>
     <li><a href="#models">Models</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#api">API</a></li>
@@ -877,7 +878,7 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    v0.1 · Open Source · MIT License
+    v0.1 · Open Source · MIT License · OpenClaw Skills Ready
   </div>
 
   <h1>
@@ -890,7 +891,7 @@
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto — all through one CLI and HTTP interface.
+    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto — all through one CLI and HTTP interface. Now includes the <code class="inline-code">tollama-forecast</code> skill package, successfully validated in <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">OpenClaw</a> on February 19, 2026.
   </p>
 
   <div class="hero-buttons">
@@ -985,6 +986,9 @@ curl -s http://localhost:11435/api/forecast \
         For a full run walkthrough (including per-family runtime isolation and installing all registry models),
         read <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
       </p>
+      <p class="qs-note">
+        OpenClaw users can install <code class="inline-code">skills/tollama-forecast</code> and run <code class="inline-code">scripts/e2e_skills_test.sh</code> to verify skill integration end-to-end.
+      </p>
     </div>
   </div>
 </section>
@@ -1009,11 +1013,45 @@ curl -s http://localhost:11435/api/forecast \
       <div class="doc-card-cta">Read →</div>
     </a>
 
+    <a class="doc-card" href="https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">OpenClaw skill guide</div>
+      <div class="doc-card-desc">How to install and run the <code class="inline-code">tollama-forecast</code> skill package with OpenClaw.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
     <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/roadmap.md" target="_blank" rel="noreferrer">
       <div class="doc-card-title">Roadmap</div>
       <div class="doc-card-desc">Implementation-aware progress tracker and planned v1 hardening items.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
+  </div>
+</section>
+
+
+<!-- SKILLS -->
+<section id="skills" class="section" style="padding-top: 30px;">
+  <div class="section-label">// Skill Support</div>
+  <div class="section-title">Tollama skills are now supported in OpenClaw.</div>
+  <p class="section-desc" style="max-width: 860px;">
+    The <code class="inline-code">tollama-forecast</code> skill package is now part of Tollama and was successfully tested end-to-end in OpenClaw on February 19, 2026.
+  </p>
+
+  <div class="features-grid" style="margin-top: 36px;">
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">OpenClaw-ready package</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, helper scripts, and example payloads.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✅</span>
+      <div class="feature-title">E2E validated</div>
+      <p class="feature-desc">Verified via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code>, including skill structure and execution checks.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌐</span>
+      <div class="feature-title">Works with OpenClaw</div>
+      <p class="feature-desc">Run Tollama forecasting skills from OpenClaw workflows. Learn more at <a href="https://openclaw.ai/" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">openclaw.ai</a>.</p>
+    </div>
   </div>
 </section>
 
