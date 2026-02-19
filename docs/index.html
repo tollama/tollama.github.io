@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tollama — Ollama for Time Series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --border: #1e2733;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: rgba(0, 212, 255, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow top */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 16, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+
+  .nav-cta:hover {
+    color: #000 !important;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent3);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 12px;
+    animation: slideUp 0.8s ease 0.1s both;
+  }
+
+  .hero h1 .toll {
+    color: var(--text);
+  }
+
+  .hero h1 .llama {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(18px, 2.5vw, 26px);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.2s both;
+    max-width: 600px;
+  }
+
+  .hero-tagline strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0, 212, 255, 0.4);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  /* Terminal */
+  .terminal-section {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 40px auto 100px;
+    padding: 0 40px;
+    animation: slideUp 0.8s ease 0.5s both;
+  }
+
+  .terminal {
+    background: #0a0e14;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0, 212, 255, 0.05);
+  }
+
+  .terminal-header {
+    background: #111822;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .td-red { background: #ff5f57; }
+  .td-yellow { background: #febc2e; }
+  .td-green { background: #28c840; }
+
+  .terminal-title {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .terminal-body {
+    padding: 28px 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 2;
+  }
+
+  .cmd-line { display: flex; gap: 10px; }
+  .prompt { color: var(--accent3); }
+  .cmd { color: var(--text); }
+  .comment { color: var(--muted); }
+  .output { color: #94a3b8; padding-left: 20px; }
+  .success { color: var(--accent3); padding-left: 20px; }
+  .highlight-cmd { color: var(--accent); }
+
+  /* Models section */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* Models grid */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 60px;
+  }
+
+  .model-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .model-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-color, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .model-card:hover {
+    border-color: var(--card-color, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(0, 212, 255, 0.05);
+  }
+
+  .model-card:hover::before { opacity: 1; }
+
+  .model-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .model-vendor {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .model-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .tag.green { border-color: rgba(16, 185, 129, 0.3); color: var(--accent3); background: rgba(16, 185, 129, 0.06); }
+  .tag.blue { border-color: rgba(0, 212, 255, 0.3); color: var(--accent); background: rgba(0, 212, 255, 0.06); }
+  .tag.purple { border-color: rgba(124, 58, 237, 0.3); color: #a78bfa; background: rgba(124, 58, 237, 0.06); }
+
+  .model-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+    box-shadow: 0 0 6px var(--accent3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* Features */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 60px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: #2d3748; }
+
+  .feature-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .feature-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* API section */
+  .api-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 40px;
+  }
+
+  .api-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .code-block {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: #0d1117;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .code-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .kw { color: #c084fc; }
+  .str { color: #86efac; }
+  .num { color: #fdba74; }
+  .key { color: var(--accent); }
+  .brkt { color: #94a3b8; }
+
+  /* Matrix section */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  .matrix-table th {
+    text-align: left;
+    padding: 12px 16px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+
+  .matrix-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(30, 39, 51, 0.5);
+    color: var(--text);
+  }
+
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .check { color: var(--accent3); }
+  .cross { color: #475569; }
+
+  /* CTA Section */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 120px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-right {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mit-badge {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--accent3);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Quickstart + Docs */
+  .inline-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(0, 212, 255, 0.18);
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .quickstart-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quickstart-section::before {
+    content: '';
+    position: absolute;
+    inset: -220px -120px -220px -120px;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.18) 0%, transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .quickstart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 38px;
+  }
+
+  .qs-card {
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid rgba(30, 39, 51, 0.9);
+    border-radius: 18px;
+    padding: 26px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(124, 58, 237, 0.06);
+  }
+
+  .qs-step-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+  }
+
+  .code-panel {
+    position: relative;
+    background: #0a0e14;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    overflow: hidden;
+  }
+
+  .code-panel pre {
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .code-panel code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    display: block;
+    white-space: pre;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: 1px solid rgba(30, 39, 51, 0.9);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    border-color: rgba(0, 212, 255, 0.35);
+    color: var(--text);
+    background: rgba(0, 212, 255, 0.07);
+  }
+
+  .copy-btn.copied {
+    border-color: rgba(16, 185, 129, 0.35);
+    color: var(--accent3);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .qs-note {
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.7;
+    margin-top: 14px;
+  }
+
+  .qs-note a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.25);
+    padding-bottom: 1px;
+  }
+
+  .qs-note a:hover {
+    color: var(--accent);
+    border-bottom-color: rgba(0, 212, 255, 0.5);
+  }
+
+  .deepdive-section {
+    position: relative;
+  }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 34px;
+  }
+
+  .doc-card {
+    display: block;
+    text-decoration: none;
+    background: rgba(13, 17, 23, 0.55);
+    border: 1px solid rgba(30, 39, 51, 0.9);
+    border-radius: 16px;
+    padding: 22px 22px 20px;
+    transition: all 0.25s;
+    backdrop-filter: blur(12px);
+  }
+
+  .doc-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 212, 255, 0.35);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45), 0 0 40px rgba(0, 212, 255, 0.06);
+  }
+
+  .doc-card-title {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .doc-card-desc {
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .doc-card-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .api-inner { grid-template-columns: 1fr; }
+    .quickstart-grid { grid-template-columns: 1fr; }
+    .doc-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="dot"></span>
+    tollama
+  </a>
+  <ul class="nav-links">
+    <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#models">Models</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#api">API</a></li>
+    <li><a href="https://github.com/tollama/tollama" class="nav-cta">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    v0.1 · Open Source · MIT License
+  </div>
+
+  <h1>
+    <span class="toll">to</span><span class="llama">llama</span>
+  </h1>
+
+  <p class="hero-tagline">
+    <strong>Ollama for Time Series.</strong><br>
+    Run state-of-the-art foundation models locally.
+  </p>
+
+  <p class="hero-sub">
+    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto — all through one CLI and HTTP interface.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="https://github.com/tollama/tollama" class="btn-primary">
+      ⭐ Star on GitHub
+    </a>
+    <a href="#quickstart" class="btn-secondary">
+      Quick Start →
+    </a>
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<div class="terminal-section">
+  <div class="terminal">
+    <div class="terminal-header">
+      <span class="terminal-dot td-red"></span>
+      <span class="terminal-dot td-yellow"></span>
+      <span class="terminal-dot td-green"></span>
+      <span class="terminal-title">tollama — bash</span>
+    </div>
+    <div class="terminal-body">
+      <div class="comment"># Start the forecasting daemon</div>
+      <div class="cmd-line">
+        <span class="prompt">$</span>
+        <span class="cmd"><span class="highlight-cmd">tollama</span> serve</span>
+      </div>
+      <div class="success">✓ Daemon running at http://127.0.0.1:11435</div>
+      <br>
+      <div class="comment"># Pull a model from the registry</div>
+      <div class="cmd-line">
+        <span class="prompt">$</span>
+        <span class="cmd"><span class="highlight-cmd">tollama</span> pull chronos2</span>
+      </div>
+      <div class="output">Pulling chronos2 from Hugging Face... ████████████ 100%</div>
+      <br>
+      <div class="comment"># Run a forecast</div>
+      <div class="cmd-line">
+        <span class="prompt">$</span>
+        <span class="cmd"><span class="highlight-cmd">tollama</span> run chronos2 --input request.json</span>
+      </div>
+      <div class="success">{"forecast": [[12.4, 13.1, 11.8, 14.2, 13.6, 12.9, 14.8]]}</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- QUICKSTART -->
+<section id="quickstart" class="section quickstart-section">
+  <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
+  <p class="section-desc" style="max-width: 820px;">
+    tollama runs a FastAPI daemon on <code class="inline-code">http://127.0.0.1:11435</code> by default and exposes an Ollama-style API under
+    <code class="inline-code">/api</code>. Start the daemon, pull a model, then forecast via curl or the CLI.
+  </p>
+
+  <div class="quickstart-grid">
+    <div class="qs-card">
+      <div class="qs-step-title">1) Install (from source)</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e &quot;.[dev]&quot;</code></pre>
+      </div>
+
+      <div class="qs-step-title" style="margin-top: 22px;">2) Start the daemon</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>tollama serve
+# check:
+curl http://localhost:11435/api/version</code></pre>
+      </div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-step-title">3) Pull + forecast (HTTP)</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code># pull
+curl -s http://localhost:11435/api/pull \
+  -H 'content-type: application/json' \
+  -d '{ &quot;name&quot;: &quot;chronos2&quot; }'
+
+# forecast (example payload)
+curl -s http://localhost:11435/api/forecast \
+  -H 'content-type: application/json' \
+  -d @examples/chronos2_request.json</code></pre>
+      </div>
+
+      <p class="qs-note">
+        For a full run walkthrough (including per-family runtime isolation and installing all registry models),
+        read <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DEEPER DIVE -->
+<section id="docs" class="section deepdive-section" style="padding-top: 40px;">
+  <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Want a deeper dive?</div>
+  <p class="section-desc" style="max-width: 780px;">
+    Documentation lives in the repo — it’s versioned, reviewable, and stays close to the code.
+  </p>
+
+  <div class="doc-grid">
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Run guide</div>
+      <div class="doc-card-desc">Install runner families, pull all TSFM registry models, and troubleshoot common issues.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/covariates.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Covariates contract</div>
+      <div class="doc-card-desc">Exact rules, family mappings, compatibility matrix, and strict vs best-effort behavior.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/roadmap.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Roadmap</div>
+      <div class="doc-card-desc">Implementation-aware progress tracker and planned v1 hardening items.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+  </div>
+</section>
+
+
+<!-- MODELS -->
+<section id="models" class="section">
+  <div class="section-label">// Model Registry</div>
+  <div class="section-title">6 foundation models.<br>One unified API.</div>
+  <p class="section-desc">Pull any supported TSFM from Hugging Face with a single command. Each model runs in its own isolated runtime to prevent dependency conflicts.</p>
+
+  <div class="models-grid">
+    <div class="model-card" style="--card-color: #f59e0b;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">chronos2</div>
+      <div class="model-vendor">Amazon · Chronos-2</div>
+      <div class="model-tags">
+        <span class="tag green">past-numeric</span>
+        <span class="tag green">past-categorical</span>
+        <span class="tag blue">known-future</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #3b82f6;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">granite-ttm-r2</div>
+      <div class="model-vendor">IBM · Granite TTM</div>
+      <div class="model-tags">
+        <span class="tag green">past-numeric</span>
+        <span class="tag blue">known-future-numeric</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #10b981;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">timesfm-2.5-200m</div>
+      <div class="model-vendor">Google · TimesFM 2.5</div>
+      <div class="model-tags">
+        <span class="tag green">past-numeric</span>
+        <span class="tag blue">xreg-support</span>
+        <span class="tag purple">xreg-mode</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #8b5cf6;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">moirai-2.0-R-small</div>
+      <div class="model-vendor">Salesforce · Uni2TS</div>
+      <div class="model-tags">
+        <span class="tag green">past-numeric</span>
+        <span class="tag blue">known-future-numeric</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #ec4899;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">sundial-base-128m</div>
+      <div class="model-vendor">THUML · Sundial</div>
+      <div class="model-tags">
+        <span class="tag">target-only</span>
+        <span class="tag">freq-agnostic</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #f97316;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">toto-open-base-1.0</div>
+      <div class="model-vendor">Datadog · Toto</div>
+      <div class="model-tags">
+        <span class="tag green">past-numeric</span>
+        <span class="tag">open-base</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section">
+  <div class="section-label">// Why Tollama</div>
+  <div class="section-title">Local-first.<br>Production-ready.</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Ollama-style UX</div>
+      <p class="feature-desc">Familiar pull, run, serve, list, rm commands for managing time series models locally — no cloud required.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-title">Isolated Runtimes</div>
+      <p class="feature-desc">Each model family gets its own venv under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/</code>. No dependency conflicts. Ever.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📡</span>
+      <div class="feature-title">Unified HTTP API</div>
+      <p class="feature-desc">FastAPI daemon with consistent <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/*</code> endpoints. Drop-in across all six model families.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Rich Covariates</div>
+      <p class="feature-desc">Unified past + future covariates contract across all runners. Best-effort or strict validation modes.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤗</span>
+      <div class="feature-title">Hugging Face Integration</div>
+      <p class="feature-desc">Native snapshot pull with progress streaming, proxy support, offline mode, and HF token auth.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔭</span>
+      <div class="feature-title">Diagnostics Built-in</div>
+      <p class="feature-desc">Rich <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info</code> output with daemon health, loaded models, runner statuses, and pull defaults.</p>
+    </div>
+  </div>
+</section>
+
+<!-- API SECTION -->
+<div id="api" class="api-section">
+  <div class="api-inner">
+    <div>
+      <div class="section-label">// REST API</div>
+      <div class="section-title" style="font-size: 40px;">Forecast with<br>a single POST.</div>
+      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, receive probabilistic forecasts. Consistent request/response schema across all model families.</p>
+    </div>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">json · /api/forecast</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent3)">POST</span>
+      </div>
+      <div class="code-body">
+<span class="brkt">{</span><br>
+&nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"timesfm-2.5-200m"</span>,<br>
+&nbsp;&nbsp;<span class="key">"horizon"</span>: <span class="num">7</span>,<br>
+&nbsp;&nbsp;<span class="key">"series"</span>: <span class="brkt">[{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"id"</span>: <span class="str">"store_001"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"freq"</span>: <span class="str">"D"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"target"</span>: <span class="brkt">[</span><span class="num">120, 135, 142</span><span class="brkt">]</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"past_covariates"</span>: <span class="brkt">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">0, 1, 0</span><span class="brkt">]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"future_covariates"</span>: <span class="brkt">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">1,1,0,0,1,0,1</span><span class="brkt">]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span><br>
+&nbsp;&nbsp;<span class="brkt">}]</span>,<br>
+&nbsp;&nbsp;<span class="key">"parameters"</span>: <span class="brkt">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"covariates_mode"</span>: <span class="str">"best_effort"</span><br>
+&nbsp;&nbsp;<span class="brkt">}</span><br>
+<span class="brkt">}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COVARIATE MATRIX -->
+<section class="section">
+  <div class="section-label">// Compatibility Matrix</div>
+  <div class="section-title" style="font-size:40px;">Know your<br>model capabilities.</div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Model Family</th>
+        <th>Past Numeric</th>
+        <th>Past Categorical</th>
+        <th>Known-Future Numeric</th>
+        <th>Known-Future Categorical</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Chronos-2</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Granite TTM</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>TimesFM 2.5</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>Uni2TS / Moirai</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>Sundial</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>Toto Open Base</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label">// Get Started</div>
+  <h2>Time series AI,<br>running locally.</h2>
+  <p>Open source, MIT licensed, and ready for production workflows. Star the repo to follow along.</p>
+  <div class="hero-buttons" style="justify-content:center">
+    <a href="https://github.com/tollama/tollama" class="btn-primary">View on GitHub ↗</a>
+    <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" class="btn-secondary">Full Docs →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">tollama</div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/tollama/tollama">GitHub</a></li>
+      <li><a href="https://github.com/tollama/tollama/blob/main/README.md">Docs</a></li>
+      <li><a href="https://github.com/tollama/tollama/blob/main/roadmap.md">Roadmap</a></li>
+      <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE">License</a></li>
+    </ul>
+  </div>
+  <div class="footer-right">
+    <span class="mit-badge">MIT</span>
+    &copy; 2026 Tollama Contributors
+  </div>
+</footer>
+
+
+<script>
+  // Copy buttons for Quickstart code panels
+  (function () {
+    function fallbackCopyText(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'absolute';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    async function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const codeEl = btn.parentElement.querySelector('code');
+        const text = (codeEl ? codeEl.innerText : '').trimEnd();
+        if (!text) return;
+
+        const original = btn.textContent;
+        try {
+          await copyToClipboard(text);
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          window.setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+          }, 1200);
+        } catch (e) {
+          btn.textContent = 'Copy failed';
+          window.setTimeout(() => { btn.textContent = original; }, 1400);
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
