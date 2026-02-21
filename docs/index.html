@@ -99,7 +99,7 @@
 
   .nav-links {
     display: flex;
-    gap: 28px;
+    gap: 22px;
     list-style: none;
   }
 
@@ -874,6 +874,7 @@
   <ul class="nav-links">
     <li><a href="#updates">Updates</a></li>
     <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#mcp">MCP</a></li>
     <li><a href="#models">Models</a></li>
@@ -888,7 +889,7 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    MIT License · Metrics + LangChain + SDK + A2A + Skills + MCP + Streams + Docker
+    MIT License · LangChain + MCP + SDK + Skills + A2A + Streams + Docker + Dashboards 
   </div>
 
   <h1>
@@ -901,7 +902,7 @@
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API. Latest upstream updates add Python SDK workflows, <span style="color: var(--accent); font-weight: 700;">A2A JSON-RPC</span>, CSV/Parquet ingest, real-time SSE streams, structured planning endpoints, API-key auth with usage metering, persistent pull defaults, shell completion, and Docker/Compose deployment paths.
+    A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API. Latest upstream updates add Python SDK workflows, <span style="color: var(--accent); font-weight: 700;">A2A JSON-RPC</span>, CSV/Parquet ingest, real-time SSE streams, bundled web dashboard + Textual TUI surfaces, structured planning endpoints, API-key auth with usage metering, persistent pull defaults, shell completion, and Docker/Compose deployment paths.
   </p>
 
   <div class="hero-buttons">
@@ -953,7 +954,7 @@
   <div class="section-label">// Latest Updates</div>
   <div class="section-title">Recently shipped in Tollama.</div>
   <p class="section-desc" style="max-width: 860px;">
-    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including February 21, 2026 updates (<code class="inline-code">cafac17</code>, <code class="inline-code">89bde3d</code>, <code class="inline-code">8385266</code>) on top of the February 20, 2026 feature wave.
+    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including the newest February 21, 2026 commits (<code class="inline-code">601c675</code>, <code class="inline-code">6745fe1</code>, <code class="inline-code">cafac17</code>, <code class="inline-code">89bde3d</code>) on top of the February 20, 2026 feature wave.
   </p>
 
   <div class="features-grid" style="margin-top: 34px;">
@@ -971,6 +972,16 @@
       <span class="feature-icon">📡</span>
       <div class="feature-title">Real-Time SSE Streams</div>
       <p class="feature-desc">New stream endpoints include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/events</code> and staged refinement via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /api/forecast/progressive</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🖥️</span>
+      <div class="feature-title">Bundled Web Dashboard</div>
+      <p class="feature-desc">Daemon now serves <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/dashboard</code> routes with static assets/partials and an aggregated bootstrap endpoint at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/dashboard/state</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧭</span>
+      <div class="feature-title">Dashboard CLI + TUI</div>
+      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama open</code> for browser launch and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dashboard</code> for Textual TUI workflows with resilient event streaming.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🧠</span>
@@ -1071,6 +1082,53 @@ curl -N http://localhost:11435/api/forecast/progressive \
   </div>
 </section>
 
+<!-- DASHBOARD -->
+<section id="dashboard" class="section" style="padding-top: 26px;">
+  <div class="section-label">// Dashboards (Web + TUI)</div>
+  <div class="section-title">Operate Tollama from browser or terminal.</div>
+  <p class="section-desc" style="max-width: 860px;">
+    Recent upstream releases bundle a web GUI and Textual TUI on top of daemon APIs, including aggregated state bootstrapping and auth-aware dashboard routes.
+  </p>
+
+  <div class="quickstart-grid" style="margin-top: 34px;">
+    <div class="qs-card">
+      <div class="qs-step-title">Web dashboard</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>tollama serve
+tollama open
+
+# direct URL
+http://127.0.0.1:11435/dashboard</code></pre>
+      </div>
+      <p class="qs-note">
+        Served routes include <code class="inline-code">/dashboard</code>, <code class="inline-code">/dashboard/static/*</code>, <code class="inline-code">/dashboard/partials/{name}</code>, and SPA fallback on <code class="inline-code">/dashboard/{path}</code>.
+      </p>
+      <p class="qs-note">
+        Bootstrap endpoint <code class="inline-code">GET /api/dashboard/state</code> aggregates info, loaded models, and usage with partial-data <code class="inline-code">warnings[]</code> when a source is unavailable.
+      </p>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-step-title">Textual TUI dashboard</div>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>python -m pip install -e &quot;.[tui]&quot;
+tollama dashboard
+
+# optional overrides
+tollama dashboard --base-url http://127.0.0.1:11435 --timeout 10</code></pre>
+      </div>
+      <p class="qs-note">
+        Dashboard controls: <code class="inline-code">TOLLAMA_DASHBOARD=1|0</code>, <code class="inline-code">TOLLAMA_DASHBOARD_REQUIRE_AUTH=1|0</code>, and <code class="inline-code">TOLLAMA_CORS_ORIGINS</code> for explicit allowlists.
+      </p>
+      <p class="qs-note">
+        Full workflow docs: <a href="https://github.com/tollama/tollama/blob/main/docs/dashboard-user-guide.md" target="_blank" rel="noreferrer">docs/dashboard-user-guide.md</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- DEEPER DIVE -->
 <section id="docs" class="section deepdive-section" style="padding-top: 40px;">
   <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Want a deeper dive?</div>
@@ -1100,6 +1158,12 @@ curl -N http://localhost:11435/api/forecast/progressive \
     <a class="doc-card" href="https://github.com/tollama/tollama#python-sdk" target="_blank" rel="noreferrer">
       <div class="doc-card-title">Python SDK</div>
       <div class="doc-card-desc">High-level <code class="inline-code">Tollama</code> client for forecast, auto-forecast, what-if, generate, and pipelines.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/dashboard-user-guide.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Dashboard user guide</div>
+      <div class="doc-card-desc">Web GUI and TUI usage, keyboard shortcuts, model selectors, auth behavior, and troubleshooting.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
@@ -1416,6 +1480,11 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
       <p class="feature-desc">Compare SDK ergonomics and time-to-first-forecast with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">benchmarks/tollama_vs_raw.py</code>.</p>
     </div>
     <div class="feature-card">
+      <span class="feature-icon">🖼️</span>
+      <div class="feature-title">Dashboard controls + CORS</div>
+      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DASHBOARD</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DASHBOARD_REQUIRE_AUTH</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_CORS_ORIGINS</code> to tune dashboard exposure and browser access policy.</p>
+    </div>
+    <div class="feature-card">
       <span class="feature-icon">🧹</span>
       <div class="feature-title">Local quality checks</div>
       <p class="feature-desc">Built-in validation commands include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">ruff check .</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">pytest -q</code> for fast local confidence.</p>
@@ -1449,7 +1518,7 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
     <div>
       <div class="section-label">// REST API</div>
       <div class="section-title" style="font-size: 40px;">Forecast +<br>planning APIs.</div>
-      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, actuals, or file-backed ingest and get probabilistic forecasts plus analysis outputs. Companion endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/what-if</code>, <code class="inline-code">/api/compare</code>, and compatibility fallback via <code class="inline-code">/v1/forecast</code>.</p>
+      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, actuals, or file-backed ingest and get probabilistic forecasts plus analysis outputs. Companion endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/what-if</code>, <code class="inline-code">/api/compare</code>, dashboard bootstrap at <code class="inline-code">/api/dashboard/state</code>, and compatibility fallback via <code class="inline-code">/v1/forecast</code>.</p>
     </div>
     <div class="code-block">
       <div class="code-header">
