@@ -99,7 +99,7 @@
 
   .nav-links {
     display: flex;
-    gap: 40px;
+    gap: 28px;
     list-style: none;
   }
 
@@ -846,6 +846,13 @@
 
 
 
+  @media (max-width: 1160px) {
+    nav { padding: 16px 30px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 12px; }
+    .nav-cta { padding: 8px 14px; }
+  }
+
   @media (max-width: 768px) {
     nav { padding: 16px 24px; }
     .nav-links { display: none; }
@@ -871,6 +878,7 @@
     <li><a href="#mcp">MCP</a></li>
     <li><a href="#models">Models</a></li>
     <li><a href="#features">Features</a></li>
+    <li><a href="#devops">Dev/Ops</a></li>
     <li><a href="#api">API</a></li>
     <li><a href="https://github.com/tollama/tollama" class="nav-cta">GitHub ↗</a></li>
   </ul>
@@ -880,7 +888,7 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    v0.1 · Open Source · MIT License · Metrics + LangChain + Skills + MCP
+    v0.1 · Open Source · MIT License · SDK + A2A + Streams + Skills + MCP + Docker
   </div>
 
   <h1>
@@ -893,7 +901,7 @@
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with a unified REST API. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP interface. Latest updates include expanded forecast metrics (MAPE, MASE, MAE, RMSE, SMAPE), first-party <span style="color: var(--accent); font-weight: 700;">LangChain tools</span>, the tollama-forecast <span style="color: var(--accent); font-weight: 700;">OpenClaw skill</span> package, and tollama-mcp for <span style="color: var(--accent); font-weight: 700;">MCP clients</span>.
+    A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API. Latest upstream updates add Python SDK workflows, <span style="color: var(--accent); font-weight: 700;">A2A JSON-RPC</span>, CSV/Parquet ingest, real-time SSE streams, structured planning endpoints, API-key auth with usage metering, persistent pull defaults, shell completion, and Docker/Compose deployment paths.
   </p>
 
   <div class="hero-buttons">
@@ -945,29 +953,49 @@
   <div class="section-label">// Latest Updates</div>
   <div class="section-title">Recently shipped in Tollama.</div>
   <p class="section-desc" style="max-width: 860px;">
-    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including commits on February 19, 2026 and integration snapshots documented for February 20, 2026.
+    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including February 21, 2026 updates (<code class="inline-code">cafac17</code>, <code class="inline-code">89bde3d</code>, <code class="inline-code">8385266</code>) on top of the February 20, 2026 feature wave.
   </p>
 
   <div class="features-grid" style="margin-top: 34px;">
     <div class="feature-card">
-      <span class="feature-icon">📈</span>
-      <div class="feature-title">Expanded Forecast Metrics</div>
-      <p class="feature-desc">Forecast accuracy now supports <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">mape,mase,mae,rmse,smape</code> via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">series[].actuals</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">parameters.metrics</code>.</p>
+      <span class="feature-icon">🤖</span>
+      <div class="feature-title">A2A JSON-RPC + Agent Card</div>
+      <p class="feature-desc">Added discovery at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/.well-known/agent-card.json</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /a2a</code> with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/send</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/stream</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/get</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/query</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/cancel</code>.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🦜</span>
-      <div class="feature-title">LangChain SDK Tools</div>
-      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">get_tollama_tools</code> wrappers for forecast, health, and models. Install with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">pip install -e &quot;.[langchain]&quot;</code>.</p>
+      <span class="feature-icon">📥</span>
+      <div class="feature-title">TSModelfile + Data Ingest</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code>, upload endpoints, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama modelfile</code> profiles now support file-native forecast workflows.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">✅</span>
-      <div class="feature-title">Skills + MCP E2E</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code> and MCP stdio smoke checks were documented as passing on <strong>February 20, 2026</strong>.</p>
+      <span class="feature-icon">📡</span>
+      <div class="feature-title">Real-Time SSE Streams</div>
+      <p class="feature-desc">New stream endpoints include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/events</code> and staged refinement via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /api/forecast/progressive</code>.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🧪</span>
-      <div class="feature-title">All Families Re-validated</div>
-      <p class="feature-desc">Latest regression rerun reports <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_all_families.sh</code> passing and confirms isolated runtimes under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/&lt;family&gt;/venv/</code>.</p>
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">Structured Planning APIs</div>
+      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>, and expanded what-if + pipeline workflows.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🐍</span>
+      <div class="feature-title">Python SDK + Auto/Pipeline</div>
+      <p class="feature-desc">New <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">Tollama</code> SDK methods now cover forecast, auto-forecast, generate, what-if, compare, and pipeline orchestration.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Auth + Metering + Metrics</div>
+      <p class="feature-desc">Optional API-key auth, per-key usage at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/usage</code>, and Prometheus metrics via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /metrics</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🛠️</span>
+      <div class="feature-title">CLI Explain + Dev Scaffold</div>
+      <p class="feature-desc">New <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama explain</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dev scaffold</code> commands improve model introspection and custom runner onboarding.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📚</span>
+      <div class="feature-title">Expanded Docs + Tutorials</div>
+      <p class="feature-desc">New API reference, CLI cheatsheet, troubleshooting guide, and tutorial notebooks now ship with OpenAPI metadata improvements.</p>
     </div>
   </div>
 </section>
@@ -977,18 +1005,18 @@
 <section id="quickstart" class="section quickstart-section">
   <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
   <p class="section-desc" style="max-width: 820px;">
-    tollama runs a FastAPI daemon on <code class="inline-code">http://127.0.0.1:11435</code> by default and exposes an Ollama-style API under
-    <code class="inline-code">/api</code>. Start the daemon, pull a model, then forecast via curl or the CLI.
+    tollama runs a FastAPI daemon on <code class="inline-code">http://127.0.0.1:11435</code> by default and exposes both Ollama-style and expanded planning APIs.
+    Start the daemon, run quickstart, then use forecast/stream/analysis endpoints from CLI, SDK, or HTTP.
   </p>
 
   <div class="quickstart-grid">
     <div class="qs-card">
-      <div class="qs-step-title">1) Install (from source)</div>
+      <div class="qs-step-title">1) Install</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>python3.11 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+        <pre><code>python -m pip install tollama
+
+# from source (dev):
 python -m pip install -e &quot;.[dev]&quot;</code></pre>
       </div>
 
@@ -998,22 +1026,24 @@ python -m pip install -e &quot;.[dev]&quot;</code></pre>
         <pre><code>tollama serve
 # check:
 curl http://localhost:11435/api/version
-tollama doctor
 tollama info --json</code></pre>
       </div>
     </div>
 
     <div class="qs-card">
-      <div class="qs-step-title">3) Pull + forecast (HTTP)</div>
+      <div class="qs-step-title">3) Quickstart + forecast (HTTP)</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code># pull
-curl -s http://localhost:11435/api/pull \
-  -H 'content-type: application/json' \
-  -d '{ &quot;name&quot;: &quot;chronos2&quot; }'
+        <pre><code># terminal 2: guided demo
+tollama quickstart
 
-# forecast (example payload)
+# direct forecast
 curl -s http://localhost:11435/api/forecast \
+  -H 'content-type: application/json' \
+  -d @examples/chronos2_request.json
+
+# progressive SSE stream
+curl -N http://localhost:11435/api/forecast/progressive \
   -H 'content-type: application/json' \
   -d @examples/chronos2_request.json</code></pre>
       </div>
@@ -1023,13 +1053,19 @@ curl -s http://localhost:11435/api/forecast \
         read <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
       </p>
       <p class="qs-note">
-        OpenClaw users can install <code class="inline-code">skills/tollama-forecast</code> and run <code class="inline-code">scripts/e2e_skills_test.sh</code> to verify skill integration.
+        Ingest from files with <code class="inline-code">data_url</code>, <code class="inline-code">POST /api/forecast/upload</code>, or <code class="inline-code">POST /api/ingest/upload</code>.
       </p>
       <p class="qs-note">
-        MCP users can install <code class="inline-code">.[mcp]</code>, run <code class="inline-code">tollama-mcp</code>, and optionally register Claude Desktop via <code class="inline-code">scripts/install_mcp.sh</code>.
+        Structured planning endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/counterfactual</code>, and <code class="inline-code">/api/scenario-tree</code>.
       </p>
       <p class="qs-note">
-        For evaluation workflows, <code class="inline-code">/api/forecast</code> accepts optional metrics names: <code class="inline-code">mape,mase,mae,rmse,smape</code>.
+        Configure API keys in <code class="inline-code">~/.tollama/config.json</code>, then monitor usage via <code class="inline-code">GET /api/usage</code> and telemetry via <code class="inline-code">GET /metrics</code>.
+      </p>
+      <p class="qs-note">
+        CLI ergonomics: install shell completion with <code class="inline-code">tollama --install-completion</code>, inspect model constraints with <code class="inline-code">tollama explain chronos2</code>, and scaffold new runner families with <code class="inline-code">tollama dev scaffold my_family --register</code>.
+      </p>
+      <p class="qs-note">
+        Configure daemon-wide pull behavior once via <code class="inline-code">tollama config set pull.offline true</code> / <code class="inline-code">pull.hf_home</code> / <code class="inline-code">pull.https_proxy</code>; defaults are then applied for every <code class="inline-code">/api/pull</code> request.
       </p>
     </div>
   </div>
@@ -1049,27 +1085,81 @@ curl -s http://localhost:11435/api/forecast \
       <div class="doc-card-cta">Read →</div>
     </a>
 
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/covariates.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Covariates contract</div>
-      <div class="doc-card-desc">Exact rules, family mappings, compatibility matrix, and strict vs best-effort behavior.</div>
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/models.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Model guides</div>
+      <div class="doc-card-desc">Per-family setup, forecast examples, covariates behavior, and compatibility notes.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#data-ingest-csvparquet" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Data ingest + streams</div>
+      <div class="doc-card-desc">Use <code class="inline-code">data_url</code>, multipart uploads, <code class="inline-code">/api/events</code>, and progressive forecast SSE.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#python-sdk" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Python SDK</div>
+      <div class="doc-card-desc">High-level <code class="inline-code">Tollama</code> client for forecast, auto-forecast, what-if, generate, and pipelines.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#a2a-integration-latest-spec" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">A2A integration</div>
+      <div class="doc-card-desc">Discover Agent Card and call <code class="inline-code">/a2a</code> JSON-RPC with message and task lifecycles.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">MCP integration</div>
+      <div class="doc-card-desc">Run <code class="inline-code">tollama-mcp</code> with strict tool schemas, deterministic outputs, and Claude Desktop install helpers.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
     <a class="doc-card" href="https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast" target="_blank" rel="noreferrer">
       <div class="doc-card-title">OpenClaw skills guide</div>
-      <div class="doc-card-desc">How to install and run the <code class="inline-code">tollama-forecast</code> skill package with OpenClaw.</div>
+      <div class="doc-card-desc">Install and validate <code class="inline-code">skills/tollama-forecast</code> with health/models/forecast/pull/rm/info wrappers.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
-    <a class="doc-card" href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">MCP integration guide</div>
-      <div class="doc-card-desc">Set up <code class="inline-code">tollama-mcp</code> for Claude Code and other MCP clients.</div>
+    <a class="doc-card" href="https://github.com/tollama/tollama#api-key-auth--usage-metering" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Auth + usage metering</div>
+      <div class="doc-card-desc">Configure API keys, inspect per-key usage at <code class="inline-code">/api/usage</code>, and wire secure clients.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
-    <a class="doc-card" href="https://github.com/tollama/tollama#langchain-integration-python-sdk" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">LangChain SDK guide</div>
-      <div class="doc-card-desc">Use <code class="inline-code">get_tollama_tools</code> wrappers for health, models, and forecast in Python agent stacks.</div>
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/covariates.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Covariates contract</div>
+      <div class="doc-card-desc">Rules for past/future covariates, strict vs best-effort validation, and family compatibility.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/api-reference.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">API reference</div>
+      <div class="doc-card-desc">Endpoint-by-endpoint request/response contracts across forecast, planning, ingest, and diagnostics APIs.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/cli-cheatsheet.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">CLI cheatsheet</div>
+      <div class="doc-card-desc">Command index for pull/run/info/modelfile/config workflows, completion, and developer scaffolding.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/troubleshooting.md" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Troubleshooting</div>
+      <div class="doc-card-desc">Canonical failure signatures, connectivity diagnostics, and remediation paths for runtime and dependency issues.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#docker" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Docker + Compose</div>
+      <div class="doc-card-desc">Containerized daemon deployment with CPU defaults and optional GPU profile via Docker Compose.</div>
+      <div class="doc-card-cta">Read →</div>
+    </a>
+
+    <a class="doc-card" href="https://github.com/tollama/tollama#architecture" target="_blank" rel="noreferrer">
+      <div class="doc-card-title">Architecture + extension</div>
+      <div class="doc-card-desc">Daemon/runner protocol, project structure, and step-by-step guide for adding a new runner family.</div>
       <div class="doc-card-cta">Read →</div>
     </a>
 
@@ -1085,26 +1175,26 @@ curl -s http://localhost:11435/api/forecast \
 <!-- SKILLS -->
 <section id="skills" class="section" style="padding-top: 30px;">
   <div class="section-label">// Skills Support</div>
-  <div class="section-title">OpenClaw skills are first-class in Tollama.</div>
+  <div class="section-title">OpenClaw skill workflows are first-class in Tollama.</div>
   <p class="section-desc" style="max-width: 860px;">
-    Tollama ships <code class="inline-code">skills/tollama-forecast</code> with forecasting, health, models, pull/rm, and info helpers. OpenClaw skill integration was re-validated end-to-end on February 20, 2026.
+    Tollama ships <code class="inline-code">skills/tollama-forecast</code> with forecast, health, model lifecycle, and info helpers plus shared script utilities. OpenClaw integration updates were re-validated in upstream docs on February 20, 2026.
   </p>
 
   <div class="features-grid" style="margin-top: 36px;">
     <div class="feature-card">
       <span class="feature-icon">🧩</span>
       <div class="feature-title">OpenClaw-ready package</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, helper scripts, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openai-tools.json</code>, and example payloads.</p>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openai-tools.json</code>, and wrappers for forecast, health, models, pull, rm, and info.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">✅</span>
-      <div class="feature-title">E2E validated</div>
-      <p class="feature-desc">Verified via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code>, including skill structure, execution, and exit code contract checks.</p>
+      <div class="feature-title">Contract-first errors</div>
+      <p class="feature-desc">Shared <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">_tollama_lib.sh</code> enforces structured error categories and exit-code contract v2 for OpenClaw tool stability.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">⚙️</span>
-      <div class="feature-title">Managed install flow</div>
-      <p class="feature-desc">Symlink into <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.openclaw/skills</code> and confirm eligibility with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openclaw skills list --eligible</code>.</p>
+      <div class="feature-title">Runbooks + validation</div>
+      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code> and skill validation scripts with sandbox/gateway runbooks for repeatable operator checks.</p>
     </div>
   </div>
 </section>
@@ -1112,9 +1202,9 @@ curl -s http://localhost:11435/api/forecast \
 <!-- MCP -->
 <section id="mcp" class="section" style="padding-top: 0;">
   <div class="section-label">// MCP Support</div>
-  <div class="section-title">Native MCP server for assistant clients.</div>
+  <div class="section-title">Native MCP server for Claude Code and MCP clients.</div>
   <p class="section-desc" style="max-width: 860px;">
-    Tollama includes <code class="inline-code">tollama-mcp</code> for Claude Code and compatible MCP clients. The stdio MCP toolchain was re-validated on February 20, 2026.
+    Tollama includes <code class="inline-code">tollama-mcp</code> with strict tool schemas and expanded planning tools (forecast, auto-forecast, analyze, compare, report, pipeline, what-if, counterfactual, and scenario-tree).
   </p>
 
   <div class="quickstart-grid" style="margin-top: 34px;">
@@ -1144,18 +1234,18 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
   <div class="features-grid" style="margin-top: 26px;">
     <div class="feature-card">
       <span class="feature-icon">🛠️</span>
-      <div class="feature-title">MCP tools included</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_health</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_models</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_show</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_pull</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_forecast</code>.</p>
+      <div class="feature-title">Expanded MCP toolset</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_auto_forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_analyze</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_pipeline</code>, and more.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧾</span>
+      <div class="feature-title">Strict validation + error map</div>
+      <p class="feature-desc">Tool inputs are schema-validated and errors map to stable categories (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">INVALID_REQUEST</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">DAEMON_UNREACHABLE</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">MODEL_MISSING</code>, etc.).</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔌</span>
-      <div class="feature-title">Non-stream tool responses</div>
-      <p class="feature-desc">MCP calls are intentionally non-streaming for deterministic tool outputs and stable automation behavior.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧪</span>
-      <div class="feature-title">Validated with live daemon</div>
-      <p class="feature-desc">MCP SDK E2E checks passed on February 20, 2026 for health, models, show, and forecast tool paths over stdio.</p>
+      <div class="feature-title">Deterministic by default</div>
+      <p class="feature-desc">MCP integration is intentionally non-streaming for predictable tool outputs; every tool supports optional <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">base_url</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">timeout</code> overrides.</p>
     </div>
   </div>
 </section>
@@ -1249,39 +1339,106 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
       <p class="feature-desc">Each model family gets its own venv under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/</code>. No dependency conflicts. Ever.</p>
     </div>
     <div class="feature-card">
+      <span class="feature-icon">🐍</span>
+      <div class="feature-title">Python SDK + Async Client</div>
+      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">from tollama import Tollama</code> for high-level workflows and async tool integration across agents.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📥</span>
+      <div class="feature-title">Ingest + TSModelfile</div>
+      <p class="feature-desc">Forecast from <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code> or upload APIs, and manage reusable forecast profiles with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama modelfile</code>.</p>
+    </div>
+    <div class="feature-card">
       <span class="feature-icon">📡</span>
-      <div class="feature-title">Unified HTTP API</div>
-      <p class="feature-desc">FastAPI daemon with consistent <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/*</code> endpoints. Drop-in across all six model families.</p>
+      <div class="feature-title">Real-Time Streams</div>
+      <p class="feature-desc">Subscribe to daemon SSE events via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/events</code> and progressive forecast stages via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/forecast/progressive</code>.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">📊</span>
-      <div class="feature-title">Covariates + Metrics</div>
-      <p class="feature-desc">Unified past + future covariates contract plus optional forecast metrics: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">mape,mase,mae,rmse,smape</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🤗</span>
-      <div class="feature-title">Hugging Face Integration</div>
-      <p class="feature-desc">Native snapshot pull with progress streaming, proxy support, offline mode, and HF token auth.</p>
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">Structured Planning APIs</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/auto-forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/pipeline</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🧩</span>
-      <div class="feature-title">OpenClaw Skills</div>
-      <p class="feature-desc">Built-in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama-forecast</code> skill package with health, models, and forecast workflows.</p>
+      <div class="feature-title">Agent Ecosystem</div>
+      <p class="feature-desc">First-party integrations across OpenClaw skills, MCP, LangChain, CrewAI, AutoGen, and smolagents.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🔌</span>
-      <div class="feature-title">MCP Integration</div>
-      <p class="feature-desc">Run Tollama through <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama-mcp</code> with native tools for health, model lifecycle, and forecasting.</p>
+      <span class="feature-icon">🤝</span>
+      <div class="feature-title">A2A Integration</div>
+      <p class="feature-desc">Expose Agent Card discovery plus JSON-RPC <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/a2a</code> methods (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/send</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/stream</code>, task query/get/cancel) with authenticated discovery when API keys are enabled.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🦜</span>
-      <div class="feature-title">LangChain Integration</div>
-      <p class="feature-desc">Python SDK wrappers via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">get_tollama_tools</code> for health, models, and forecast tool calls.</p>
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Auth + Observability</div>
+      <p class="feature-desc">Optional API-key auth, usage metering at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/usage</code>, Prometheus <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/metrics</code>, and enriched telemetry in responses.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔭</span>
-      <div class="feature-title">Diagnostics Built-in</div>
-      <p class="feature-desc">Rich <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info</code> output with daemon health, loaded models, runner statuses, and pull defaults.</p>
+      <div class="feature-title">Deep Diagnostics</div>
+      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/info</code> for daemon health, model inventories, pull defaults, and runner status.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEV + OPS -->
+<section id="devops" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Dev + Ops Features</div>
+  <div class="section-title">Everything shipped in the repo.<br>Not just forecast endpoints.</div>
+  <p class="section-desc" style="max-width: 900px;">
+    Tollama includes CLI ergonomics, deployment paths, extension hooks, benchmarking, and quality tooling alongside core forecasting APIs. These capabilities are documented in <a href="https://github.com/tollama/tollama/blob/main/README.md" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a> and mirrored here.
+  </p>
+
+  <div class="features-grid" style="margin-top: 36px;">
+    <div class="feature-card">
+      <span class="feature-icon">⌨️</span>
+      <div class="feature-title">Shell completion + progress control</div>
+      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama --install-completion</code> and control interactive progress with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">--progress on|off</code> for pull/run/quickstart/runtime install.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <div class="feature-title">Model explain + runner scaffolding</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama explain &lt;model&gt;</code> summarizes limits/capabilities, while <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dev scaffold</code> bootstraps new runner families.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧰</span>
+      <div class="feature-title">Persistent pull defaults</div>
+      <p class="feature-desc">Set daemon-wide pull policy once with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama config</code> (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">offline</code>, proxy, cache paths), then reuse across CLI and API clients. <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama run --interactive</code> can also pick models/requests when args are omitted.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🐳</span>
+      <div class="feature-title">Docker + Compose deployment</div>
+      <p class="feature-desc">Run Tollama in containers with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">docker run</code> or Docker Compose, including an optional GPU profile for accelerated setups.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📈</span>
+      <div class="feature-title">Benchmark harness</div>
+      <p class="feature-desc">Compare SDK ergonomics and time-to-first-forecast with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">benchmarks/tollama_vs_raw.py</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧹</span>
+      <div class="feature-title">Local quality checks</div>
+      <p class="feature-desc">Built-in validation commands include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">ruff check .</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">pytest -q</code> for fast local confidence.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🩺</span>
+      <div class="feature-title">Diagnostics + debug modes</div>
+      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/info</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info --local|--remote</code> provide one-shot daemon/config/runtime diagnostics.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔐</span>
+      <div class="feature-title">Protected docs when auth is on</div>
+      <p class="feature-desc">When API keys are configured, interactive docs endpoints are protected by bearer auth by default; set <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DOCS_PUBLIC=1</code> for local-only public docs.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">Framework wrappers for agents</div>
+      <p class="feature-desc">Beyond MCP/OpenClaw, first-party wrappers are available for LangChain, CrewAI, AutoGen, and smolagents with shared tool contracts.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏗️</span>
+      <div class="feature-title">Extensible architecture</div>
+      <p class="feature-desc">Clear daemon/runner JSON protocol, modular project structure, and documented steps for adding a new runner family end to end.</p>
     </div>
   </div>
 </section>
@@ -1291,8 +1448,8 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
   <div class="api-inner">
     <div>
       <div class="section-label">// REST API</div>
-      <div class="section-title" style="font-size: 40px;">Forecast with<br>a single POST.</div>
-      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates and optional actuals, receive probabilistic forecasts and evaluation metrics in one response. Consistent schema across all model families.</p>
+      <div class="section-title" style="font-size: 40px;">Forecast +<br>planning APIs.</div>
+      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, actuals, or file-backed ingest and get probabilistic forecasts plus analysis outputs. Companion endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/what-if</code>, <code class="inline-code">/api/compare</code>, and compatibility fallback via <code class="inline-code">/v1/forecast</code>.</p>
     </div>
     <div class="code-block">
       <div class="code-header">
