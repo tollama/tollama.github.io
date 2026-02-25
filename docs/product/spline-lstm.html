@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spline-lstm — LSTM/GRU Forecasting Pipeline | Tollama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --border: #1e2733;
+    --accent: #10b981;
+    --accent-rgb: 16, 185, 129;
+    --accent2: #00d4ff;
+    --accent3: #7c3aed;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(16,185,129,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,185,129,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(16,185,129,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 16, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 0 20px rgba(16,185,129,0.3);
+  }
+
+  .nav-cta:hover {
+    box-shadow: 0 0 30px rgba(16,185,129,0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 140px 40px 80px;
+    text-align: center;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb span { color: var(--border); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease 0.1s both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(17px, 2.2vw, 22px);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.22s both;
+    max-width: 640px;
+  }
+
+  .hero-tagline strong { color: var(--text); font-weight: 600; }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(16,185,129,0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(16,185,129,0.4);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(16,185,129,0.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 620px;
+  }
+
+  /* PHASES */
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 52px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .phase-card {
+    background: var(--bg);
+    padding: 28px 24px;
+  }
+
+  .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+  }
+
+  .phase-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .phase-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 52px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: rgba(16,185,129,0.35); }
+
+  .feature-icon { font-size: 30px; margin-bottom: 18px; display: block; }
+  .feature-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* STACK SECTION */
+  .stack-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+  }
+
+  .stack-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .tech-list { list-style: none; margin-top: 24px; }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(30,39,51,0.5);
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .tech-item:last-child { border-bottom: none; }
+
+  .tech-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .code-block {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: #0d1117;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .code-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: #94a3b8;
+    overflow-x: auto;
+  }
+
+  .code-body .cm { color: #475569; }
+  .code-body .kw { color: #a78bfa; }
+  .code-body .str { color: #86efac; }
+  .code-body .key { color: #00d4ff; }
+  .code-body .num { color: #fdba74; }
+  .code-body .green { color: #10b981; }
+
+  /* ARCHITECTURE SECTION */
+  .arch-section {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .arch-section::before {
+    content: '';
+    position: absolute;
+    inset: -200px -100px;
+    background:
+      radial-gradient(circle at 15% 85%, rgba(16,185,129,0.1) 0%, transparent 55%),
+      radial-gradient(circle at 85% 15%, rgba(0,212,255,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(16,185,129,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-left { display: flex; align-items: center; gap: 20px; }
+  .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-right { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  .mit-badge {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1160px) {
+    nav { padding: 16px 30px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 12px; }
+  }
+
+  @media (max-width: 900px) {
+    .phases-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .stack-inner { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="dot"></span>
+    tollama
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">← Company</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#phases">Architecture</a></li>
+    <li><a href="#stack">Tech Stack</a></li>
+    <li><a href="https://github.com/tollama/spline-lstm" class="nav-cta">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="/">tollama</a>
+    <span>/</span>
+    <span style="color: var(--accent);">spline-lstm</span>
+  </div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    MIT License · Production · 6 Phases Complete · Agent-ready
+  </div>
+
+  <h1>
+    <span class="grad">spline-lstm</span>
+  </h1>
+
+  <p class="hero-tagline">
+    <strong>Spline Preprocessing + LSTM/GRU Neural Forecasting.</strong><br>
+    Short-term noise and long-term dependencies — handled together.
+  </p>
+
+  <p class="hero-sub">
+    A production-ready time-series forecasting pipeline that combines spline-based preprocessing with LSTM and GRU neural networks. Multi-input modeling, rolling-window cross-validation, CLI runner, FastAPI backend, React UI, and first-party agent ecosystem integration.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="https://github.com/tollama/spline-lstm" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="#features" class="btn-secondary">
+      Explore Features →
+    </a>
+  </div>
+</section>
+
+<!-- 6 PHASES -->
+<section id="phases" class="section arch-section" style="padding-top: 20px;">
+  <div class="section-label">// Project Phases</div>
+  <div class="section-title">Six phases complete.<br>Built for production from day one.</div>
+  <p class="section-desc">
+    The project was structured as a phased build — each phase validated before proceeding, with comprehensive documentation, test suites, and operational gates at every stage.
+  </p>
+
+  <div class="phases-grid">
+    <div class="phase-card">
+      <div class="phase-num">PHASE 01</div>
+      <div class="phase-title">Data &amp; Preprocessing</div>
+      <p class="phase-desc">Spline interpolation, scaling, and windowing pipeline with reproducible artifact persistence.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">PHASE 02</div>
+      <div class="phase-title">Multi-input Modeling</div>
+      <p class="phase-desc">LSTM and GRU architectures supporting past observations, future-known variables, and static covariates.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">PHASE 03</div>
+      <div class="phase-title">Training &amp; Validation</div>
+      <p class="phase-desc">Unified CLI training runner with rolling-window cross-validation and configurable hyperparameters.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">PHASE 04</div>
+      <div class="phase-title">Production Hardening</div>
+      <p class="phase-desc">Operational gates with smoke testing, run-verification, and circuit-breaker patterns for inference safety.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">PHASE 05</div>
+      <div class="phase-title">API &amp; UI</div>
+      <p class="phase-desc">FastAPI backend exposing forecast endpoints and React UI for model monitoring, input management, and output visualization.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">PHASE 06</div>
+      <div class="phase-title">Agent Ecosystem</div>
+      <p class="phase-desc">Backend compatibility with Tollama agent runtime, LangChain, and OpenClaw skills for integration into multi-agent forecasting workflows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Key Features</div>
+  <div class="section-title">Advanced forecasting,<br>production-ready defaults.</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">〰️</span>
+      <div class="feature-title">Spline-based Preprocessing</div>
+      <p class="feature-desc">Spline interpolation for gap filling and noise smoothing before neural modeling — capturing the underlying trend without overfitting short-term variance.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔁</span>
+      <div class="feature-title">LSTM + GRU Architectures</div>
+      <p class="feature-desc">Both LSTM and GRU architectures are supported, configurable via YAML. Each captures long-range temporal dependencies while handling varying sequence lengths.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">Multi-input Modeling</div>
+      <p class="feature-desc">Supports past observations, future-known variables (e.g., promotions, calendar features), and static covariates (e.g., store type) as separate model inputs.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">⌨️</span>
+      <div class="feature-title">Unified CLI Training Runner</div>
+      <p class="feature-desc">Train, validate, and export models from a single CLI command with full artifact persistence — checkpoints, metrics, and config saved automatically.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Rolling-window Cross-validation</div>
+      <p class="feature-desc">Time-series cross-validation using a rolling-window methodology — no data leakage, realistic evaluation of model performance across historical regimes.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🛡️</span>
+      <div class="feature-title">Production Operational Gates</div>
+      <p class="feature-desc">Smoke testing and run-verification gates ensure models meet quality thresholds before being promoted to production inference endpoints.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🌐</span>
+      <div class="feature-title">FastAPI Backend + React UI</div>
+      <p class="feature-desc">REST API for forecast endpoints with a React frontend for monitoring, input management, and visualizing predictions — deployable standalone or embedded.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🤖</span>
+      <div class="feature-title">Agent &amp; LLM Ecosystem Integration</div>
+      <p class="feature-desc">First-party backend compatibility with the Tollama agent runtime, LangChain, and OpenClaw skills — plugs directly into multi-agent forecasting workflows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<div id="stack" class="stack-section">
+  <div class="stack-inner">
+    <div>
+      <div class="section-label">// Tech Stack</div>
+      <div class="section-title" style="font-size: 36px;">Deep learning<br>for time series.</div>
+      <p class="section-desc">TensorFlow-backed LSTM/GRU with spline preprocessing, served via FastAPI and monitored through a React UI. Structured for clean agent integration.</p>
+
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-badge">Python 3.10–3.11</span> Core runtime</li>
+        <li class="tech-item"><span class="tech-badge">TensorFlow ≥2.14</span> LSTM / GRU training &amp; inference</li>
+        <li class="tech-item"><span class="tech-badge">Spline</span> Interpolation &amp; smoothing preprocessing</li>
+        <li class="tech-item"><span class="tech-badge">FastAPI</span> Forecast &amp; management API backend</li>
+        <li class="tech-item"><span class="tech-badge">React</span> Monitoring &amp; visualization UI</li>
+        <li class="tech-item"><span class="tech-badge">YAML</span> Declarative model &amp; training configuration</li>
+        <li class="tech-item"><span class="tech-badge">Tollama / LangChain</span> Agent ecosystem integration</li>
+        <li class="tech-item"><span class="tech-badge">MIT License</span> Open source, production-grade</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="section-label" style="margin-bottom: 20px;">// Example: CLI Training Run</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span>bash · Training Runner</span>
+          <span style="color: var(--accent);">CLI</span>
+        </div>
+        <div class="code-body">
+<span class="cm"># Install</span><br>
+pip install -e ".[dev]"<br><br>
+<span class="cm"># Train with config</span><br>
+python -m spline_lstm.train \<br>
+&nbsp;&nbsp;--config configs/lstm_base.yaml \<br>
+&nbsp;&nbsp;--data data/processed/train.parquet \<br>
+&nbsp;&nbsp;--output artifacts/run_001<br><br>
+<span class="cm"># Validate with rolling-window CV</span><br>
+python -m spline_lstm.validate \<br>
+&nbsp;&nbsp;--run artifacts/run_001 \<br>
+&nbsp;&nbsp;--folds <span class="num">5</span><br><br>
+<span class="cm"># Serve via FastAPI</span><br>
+uvicorn spline_lstm.api:app --port <span class="num">8080</span><br><br>
+<span class="cm"># Smoke test before production</span><br>
+python scripts/smoke_test.py \<br>
+&nbsp;&nbsp;--endpoint http://localhost:8080
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT INTEGRATION -->
+<section class="section">
+  <div class="section-label">// Agent Ecosystem</div>
+  <div class="section-title">Forecasting that plugs<br>into your agent stack.</div>
+  <p class="section-desc">
+    spline-lstm is designed to operate as a forecasting backend in multi-agent systems — compatible with the Tollama daemon, LangChain chains, and OpenClaw skill wrappers.
+  </p>
+
+  <div class="features-grid" style="margin-top: 40px;">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Tollama Runtime Integration</div>
+      <p class="feature-desc">Register spline-lstm as a model family in the Tollama daemon — accessible via the same REST API and SDK used for TSFM models like Chronos and TimesFM.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🦜</span>
+      <div class="feature-title">LangChain Tool</div>
+      <p class="feature-desc">Expose the FastAPI forecast endpoint as a LangChain tool — letting LLM agents call spline-lstm forecasts as part of reasoning chains.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">OpenClaw Skill Wrapper</div>
+      <p class="feature-desc">Compatible with OpenClaw skill contracts — wrap as a structured skill with health, predict, and explain endpoints for Claude Code agent use.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label">// Get Started</div>
+  <h2>Hybrid forecasting,<br>production-ready.</h2>
+  <p>Six phases complete. Open source, MIT licensed, and agent-ready for integration into any forecasting workflow.</p>
+  <div class="hero-buttons" style="justify-content: center;">
+    <a href="https://github.com/tollama/spline-lstm" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="/" class="btn-secondary">← Back to Tollama</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">tollama</div>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/product/tollama.html">tollama product</a></li>
+      <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
+      <li><a href="https://github.com/tollama/spline-lstm">GitHub</a></li>
+    </ul>
+  </div>
+  <div class="footer-right">
+    <span class="mit-badge">MIT</span>
+    &copy; 2026 Tollama Contributors
+  </div>
+</footer>
+
+</body>
+</html>

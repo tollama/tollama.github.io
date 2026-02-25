@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Calibration Agent | Tollama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --border: #1e2733;
+    --accent: #7c3aed;
+    --accent-rgb: 124, 58, 237;
+    --accent2: #00d4ff;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 16, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 0 20px rgba(124,58,237,0.3);
+  }
+
+  .nav-cta:hover {
+    box-shadow: 0 0 30px rgba(124,58,237,0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 140px 40px 80px;
+    text-align: center;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb span { color: var(--border); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #a78bfa;
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease 0.1s both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent3);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2.5px;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #a78bfa, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(17px, 2.2vw, 22px);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.22s both;
+    max-width: 640px;
+  }
+
+  .hero-tagline strong { color: var(--text); font-weight: 600; }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(124,58,237,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(124,58,237,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: #a78bfa;
+    background: rgba(124,58,237,0.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 620px;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 52px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .feature-icon { font-size: 30px; margin-bottom: 18px; display: block; }
+  .feature-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* METRIC CHIPS */
+  .metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+
+  .metric-chip {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 10px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: #a78bfa;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* STACK SECTION */
+  .stack-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+  }
+
+  .stack-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .tech-list {
+    list-style: none;
+    margin-top: 24px;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(30,39,51,0.5);
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .tech-item:last-child { border-bottom: none; }
+
+  .tech-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.25);
+    color: #a78bfa;
+    white-space: nowrap;
+  }
+
+  .code-block {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: #0d1117;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .code-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: #94a3b8;
+    overflow-x: auto;
+  }
+
+  .code-body .cm { color: #475569; }
+  .code-body .kw { color: #a78bfa; }
+  .code-body .str { color: #86efac; }
+  .code-body .key { color: #00d4ff; }
+  .code-body .num { color: #fdba74; }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-left { display: flex; align-items: center; gap: 20px; }
+  .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-right { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  .mit-badge {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: var(--accent3);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1160px) {
+    nav { padding: 16px 30px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 12px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .stack-inner { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="dot"></span>
+    tollama
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">← Company</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#stack">Tech Stack</a></li>
+    <li><a href="https://github.com/tollama/Market-Calibration-Agent" class="nav-cta">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="/">tollama</a>
+    <span>/</span>
+    <span style="color: #a78bfa;">Market Calibration Agent</span>
+  </div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    MIT License · Production · Read-only Research &amp; Risk Tool
+  </div>
+
+  <h1>
+    <span class="grad">Market Calibration</span><br>
+    Agent
+  </h1>
+
+  <p class="hero-tagline">
+    <strong>Trust Scores for Prediction Market Probabilities.</strong><br>
+    Quantify how reliable each Polymarket probability actually is.
+  </p>
+
+  <p class="hero-sub">
+    A production-grade system that assesses prediction market reliability through calibration analysis, statistical scoring, and Time Series Foundation Model inference — with safeguards for rate-limiting, caching, and circuit breakers.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="https://github.com/tollama/Market-Calibration-Agent" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="#features" class="btn-secondary">
+      Explore Features →
+    </a>
+  </div>
+</section>
+
+<!-- METRIC OVERVIEW -->
+<section class="section" style="padding-top: 20px;">
+  <div class="section-label">// What It Measures</div>
+  <div class="section-title">Statistical calibration,<br>made actionable.</div>
+  <p class="section-desc">
+    The agent quantifies market signal reliability through four core statistical metrics — turning abstract probabilities into trustworthy, auditable Trust Scores.
+  </p>
+
+  <div class="metrics-row">
+    <div class="metric-chip">
+      <span class="metric-value">Brier</span>
+      <span class="metric-label">Proper scoring rule</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">ECE</span>
+      <span class="metric-label">Expected Calibration Error</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">Log-Loss</span>
+      <span class="metric-label">Probabilistic accuracy</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">Drift</span>
+      <span class="metric-label">Probability deviation alerts</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">Trust Score</span>
+      <span class="metric-label">Composite reliability signal</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Key Features</div>
+  <div class="section-title">Everything you need to<br>trust a probability.</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🔗</span>
+      <div class="feature-title">Multi-source Data Integration</div>
+      <p class="feature-desc">Integrates REST APIs, WebSocket feeds, and subgraph queries from Polymarket to maintain a real-time, unified view of market data.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📐</span>
+      <div class="feature-title">Calibration Analysis Pipeline</div>
+      <p class="feature-desc">Computes Brier score, log-loss, and Expected Calibration Error per market — generating composite Trust Scores with postmortem-ready audit trails.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🚨</span>
+      <div class="feature-title">Configurable Alert Generation</div>
+      <p class="feature-desc">YAML-defined alert rules trigger on probability deviation thresholds. Alert feeds are exposed as read-only API endpoints for downstream consumers.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">TSFM Inference with Safeguards</div>
+      <p class="feature-desc">Integrates Time Series Foundation Model inference with production-grade safeguards: rate-limiting, response caching, and circuit breakers to prevent cascade failures.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🖥️</span>
+      <div class="feature-title">Streamlit Operational Dashboard</div>
+      <p class="feature-desc">Real-time monitoring dashboard showing market summaries, Trust Score distributions, active alerts, and calibration postmortems — designed for ops and quant teams.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📡</span>
+      <div class="feature-title">Read-only API Services</div>
+      <p class="feature-desc">Exposes market summaries, alert feeds, and performance postmortems as structured, read-only API endpoints. No write operations — safe for research and risk workflows.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">⚙️</span>
+      <div class="feature-title">YAML-based Configuration</div>
+      <p class="feature-desc">Fully configurable via YAML — alert thresholds, model settings, API targets, and caching behavior are all declared without code changes.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">Modular Architecture</div>
+      <p class="feature-desc">Cleanly separated connectors, calibration pipelines, and API handlers. Add new market sources or scoring metrics without touching core logic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<div id="stack" class="stack-section">
+  <div class="stack-inner">
+    <div>
+      <div class="section-label" style="color: #a78bfa;">// Tech Stack</div>
+      <div class="section-title" style="font-size: 36px;">Production Python,<br>modular by design.</div>
+      <p class="section-desc">Built with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#a78bfa;">uv</code> as package manager with a frozen lockfile for reproducible installs. Python 95%+ of the codebase.</p>
+
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-badge">Python</span> Primary runtime (95.6% of codebase)</li>
+        <li class="tech-item"><span class="tech-badge">uv</span> Package manager with frozen lockfile</li>
+        <li class="tech-item"><span class="tech-badge">YAML</span> Configuration — alerts, models, API targets</li>
+        <li class="tech-item"><span class="tech-badge">Streamlit</span> Operational monitoring dashboard</li>
+        <li class="tech-item"><span class="tech-badge">Polymarket APIs</span> REST + WebSocket + subgraph</li>
+        <li class="tech-item"><span class="tech-badge">TSFM</span> Time Series Foundation Model inference</li>
+        <li class="tech-item"><span class="tech-badge">MIT License</span> Open source, production-grade</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="section-label" style="color: #a78bfa; margin-bottom: 20px;">// Example: Trust Score API Response</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span>json · /api/market/{id}/trust-score</span>
+          <span style="color: var(--accent3);">GET</span>
+        </div>
+        <div class="code-body">
+<span class="cm">// Market calibration result</span><br>
+{<br>
+&nbsp;&nbsp;<span class="key">"market_id"</span>: <span class="str">"0x1a2b..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"question"</span>: <span class="str">"Will X happen by..."</span>,<br>
+&nbsp;&nbsp;<span class="key">"current_probability"</span>: <span class="num">0.74</span>,<br>
+&nbsp;&nbsp;<span class="key">"trust_score"</span>: <span class="num">0.81</span>,<br>
+&nbsp;&nbsp;<span class="key">"metrics"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"brier_score"</span>: <span class="num">0.142</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"log_loss"</span>: <span class="num">0.318</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"ece"</span>: <span class="num">0.047</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="key">"alerts"</span>: [],<br>
+&nbsp;&nbsp;<span class="key">"tsfm_signal"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"forecast"</span>: [<span class="num">0.72, 0.75, 0.71</span>],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"cached"</span>: <span class="kw">false</span><br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHO IS IT FOR -->
+<section class="section">
+  <div class="section-label">// Target Users</div>
+  <div class="section-title">Built for the people who<br>need to trust the signal.</div>
+
+  <div class="features-grid" style="margin-top: 40px;">
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Quantitative Researchers</div>
+      <p class="feature-desc">Use calibration metrics and TSFM signals to evaluate prediction market quality before incorporating them into models or strategies.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🛡️</span>
+      <div class="feature-title">Operations Teams</div>
+      <p class="feature-desc">Monitor real-time alert feeds and Trust Score distributions to catch signal degradation before it affects downstream decisions.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔧</span>
+      <div class="feature-title">Platform Engineers</div>
+      <p class="feature-desc">Integrate the read-only API endpoints into existing risk pipelines, dashboards, or agent workflows with minimal configuration.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <div class="feature-title">Model Teams</div>
+      <p class="feature-desc">Access structured postmortem data and calibration history to evaluate how prediction markets perform across different market regimes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label" style="color: #a78bfa;">// Get Started</div>
+  <h2>Know when to trust<br>the market signal.</h2>
+  <p>Open source, MIT licensed, and production-ready for quantitative research and risk workflows.</p>
+  <div class="hero-buttons" style="justify-content: center;">
+    <a href="https://github.com/tollama/Market-Calibration-Agent" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="/" class="btn-secondary">← Back to Tollama</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">tollama</div>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/product/tollama.html">tollama product</a></li>
+      <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
+      <li><a href="https://github.com/tollama/Market-Calibration-Agent">GitHub</a></li>
+    </ul>
+  </div>
+  <div class="footer-right">
+    <span class="mit-badge">MIT</span>
+    &copy; 2026 Tollama Contributors
+  </div>
+</footer>
+
+</body>
+</html>

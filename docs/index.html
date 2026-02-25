@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tollama — Ollama for Time Series</title>
+<title>Tollama — AI Agents for Predictive Industries</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -20,7 +20,6 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -44,7 +43,6 @@
     z-index: 0;
   }
 
-  /* Radial glow top */
   body::after {
     content: '';
     position: fixed;
@@ -58,6 +56,7 @@
     z-index: 0;
   }
 
+  /* NAV */
   nav {
     position: fixed;
     top: 0;
@@ -140,7 +139,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 120px 40px 80px;
+    padding: 140px 40px 100px;
     text-align: center;
   }
 
@@ -155,7 +154,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: var(--accent);
-    margin-bottom: 32px;
+    margin-bottom: 36px;
     animation: fadeIn 0.8s ease forwards;
   }
 
@@ -169,18 +168,15 @@
   }
 
   .hero h1 {
-    font-size: clamp(48px, 8vw, 96px);
+    font-size: clamp(56px, 9vw, 108px);
     font-weight: 800;
-    line-height: 1;
-    letter-spacing: -3px;
-    margin-bottom: 12px;
+    line-height: 0.95;
+    letter-spacing: -4px;
+    margin-bottom: 28px;
     animation: slideUp 0.8s ease 0.1s both;
   }
 
-  .hero h1 .toll {
-    color: var(--text);
-  }
-
+  .hero h1 .toll { color: var(--text); }
   .hero h1 .llama {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
@@ -188,28 +184,37 @@
     background-clip: text;
   }
 
-  .hero-tagline {
-    font-size: clamp(18px, 2.5vw, 26px);
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
     color: var(--muted);
-    font-weight: 400;
-    margin-bottom: 20px;
-    animation: slideUp 0.8s ease 0.2s both;
-    max-width: 600px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: slideUp 0.8s ease 0.15s both;
   }
 
-  .hero-tagline strong {
+  .hero-headline {
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 700;
     color: var(--text);
-    font-weight: 600;
+    max-width: 760px;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.2s both;
   }
 
   .hero-sub {
-    font-size: 16px;
+    font-size: 17px;
     color: var(--muted);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 48px;
+    max-width: 580px;
+    line-height: 1.75;
+    margin-bottom: 52px;
     animation: slideUp 0.8s ease 0.3s both;
   }
+
+  .hero-sub strong { color: var(--text); }
 
   .hero-buttons {
     display: flex;
@@ -262,67 +267,7 @@
     background: rgba(0, 212, 255, 0.05);
   }
 
-  /* Terminal */
-  .terminal-section {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 40px auto 100px;
-    padding: 0 40px;
-    animation: slideUp 0.8s ease 0.5s both;
-  }
-
-  .terminal {
-    background: #0a0e14;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0, 212, 255, 0.05);
-  }
-
-  .terminal-header {
-    background: #111822;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .terminal-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .td-red { background: #ff5f57; }
-  .td-yellow { background: #febc2e; }
-  .td-green { background: #28c840; }
-
-  .terminal-title {
-    margin-left: auto;
-    margin-right: auto;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .terminal-body {
-    padding: 28px 32px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13.5px;
-    line-height: 2;
-  }
-
-  .cmd-line { display: flex; gap: 10px; }
-  .prompt { color: var(--accent3); }
-  .cmd { color: var(--text); }
-  .comment { color: var(--muted); }
-  .output { color: #94a3b8; padding-left: 20px; }
-  .success { color: var(--accent3); padding-left: 20px; }
-  .highlight-cmd { color: var(--accent); }
-
-  /* Models section */
+  /* SECTIONS */
   .section {
     position: relative;
     z-index: 1;
@@ -352,137 +297,11 @@
     color: var(--muted);
     font-size: 17px;
     line-height: 1.7;
-    max-width: 560px;
+    max-width: 580px;
   }
 
-  /* Models grid */
-  .models-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 60px;
-  }
-
-  .model-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .model-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--card-color, var(--accent)), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .model-card:hover {
-    border-color: var(--card-color, var(--accent));
-    transform: translateY(-3px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(0, 212, 255, 0.05);
-  }
-
-  .model-card:hover::before { opacity: 1; }
-
-  .model-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  .model-vendor {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  .model-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 100px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-
-  .tag.green { border-color: rgba(16, 185, 129, 0.3); color: var(--accent3); background: rgba(16, 185, 129, 0.06); }
-  .tag.blue { border-color: rgba(0, 212, 255, 0.3); color: var(--accent); background: rgba(0, 212, 255, 0.06); }
-  .tag.purple { border-color: rgba(124, 58, 237, 0.3); color: #a78bfa; background: rgba(124, 58, 237, 0.06); }
-
-  .model-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    margin-bottom: 14px;
-  }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent3);
-    box-shadow: 0 0 6px var(--accent3);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  /* Features */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 24px;
-    margin-top: 60px;
-  }
-
-  .feature-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 32px;
-    transition: border-color 0.2s;
-  }
-
-  .feature-card:hover { border-color: #2d3748; }
-
-  .feature-icon {
-    font-size: 32px;
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .feature-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: -0.3px;
-  }
-
-  .feature-desc {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* API section */
-  .api-section {
+  /* THE SHIFT */
+  .shift-section {
     position: relative;
     z-index: 1;
     background: var(--surface);
@@ -491,87 +310,419 @@
     padding: 100px 40px;
   }
 
-  .api-inner {
+  .shift-inner {
     max-width: 1100px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
   }
 
-  .code-block {
-    background: #050810;
+  .shift-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+  }
+
+  .shift-card {
+    border-left: 2px solid var(--border);
+    padding-left: 28px;
+  }
+
+  .shift-card:nth-child(1) { border-left-color: var(--accent); }
+  .shift-card:nth-child(2) { border-left-color: var(--accent2); }
+  .shift-card:nth-child(3) { border-left-color: var(--accent3); }
+
+  .shift-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .shift-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+  }
+
+  .shift-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* PRODUCTS */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .product-card {
+    display: block;
+    text-decoration: none;
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.25s;
+    position: relative;
     overflow: hidden;
   }
 
-  .code-header {
-    background: #0d1117;
-    padding: 12px 20px;
+  .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .product-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.05);
+  }
+
+  .product-card:hover::before { opacity: 1; }
+
+  .product-icon {
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .product-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent3);
+    box-shadow: 0 0 6px var(--accent3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .product-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .product-tagline {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  .product-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .tag.blue { border-color: rgba(0,212,255,0.3); color: var(--accent); background: rgba(0,212,255,0.06); }
+  .tag.green { border-color: rgba(16,185,129,0.3); color: var(--accent3); background: rgba(16,185,129,0.06); }
+  .tag.purple { border-color: rgba(124,58,237,0.3); color: #a78bfa; background: rgba(124,58,237,0.06); }
+
+  .product-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* AGENTS */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .agent-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .agent-card:hover { border-color: #2d3748; }
+
+  .agent-icon {
+    font-size: 30px;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .agent-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .agent-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .agent-uses {
+    list-style: none;
+  }
+
+  .agent-uses li {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 4px 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
+    gap: 8px;
   }
 
-  .code-lang {
+  .agent-uses li::before {
+    content: '→';
+    color: var(--accent);
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
   }
 
-  .code-body {
+  /* VERTICALS */
+  .verticals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .vertical-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vertical-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--v-color, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .vertical-card:hover { border-color: var(--v-color, var(--accent)); }
+  .vertical-card:hover::after { opacity: 1; }
+
+  .vertical-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+  .vertical-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; }
+  .vertical-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 40px;
+    overflow: hidden;
+  }
+
+  .how-section::before {
+    content: '';
+    position: absolute;
+    inset: -200px -100px;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(124,58,237,0.12) 0%, transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(0,212,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .how-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .how-step {
+    background: var(--bg);
+    padding: 32px 28px;
+    position: relative;
+  }
+
+  .how-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .how-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .how-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* UPCOMING */
+  .upcoming-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .upcoming-card {
+    background: rgba(13,17,23,0.6);
+    border: 1px solid rgba(30,39,51,0.8);
+    border-radius: 14px;
+    padding: 26px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+
+  .upcoming-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124,58,237,0.5), transparent);
+  }
+
+  .upcoming-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #a78bfa;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 100px;
+    padding: 2px 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+
+  .upcoming-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .upcoming-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* OPEN SOURCE */
+  .os-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .os-card {
+    display: block;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
     padding: 24px;
+    transition: all 0.2s;
+  }
+
+  .os-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+
+  .os-name {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    overflow-x: auto;
-  }
-
-  .kw { color: #c084fc; }
-  .str { color: #86efac; }
-  .num { color: #fdba74; }
-  .key { color: var(--accent); }
-  .brkt { color: #94a3b8; }
-
-  /* Matrix section */
-  .matrix-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-  }
-
-  .matrix-table th {
-    text-align: left;
-    padding: 12px 16px;
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--border);
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-  }
-
-  .matrix-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(30, 39, 51, 0.5);
+    font-size: 14px;
     color: var(--text);
+    margin-bottom: 8px;
+    font-weight: 500;
   }
 
-  .matrix-table tr:last-child td { border-bottom: none; }
-  .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .os-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
 
-  .check { color: var(--accent3); }
-  .cross { color: #475569; }
+  .os-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
 
-  /* CTA Section */
+  /* CTA */
   .cta-section {
     position: relative;
     z-index: 1;
@@ -585,28 +736,29 @@
     bottom: -100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
-    height: 400px;
-    background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.12) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .cta-section h2 {
-    font-size: clamp(36px, 5vw, 64px);
+    font-size: clamp(36px, 5vw, 68px);
     font-weight: 800;
     letter-spacing: -2px;
+    line-height: 1.05;
     margin-bottom: 20px;
   }
 
   .cta-section p {
     font-size: 18px;
     color: var(--muted);
-    max-width: 480px;
+    max-width: 520px;
     margin: 0 auto 48px;
     line-height: 1.7;
   }
 
-  /* Footer */
+  /* FOOTER */
   footer {
     position: relative;
     z-index: 1;
@@ -615,7 +767,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: gap;
+    flex-wrap: wrap;
+    gap: 20px;
   }
 
   .footer-left {
@@ -651,16 +804,32 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-direction: column;
+    text-align: right;
+  }
+
+  .footer-right-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .mit-badge {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
     color: var(--accent3);
     font-size: 11px;
     padding: 3px 10px;
     border-radius: 100px;
     font-family: 'JetBrains Mono', monospace;
+  }
+
+  .footer-disclaimer {
+    font-size: 11px;
+    color: #374151;
+    max-width: 340px;
+    text-align: right;
+    line-height: 1.5;
   }
 
   @keyframes fadeIn {
@@ -673,179 +842,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Quickstart + Docs */
-  .inline-code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.06);
-    border: 1px solid rgba(0, 212, 255, 0.18);
-    padding: 2px 8px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-
-  .quickstart-section {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .quickstart-section::before {
-    content: '';
-    position: absolute;
-    inset: -220px -120px -220px -120px;
-    background:
-      radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.18) 0%, transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.12) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .quickstart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-top: 38px;
-  }
-
-  .qs-card {
-    background: rgba(13, 17, 23, 0.55);
-    border: 1px solid rgba(30, 39, 51, 0.9);
-    border-radius: 18px;
-    padding: 26px;
-    backdrop-filter: blur(14px);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(124, 58, 237, 0.06);
-  }
-
-  .qs-step-title {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.4px;
-    margin-bottom: 12px;
-  }
-
-  .code-panel {
-    position: relative;
-    background: #0a0e14;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 18px 16px;
-    overflow: hidden;
-  }
-
-  .code-panel pre {
-    margin: 0;
-    overflow-x: auto;
-  }
-
-  .code-panel code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    color: var(--text);
-    display: block;
-    white-space: pre;
-  }
-
-  .copy-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    border: 1px solid rgba(30, 39, 51, 0.9);
-    background: rgba(255,255,255,0.04);
-    color: var(--muted);
-    padding: 7px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .copy-btn:hover {
-    border-color: rgba(0, 212, 255, 0.35);
-    color: var(--text);
-    background: rgba(0, 212, 255, 0.07);
-  }
-
-  .copy-btn.copied {
-    border-color: rgba(16, 185, 129, 0.35);
-    color: var(--accent3);
-    background: rgba(16, 185, 129, 0.08);
-  }
-
-  .qs-note {
-    color: var(--muted);
-    font-size: 13.5px;
-    line-height: 1.7;
-    margin-top: 14px;
-  }
-
-  .qs-note a {
-    color: var(--text);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.25);
-    padding-bottom: 1px;
-  }
-
-  .qs-note a:hover {
-    color: var(--accent);
-    border-bottom-color: rgba(0, 212, 255, 0.5);
-  }
-
-  .deepdive-section {
-    position: relative;
-  }
-
-  .doc-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin-top: 34px;
-  }
-
-  .doc-card {
-    display: block;
-    text-decoration: none;
-    background: rgba(13, 17, 23, 0.55);
-    border: 1px solid rgba(30, 39, 51, 0.9);
-    border-radius: 16px;
-    padding: 22px 22px 20px;
-    transition: all 0.25s;
-    backdrop-filter: blur(12px);
-  }
-
-  .doc-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(0, 212, 255, 0.35);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.45), 0 0 40px rgba(0, 212, 255, 0.06);
-  }
-
-  .doc-card-title {
-    color: var(--text);
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: -0.3px;
-    margin-bottom: 10px;
-  }
-
-  .doc-card-desc {
-    color: var(--muted);
-    font-size: 13.5px;
-    line-height: 1.65;
-    margin-bottom: 16px;
-  }
-
-  .doc-card-cta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    letter-spacing: 0.02em;
-  }
-
-
-
   @media (max-width: 1160px) {
     nav { padding: 16px 30px; }
     .nav-links { gap: 18px; }
@@ -853,13 +849,19 @@
     .nav-cta { padding: 8px 14px; }
   }
 
+  @media (max-width: 900px) {
+    .shift-grid { grid-template-columns: 1fr; gap: 32px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .verticals-grid { grid-template-columns: 1fr; }
+    .how-grid { grid-template-columns: 1fr; }
+    .os-grid { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 768px) {
     nav { padding: 16px 24px; }
     .nav-links { display: none; }
-    .api-inner { grid-template-columns: 1fr; }
-    .quickstart-grid { grid-template-columns: 1fr; }
-    .doc-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 20px; text-align: center; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-disclaimer { text-align: center; }
   }
 </style>
 </head>
@@ -867,21 +869,17 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="/" class="nav-logo">
     <span class="dot"></span>
     tollama
   </a>
   <ul class="nav-links">
-    <li><a href="#updates">Updates</a></li>
-    <li><a href="#quickstart">Quickstart</a></li>
-    <li><a href="#dashboard">Dashboard</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#mcp">MCP</a></li>
-    <li><a href="#models">Models</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#devops">Dev/Ops</a></li>
-    <li><a href="#api">API</a></li>
-    <li><a href="https://github.com/tollama/tollama" class="nav-cta">GitHub ↗</a></li>
+    <li><a href="#products">Platform</a></li>
+    <li><a href="#agents">Agents</a></li>
+    <li><a href="#verticals">Solutions</a></li>
+    <li><a href="#upcoming">Roadmap</a></li>
+    <li><a href="#opensource">Open Source</a></li>
+    <li><a href="https://github.com/tollama" class="nav-cta">GitHub ↗</a></li>
   </ul>
 </nav>
 
@@ -889,706 +887,319 @@
 <section class="hero">
   <div class="badge">
     <span class="badge-dot"></span>
-    MIT License · LangChain + MCP + SDK + Skills + A2A + Streams + Docker + Dashboards 
+    MIT License · Autonomous AI Agents for Predictive Industries
   </div>
+
+  <p class="hero-label">The Post-Siri Era of AI</p>
 
   <h1>
     <span class="toll">to</span><span class="llama">llama</span>
   </h1>
 
-  <p class="hero-tagline">
-    <strong>Ollama for Time Series.</strong><br>
-    Run state-of-the-art foundation models locally.
+  <p class="hero-headline">
+    Autonomous AI Agents that Forecast,<br>Reason, and Execute.
   </p>
 
   <p class="hero-sub">
-    A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API. Latest upstream updates add Python SDK workflows, <span style="color: var(--accent); font-weight: 700;">A2A JSON-RPC</span>, CSV/Parquet ingest, real-time SSE streams, bundled web dashboard + Textual TUI surfaces, structured planning endpoints, API-key auth with usage metering, persistent pull defaults, shell completion, and Docker/Compose deployment paths.
+    Assistants like Siri helped people <strong>talk to devices</strong>.<br>
+    Tollama builds <strong>autonomous AI agents</strong> that operate inside real business workflows — predicting the next state of the world and taking action.
   </p>
 
   <div class="hero-buttons">
-    <a href="https://github.com/tollama/tollama" class="btn-primary">
-      ⭐ Star on GitHub
-    </a>
-    <a href="#quickstart" class="btn-secondary">
-      Quick Start →
-    </a>
+    <a href="#products" class="btn-primary">Explore the Platform</a>
+    <a href="https://github.com/tollama" class="btn-secondary">View on GitHub ↗</a>
   </div>
 </section>
 
-<!-- TERMINAL -->
-<div class="terminal-section">
-  <div class="terminal">
-    <div class="terminal-header">
-      <span class="terminal-dot td-red"></span>
-      <span class="terminal-dot td-yellow"></span>
-      <span class="terminal-dot td-green"></span>
-      <span class="terminal-title">tollama — bash</span>
-    </div>
-    <div class="terminal-body">
-      <div class="comment"># Start the forecasting daemon</div>
-      <div class="cmd-line">
-        <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> serve</span>
+<!-- THE SHIFT -->
+<div class="shift-section">
+  <div class="shift-inner">
+    <div class="section-label">// The Shift</div>
+    <div class="section-title">From "answering"<br>to "operating."</div>
+    <p class="section-desc">
+      The first wave of assistants was built for conversation. The next wave is built for <strong style="color: var(--text);">systems</strong>: markets, demand, operations, and software.
+    </p>
+
+    <div class="shift-grid">
+      <div class="shift-card">
+        <div class="shift-num">01 / LLMs</div>
+        <div class="shift-title">Reasoning became cheap.</div>
+        <p class="shift-desc">Large language models democratized structured reasoning over unstructured data — turning documents, signals, and intent into actionable understanding.</p>
       </div>
-      <div class="success">✓ Daemon running at http://127.0.0.1:11435</div>
-      <br>
-      <div class="comment"># Pull a model from the registry</div>
-      <div class="cmd-line">
-        <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> pull chronos2</span>
+      <div class="shift-card">
+        <div class="shift-num">02 / Time Series</div>
+        <div class="shift-title">Prediction became scalable.</div>
+        <p class="shift-desc">Time Series Foundation Models made it possible to forecast any temporal signal — demand, load, price, usage — without per-dataset retraining.</p>
       </div>
-      <div class="output">Pulling chronos2 from Hugging Face... ████████████ 100%</div>
-      <br>
-      <div class="comment"># Run a forecast</div>
-      <div class="cmd-line">
-        <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> run chronos2 --input request.json</span>
-      </div>
-      <div class="success">{"forecast": [[12.4, 13.1, 11.8, 14.2, 13.6, 12.9, 14.8]]}</div>
-    </div>
-  </div>
-</div>
-
-<!-- LATEST UPDATES -->
-<section id="updates" class="section" style="padding-top: 10px;">
-  <div class="section-label">// Latest Updates</div>
-  <div class="section-title">Recently shipped in Tollama.</div>
-  <p class="section-desc" style="max-width: 860px;">
-    Synced to latest upstream changes from <a href="https://github.com/tollama/tollama/commits/main" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a>, including the newest February 21, 2026 commits (<code class="inline-code">601c675</code>, <code class="inline-code">6745fe1</code>, <code class="inline-code">cafac17</code>, <code class="inline-code">89bde3d</code>) on top of the February 20, 2026 feature wave.
-  </p>
-
-  <div class="features-grid" style="margin-top: 34px;">
-    <div class="feature-card">
-      <span class="feature-icon">🤖</span>
-      <div class="feature-title">A2A JSON-RPC + Agent Card</div>
-      <p class="feature-desc">Added discovery at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/.well-known/agent-card.json</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /a2a</code> with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/send</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/stream</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/get</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/query</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/cancel</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📥</span>
-      <div class="feature-title">TSModelfile + Data Ingest</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code>, upload endpoints, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama modelfile</code> profiles now support file-native forecast workflows.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📡</span>
-      <div class="feature-title">Real-Time SSE Streams</div>
-      <p class="feature-desc">New stream endpoints include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/events</code> and staged refinement via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /api/forecast/progressive</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🖥️</span>
-      <div class="feature-title">Bundled Web Dashboard</div>
-      <p class="feature-desc">Daemon now serves <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/dashboard</code> routes with static assets/partials and an aggregated bootstrap endpoint at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/dashboard/state</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧭</span>
-      <div class="feature-title">Dashboard CLI + TUI</div>
-      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama open</code> for browser launch and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dashboard</code> for Textual TUI workflows with resilient event streaming.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧠</span>
-      <div class="feature-title">Structured Planning APIs</div>
-      <p class="feature-desc">Added <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>, and expanded what-if + pipeline workflows.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🐍</span>
-      <div class="feature-title">Python SDK + Auto/Pipeline</div>
-      <p class="feature-desc">New <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">Tollama</code> SDK methods now cover forecast, auto-forecast, generate, what-if, compare, and pipeline orchestration.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📊</span>
-      <div class="feature-title">Auth + Metering + Metrics</div>
-      <p class="feature-desc">Optional API-key auth, per-key usage at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/usage</code>, and Prometheus metrics via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /metrics</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🛠️</span>
-      <div class="feature-title">CLI Explain + Dev Scaffold</div>
-      <p class="feature-desc">New <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama explain</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dev scaffold</code> commands improve model introspection and custom runner onboarding.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📚</span>
-      <div class="feature-title">Expanded Docs + Tutorials</div>
-      <p class="feature-desc">New API reference, CLI cheatsheet, troubleshooting guide, and tutorial notebooks now ship with OpenAPI metadata improvements.</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- QUICKSTART -->
-<section id="quickstart" class="section quickstart-section">
-  <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
-  <p class="section-desc" style="max-width: 820px;">
-    tollama runs a FastAPI daemon on <code class="inline-code">http://127.0.0.1:11435</code> by default and exposes both Ollama-style and expanded planning APIs.
-    Start the daemon, run quickstart, then use forecast/stream/analysis endpoints from CLI, SDK, or HTTP.
-  </p>
-
-  <div class="quickstart-grid">
-    <div class="qs-card">
-      <div class="qs-step-title">1) Install</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>python -m pip install tollama
-
-# from source (dev):
-python -m pip install -e &quot;.[dev]&quot;</code></pre>
-      </div>
-
-      <div class="qs-step-title" style="margin-top: 22px;">2) Start the daemon</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama serve
-# check:
-curl http://localhost:11435/api/version
-tollama info --json</code></pre>
-      </div>
-    </div>
-
-    <div class="qs-card">
-      <div class="qs-step-title">3) Quickstart + forecast (HTTP)</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code># terminal 2: guided demo
-tollama quickstart
-
-# direct forecast
-curl -s http://localhost:11435/api/forecast \
-  -H 'content-type: application/json' \
-  -d @examples/chronos2_request.json
-
-# progressive SSE stream
-curl -N http://localhost:11435/api/forecast/progressive \
-  -H 'content-type: application/json' \
-  -d @examples/chronos2_request.json</code></pre>
-      </div>
-
-      <p class="qs-note">
-        For a full run walkthrough (including per-family runtime isolation and installing all registry models),
-        read <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
-      </p>
-      <p class="qs-note">
-        Ingest from files with <code class="inline-code">data_url</code>, <code class="inline-code">POST /api/forecast/upload</code>, or <code class="inline-code">POST /api/ingest/upload</code>.
-      </p>
-      <p class="qs-note">
-        Structured planning endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/counterfactual</code>, and <code class="inline-code">/api/scenario-tree</code>.
-      </p>
-      <p class="qs-note">
-        Configure API keys in <code class="inline-code">~/.tollama/config.json</code>, then monitor usage via <code class="inline-code">GET /api/usage</code> and telemetry via <code class="inline-code">GET /metrics</code>.
-      </p>
-      <p class="qs-note">
-        CLI ergonomics: install shell completion with <code class="inline-code">tollama --install-completion</code>, inspect model constraints with <code class="inline-code">tollama explain chronos2</code>, and scaffold new runner families with <code class="inline-code">tollama dev scaffold my_family --register</code>.
-      </p>
-      <p class="qs-note">
-        Configure daemon-wide pull behavior once via <code class="inline-code">tollama config set pull.offline true</code> / <code class="inline-code">pull.hf_home</code> / <code class="inline-code">pull.https_proxy</code>; defaults are then applied for every <code class="inline-code">/api/pull</code> request.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- DASHBOARD -->
-<section id="dashboard" class="section" style="padding-top: 26px;">
-  <div class="section-label">// Dashboards (Web + TUI)</div>
-  <div class="section-title">Operate Tollama from browser or terminal.</div>
-  <p class="section-desc" style="max-width: 860px;">
-    Recent upstream releases bundle a web GUI and Textual TUI on top of daemon APIs, including aggregated state bootstrapping and auth-aware dashboard routes.
-  </p>
-
-  <div class="quickstart-grid" style="margin-top: 34px;">
-    <div class="qs-card">
-      <div class="qs-step-title">Web dashboard</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama serve
-tollama open
-
-# direct URL
-http://127.0.0.1:11435/dashboard</code></pre>
-      </div>
-      <p class="qs-note">
-        Served routes include <code class="inline-code">/dashboard</code>, <code class="inline-code">/dashboard/static/*</code>, <code class="inline-code">/dashboard/partials/{name}</code>, and SPA fallback on <code class="inline-code">/dashboard/{path}</code>.
-      </p>
-      <p class="qs-note">
-        Bootstrap endpoint <code class="inline-code">GET /api/dashboard/state</code> aggregates info, loaded models, and usage with partial-data <code class="inline-code">warnings[]</code> when a source is unavailable.
-      </p>
-    </div>
-
-    <div class="qs-card">
-      <div class="qs-step-title">Textual TUI dashboard</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>python -m pip install -e &quot;.[tui]&quot;
-tollama dashboard
-
-# optional overrides
-tollama dashboard --base-url http://127.0.0.1:11435 --timeout 10</code></pre>
-      </div>
-      <p class="qs-note">
-        Dashboard controls: <code class="inline-code">TOLLAMA_DASHBOARD=1|0</code>, <code class="inline-code">TOLLAMA_DASHBOARD_REQUIRE_AUTH=1|0</code>, and <code class="inline-code">TOLLAMA_CORS_ORIGINS</code> for explicit allowlists.
-      </p>
-      <p class="qs-note">
-        Full workflow docs: <a href="https://github.com/tollama/tollama/blob/main/docs/dashboard-user-guide.md" target="_blank" rel="noreferrer">docs/dashboard-user-guide.md</a>.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- DEEPER DIVE -->
-<section id="docs" class="section deepdive-section" style="padding-top: 40px;">
-  <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Want a deeper dive?</div>
-  <p class="section-desc" style="max-width: 780px;">
-    Documentation lives in the repo — it’s versioned, reviewable, and stays close to the code.
-  </p>
-
-  <div class="doc-grid">
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Run guide</div>
-      <div class="doc-card-desc">Install runner families, pull all TSFM registry models, and troubleshoot common issues.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/models.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Model guides</div>
-      <div class="doc-card-desc">Per-family setup, forecast examples, covariates behavior, and compatibility notes.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#data-ingest-csvparquet" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Data ingest + streams</div>
-      <div class="doc-card-desc">Use <code class="inline-code">data_url</code>, multipart uploads, <code class="inline-code">/api/events</code>, and progressive forecast SSE.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#python-sdk" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Python SDK</div>
-      <div class="doc-card-desc">High-level <code class="inline-code">Tollama</code> client for forecast, auto-forecast, what-if, generate, and pipelines.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/dashboard-user-guide.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Dashboard user guide</div>
-      <div class="doc-card-desc">Web GUI and TUI usage, keyboard shortcuts, model selectors, auth behavior, and troubleshooting.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#a2a-integration-latest-spec" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">A2A integration</div>
-      <div class="doc-card-desc">Discover Agent Card and call <code class="inline-code">/a2a</code> JSON-RPC with message and task lifecycles.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">MCP integration</div>
-      <div class="doc-card-desc">Run <code class="inline-code">tollama-mcp</code> with strict tool schemas, deterministic outputs, and Claude Desktop install helpers.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">OpenClaw skills guide</div>
-      <div class="doc-card-desc">Install and validate <code class="inline-code">skills/tollama-forecast</code> with health/models/forecast/pull/rm/info wrappers.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#api-key-auth--usage-metering" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Auth + usage metering</div>
-      <div class="doc-card-desc">Configure API keys, inspect per-key usage at <code class="inline-code">/api/usage</code>, and wire secure clients.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/covariates.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Covariates contract</div>
-      <div class="doc-card-desc">Rules for past/future covariates, strict vs best-effort validation, and family compatibility.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/api-reference.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">API reference</div>
-      <div class="doc-card-desc">Endpoint-by-endpoint request/response contracts across forecast, planning, ingest, and diagnostics APIs.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/cli-cheatsheet.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">CLI cheatsheet</div>
-      <div class="doc-card-desc">Command index for pull/run/info/modelfile/config workflows, completion, and developer scaffolding.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/docs/troubleshooting.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Troubleshooting</div>
-      <div class="doc-card-desc">Canonical failure signatures, connectivity diagnostics, and remediation paths for runtime and dependency issues.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#docker" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Docker + Compose</div>
-      <div class="doc-card-desc">Containerized daemon deployment with CPU defaults and optional GPU profile via Docker Compose.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama#architecture" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Architecture + extension</div>
-      <div class="doc-card-desc">Daemon/runner protocol, project structure, and step-by-step guide for adding a new runner family.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-
-    <a class="doc-card" href="https://github.com/tollama/tollama/blob/main/roadmap.md" target="_blank" rel="noreferrer">
-      <div class="doc-card-title">Roadmap</div>
-      <div class="doc-card-desc">Implementation-aware progress tracker and planned v1 hardening items.</div>
-      <div class="doc-card-cta">Read →</div>
-    </a>
-  </div>
-</section>
-
-
-<!-- SKILLS -->
-<section id="skills" class="section" style="padding-top: 30px;">
-  <div class="section-label">// Skills Support</div>
-  <div class="section-title">OpenClaw skill workflows are first-class in Tollama.</div>
-  <p class="section-desc" style="max-width: 860px;">
-    Tollama ships <code class="inline-code">skills/tollama-forecast</code> with forecast, health, model lifecycle, and info helpers plus shared script utilities. OpenClaw integration updates were re-validated in upstream docs on February 20, 2026.
-  </p>
-
-  <div class="features-grid" style="margin-top: 36px;">
-    <div class="feature-card">
-      <span class="feature-icon">🧩</span>
-      <div class="feature-title">OpenClaw-ready package</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">skills/tollama-forecast/</code> includes <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">SKILL.md</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">openai-tools.json</code>, and wrappers for forecast, health, models, pull, rm, and info.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">✅</span>
-      <div class="feature-title">Contract-first errors</div>
-      <p class="feature-desc">Shared <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">_tollama_lib.sh</code> enforces structured error categories and exit-code contract v2 for OpenClaw tool stability.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">⚙️</span>
-      <div class="feature-title">Runbooks + validation</div>
-      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">scripts/e2e_skills_test.sh</code> and skill validation scripts with sandbox/gateway runbooks for repeatable operator checks.</p>
-    </div>
-  </div>
-</section>
-
-<!-- MCP -->
-<section id="mcp" class="section" style="padding-top: 0;">
-  <div class="section-label">// MCP Support</div>
-  <div class="section-title">Native MCP server for Claude Code and MCP clients.</div>
-  <p class="section-desc" style="max-width: 860px;">
-    Tollama includes <code class="inline-code">tollama-mcp</code> with strict tool schemas and expanded planning tools (forecast, auto-forecast, analyze, compare, report, pipeline, what-if, counterfactual, and scenario-tree).
-  </p>
-
-  <div class="quickstart-grid" style="margin-top: 34px;">
-    <div class="qs-card">
-      <div class="qs-step-title">Install and run MCP</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>python -m pip install -e &quot;.[mcp]&quot;
-tollama serve
-tollama-mcp</code></pre>
-      </div>
-      <p class="qs-note">Default MCP base URL is <code class="inline-code">http://localhost:11435</code>. Each tool supports optional <code class="inline-code">base_url</code> and <code class="inline-code">timeout</code> overrides.</p>
-    </div>
-
-    <div class="qs-card">
-      <div class="qs-step-title">Register in Claude Desktop</div>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code>bash scripts/install_mcp.sh --base-url &quot;http://127.0.0.1:11435&quot;
-# preview only:
-bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&quot;</code></pre>
-      </div>
-      <p class="qs-note">Docs: <a href="https://github.com/tollama/tollama#mcp-integration-claude-code" target="_blank" rel="noreferrer">README MCP integration section</a>.</p>
-    </div>
-  </div>
-
-  <div class="features-grid" style="margin-top: 26px;">
-    <div class="feature-card">
-      <span class="feature-icon">🛠️</span>
-      <div class="feature-title">Expanded MCP toolset</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_auto_forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_analyze</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama_pipeline</code>, and more.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧾</span>
-      <div class="feature-title">Strict validation + error map</div>
-      <p class="feature-desc">Tool inputs are schema-validated and errors map to stable categories (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">INVALID_REQUEST</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">DAEMON_UNREACHABLE</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">MODEL_MISSING</code>, etc.).</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔌</span>
-      <div class="feature-title">Deterministic by default</div>
-      <p class="feature-desc">MCP integration is intentionally non-streaming for predictable tool outputs; every tool supports optional <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">base_url</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">timeout</code> overrides.</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- MODELS -->
-<section id="models" class="section">
-  <div class="section-label">// Model Registry</div>
-  <div class="section-title">6 foundation models.<br>One unified API.</div>
-  <p class="section-desc">Pull any supported TSFM from Hugging Face with a single command. Each model runs in its own isolated runtime to prevent dependency conflicts.</p>
-
-  <div class="models-grid">
-    <div class="model-card" style="--card-color: #f59e0b;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">chronos2</div>
-      <div class="model-vendor">Amazon · Chronos-2</div>
-      <div class="model-tags">
-        <span class="tag green">past-numeric</span>
-        <span class="tag green">past-categorical</span>
-        <span class="tag blue">known-future</span>
-      </div>
-    </div>
-
-    <div class="model-card" style="--card-color: #3b82f6;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">granite-ttm-r2</div>
-      <div class="model-vendor">IBM · Granite TTM</div>
-      <div class="model-tags">
-        <span class="tag green">past-numeric</span>
-        <span class="tag blue">known-future-numeric</span>
-      </div>
-    </div>
-
-    <div class="model-card" style="--card-color: #10b981;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">timesfm-2.5-200m</div>
-      <div class="model-vendor">Google · TimesFM 2.5</div>
-      <div class="model-tags">
-        <span class="tag green">past-numeric</span>
-        <span class="tag blue">xreg-support</span>
-        <span class="tag purple">xreg-mode</span>
-      </div>
-    </div>
-
-    <div class="model-card" style="--card-color: #8b5cf6;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">moirai-2.0-R-small</div>
-      <div class="model-vendor">Salesforce · Uni2TS</div>
-      <div class="model-tags">
-        <span class="tag green">past-numeric</span>
-        <span class="tag blue">known-future-numeric</span>
-      </div>
-    </div>
-
-    <div class="model-card" style="--card-color: #ec4899;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">sundial-base-128m</div>
-      <div class="model-vendor">THUML · Sundial</div>
-      <div class="model-tags">
-        <span class="tag">target-only</span>
-        <span class="tag">freq-agnostic</span>
-      </div>
-    </div>
-
-    <div class="model-card" style="--card-color: #f97316;">
-      <div class="model-status"><span class="status-dot"></span> PASSING</div>
-      <div class="model-name">toto-open-base-1.0</div>
-      <div class="model-vendor">Datadog · Toto</div>
-      <div class="model-tags">
-        <span class="tag green">past-numeric</span>
-        <span class="tag">open-base</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section id="features" class="section">
-  <div class="section-label">// Why Tollama</div>
-  <div class="section-title">Local-first.<br>Production-ready.</div>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <span class="feature-icon">⚡</span>
-      <div class="feature-title">Ollama-style UX</div>
-      <p class="feature-desc">Familiar pull, run, serve, list, rm commands for managing time series models locally — no cloud required.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔒</span>
-      <div class="feature-title">Isolated Runtimes</div>
-      <p class="feature-desc">Each model family gets its own venv under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/</code>. No dependency conflicts. Ever.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🐍</span>
-      <div class="feature-title">Python SDK + Async Client</div>
-      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">from tollama import Tollama</code> for high-level workflows and async tool integration across agents.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📥</span>
-      <div class="feature-title">Ingest + TSModelfile</div>
-      <p class="feature-desc">Forecast from <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code> or upload APIs, and manage reusable forecast profiles with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama modelfile</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📡</span>
-      <div class="feature-title">Real-Time Streams</div>
-      <p class="feature-desc">Subscribe to daemon SSE events via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/events</code> and progressive forecast stages via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/forecast/progressive</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧠</span>
-      <div class="feature-title">Structured Planning APIs</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/auto-forecast</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/pipeline</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧩</span>
-      <div class="feature-title">Agent Ecosystem</div>
-      <p class="feature-desc">First-party integrations across OpenClaw skills, MCP, LangChain, CrewAI, AutoGen, and smolagents.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🤝</span>
-      <div class="feature-title">A2A Integration</div>
-      <p class="feature-desc">Expose Agent Card discovery plus JSON-RPC <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/a2a</code> methods (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/send</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/stream</code>, task query/get/cancel) with authenticated discovery when API keys are enabled.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📊</span>
-      <div class="feature-title">Auth + Observability</div>
-      <p class="feature-desc">Optional API-key auth, usage metering at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/usage</code>, Prometheus <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/metrics</code>, and enriched telemetry in responses.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔭</span>
-      <div class="feature-title">Deep Diagnostics</div>
-      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/info</code> for daemon health, model inventories, pull defaults, and runner status.</p>
-    </div>
-  </div>
-</section>
-
-<!-- DEV + OPS -->
-<section id="devops" class="section" style="padding-top: 10px;">
-  <div class="section-label">// Dev + Ops Features</div>
-  <div class="section-title">Everything shipped in the repo.<br>Not just forecast endpoints.</div>
-  <p class="section-desc" style="max-width: 900px;">
-    Tollama includes CLI ergonomics, deployment paths, extension hooks, benchmarking, and quality tooling alongside core forecasting APIs. These capabilities are documented in <a href="https://github.com/tollama/tollama/blob/main/README.md" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,0.35);">tollama/tollama</a> and mirrored here.
-  </p>
-
-  <div class="features-grid" style="margin-top: 36px;">
-    <div class="feature-card">
-      <span class="feature-icon">⌨️</span>
-      <div class="feature-title">Shell completion + progress control</div>
-      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama --install-completion</code> and control interactive progress with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">--progress on|off</code> for pull/run/quickstart/runtime install.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧪</span>
-      <div class="feature-title">Model explain + runner scaffolding</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama explain &lt;model&gt;</code> summarizes limits/capabilities, while <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama dev scaffold</code> bootstraps new runner families.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧰</span>
-      <div class="feature-title">Persistent pull defaults</div>
-      <p class="feature-desc">Set daemon-wide pull policy once with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama config</code> (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">offline</code>, proxy, cache paths), then reuse across CLI and API clients. <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama run --interactive</code> can also pick models/requests when args are omitted.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🐳</span>
-      <div class="feature-title">Docker + Compose deployment</div>
-      <p class="feature-desc">Run Tollama in containers with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">docker run</code> or Docker Compose, including an optional GPU profile for accelerated setups.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📈</span>
-      <div class="feature-title">Benchmark harness</div>
-      <p class="feature-desc">Compare SDK ergonomics and time-to-first-forecast with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">benchmarks/tollama_vs_raw.py</code>.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🖼️</span>
-      <div class="feature-title">Dashboard controls + CORS</div>
-      <p class="feature-desc">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DASHBOARD</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DASHBOARD_REQUIRE_AUTH</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_CORS_ORIGINS</code> to tune dashboard exposure and browser access policy.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧹</span>
-      <div class="feature-title">Local quality checks</div>
-      <p class="feature-desc">Built-in validation commands include <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">ruff check .</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">pytest -q</code> for fast local confidence.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🩺</span>
-      <div class="feature-title">Diagnostics + debug modes</div>
-      <p class="feature-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">GET /api/info</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama info --local|--remote</code> provide one-shot daemon/config/runtime diagnostics.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔐</span>
-      <div class="feature-title">Protected docs when auth is on</div>
-      <p class="feature-desc">When API keys are configured, interactive docs endpoints are protected by bearer auth by default; set <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">TOLLAMA_DOCS_PUBLIC=1</code> for local-only public docs.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧠</span>
-      <div class="feature-title">Framework wrappers for agents</div>
-      <p class="feature-desc">Beyond MCP/OpenClaw, first-party wrappers are available for LangChain, CrewAI, AutoGen, and smolagents with shared tool contracts.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🏗️</span>
-      <div class="feature-title">Extensible architecture</div>
-      <p class="feature-desc">Clear daemon/runner JSON protocol, modular project structure, and documented steps for adding a new runner family end to end.</p>
-    </div>
-  </div>
-</section>
-
-<!-- API SECTION -->
-<div id="api" class="api-section">
-  <div class="api-inner">
-    <div>
-      <div class="section-label">// REST API</div>
-      <div class="section-title" style="font-size: 40px;">Forecast +<br>planning APIs.</div>
-      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates, actuals, or file-backed ingest and get probabilistic forecasts plus analysis outputs. Companion endpoints include <code class="inline-code">/api/auto-forecast</code>, <code class="inline-code">/api/pipeline</code>, <code class="inline-code">/api/report</code>, <code class="inline-code">/api/what-if</code>, <code class="inline-code">/api/compare</code>, dashboard bootstrap at <code class="inline-code">/api/dashboard/state</code>, and compatibility fallback via <code class="inline-code">/v1/forecast</code>.</p>
-    </div>
-    <div class="code-block">
-      <div class="code-header">
-        <span class="code-lang">json · /api/forecast</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent3)">POST</span>
-      </div>
-      <div class="code-body">
-<span class="brkt">{</span><br>
-&nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"timesfm-2.5-200m"</span>,<br>
-&nbsp;&nbsp;<span class="key">"horizon"</span>: <span class="num">2</span>,<br>
-&nbsp;&nbsp;<span class="key">"series"</span>: <span class="brkt">[{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"id"</span>: <span class="str">"store_001"</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"freq"</span>: <span class="str">"D"</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"target"</span>: <span class="brkt">[</span><span class="num">120, 135, 142</span><span class="brkt">]</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"actuals"</span>: <span class="brkt">[</span><span class="num">141, 145</span><span class="brkt">]</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"past_covariates"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">0, 1, 0</span><span class="brkt">]</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"future_covariates"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"promo"</span>: <span class="brkt">[</span><span class="num">1, 0</span><span class="brkt">]</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span><br>
-&nbsp;&nbsp;<span class="brkt">}]</span>,<br>
-&nbsp;&nbsp;<span class="key">"parameters"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"covariates_mode"</span>: <span class="str">"best_effort"</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"metrics"</span>: <span class="brkt">{</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"names"</span>: <span class="brkt">[</span><span class="str">"mape"</span>, <span class="str">"mase"</span>, <span class="str">"mae"</span>, <span class="str">"rmse"</span>, <span class="str">"smape"</span><span class="brkt">]</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"mase_seasonality"</span>: <span class="num">1</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="brkt">}</span><br>
-&nbsp;&nbsp;<span class="brkt">}</span><br>
-<span class="brkt">}</span>
+      <div class="shift-card">
+        <div class="shift-num">03 / Agents</div>
+        <div class="shift-title">Execution became programmable.</div>
+        <p class="shift-desc">Agent frameworks let models take actions: calling APIs, orchestrating workflows, calibrating signals, and closing the loop from forecast to decision.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- COVARIATE MATRIX -->
-<section class="section">
-  <div class="section-label">// Compatibility Matrix</div>
-  <div class="section-title" style="font-size:40px;">Know your<br>model capabilities.</div>
+<!-- PRODUCTS -->
+<section id="products" class="section">
+  <div class="section-label">// Platform</div>
+  <div class="section-title">Three products.<br>One forecasting stack.</div>
+  <p class="section-desc">
+    Tollama builds the runtime infrastructure and vertical agents that power predictive AI — from local model serving to production-grade calibration systems.
+  </p>
 
-  <table class="matrix-table">
-    <thead>
-      <tr>
-        <th>Model Family</th>
-        <th>Past Numeric</th>
-        <th>Past Categorical</th>
-        <th>Known-Future Numeric</th>
-        <th>Known-Future Categorical</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Chronos-2</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Granite TTM</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
-      <tr><td>TimesFM 2.5</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
-      <tr><td>Uni2TS / Moirai</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
-      <tr><td>Sundial</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
-      <tr><td>Toto Open Base</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
-    </tbody>
-  </table>
+  <div class="product-grid">
+    <!-- tollama -->
+    <a class="product-card" href="/product/tollama.html" style="--card-accent: #00d4ff;">
+      <span class="product-icon">⚡</span>
+      <div class="product-status"><span class="status-dot"></span> Production</div>
+      <div class="product-name">tollama</div>
+      <div class="product-tagline">Ollama for Time Series</div>
+      <p class="product-desc">
+        A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API.
+      </p>
+      <div class="product-tags">
+        <span class="tag blue">TSFM Runtime</span>
+        <span class="tag green">FastAPI</span>
+        <span class="tag green">MCP</span>
+        <span class="tag blue">A2A JSON-RPC</span>
+        <span class="tag">LangChain</span>
+      </div>
+      <div class="product-cta">View product →</div>
+    </a>
+
+    <!-- Market Calibration Agent -->
+    <a class="product-card" href="/product/market-calibration-agent.html" style="--card-accent: #7c3aed;">
+      <span class="product-icon">📊</span>
+      <div class="product-status"><span class="status-dot"></span> Production</div>
+      <div class="product-name">Market Calibration Agent</div>
+      <div class="product-tagline">Trust Score for Prediction Markets</div>
+      <p class="product-desc">
+        Assess the reliability of prediction market probabilities on Polymarket. Quantifies how trustworthy each probability is through calibration analysis, statistical metrics, and TSFM inference.
+      </p>
+      <div class="product-tags">
+        <span class="tag purple">Calibration</span>
+        <span class="tag blue">Polymarket</span>
+        <span class="tag green">TSFM</span>
+        <span class="tag">Streamlit</span>
+      </div>
+      <div class="product-cta">View product →</div>
+    </a>
+
+    <!-- Spline-LSTM -->
+    <a class="product-card" href="/product/spline-lstm.html" style="--card-accent: #10b981;">
+      <span class="product-icon">🧠</span>
+      <div class="product-status"><span class="status-dot"></span> Production</div>
+      <div class="product-name">spline-lstm</div>
+      <div class="product-tagline">Spline + LSTM/GRU Forecasting Pipeline</div>
+      <p class="product-desc">
+        Combines spline-based preprocessing with LSTM and GRU neural networks to capture both short-term noise patterns and long-term temporal dependencies in production environments.
+      </p>
+      <div class="product-tags">
+        <span class="tag green">TensorFlow</span>
+        <span class="tag blue">FastAPI</span>
+        <span class="tag blue">React</span>
+        <span class="tag">LSTM/GRU</span>
+        <span class="tag green">Agent-ready</span>
+      </div>
+      <div class="product-cta">View product →</div>
+    </a>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Agents We Build</div>
+  <div class="section-title">Domain agents for<br>high-stakes environments.</div>
+  <p class="section-desc">
+    Each Tollama agent is purpose-built for a domain where forecasting, uncertainty, and action are mission-critical.
+  </p>
+
+  <div class="agent-grid">
+    <div class="agent-card">
+      <span class="agent-icon">📈</span>
+      <div class="agent-title">Market Calibration Agent</div>
+      <p class="agent-desc">Interprets, calibrates, and explains uncertainty in probabilistic market signals so teams can make better, risk-aware decisions.</p>
+      <ul class="agent-uses">
+        <li>Signal reliability &amp; drift detection</li>
+        <li>Calibration / normalization pipelines</li>
+        <li>Decision support with uncertainty bounds</li>
+      </ul>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-icon">💻</span>
+      <div class="agent-title">Coding Agent</div>
+      <p class="agent-desc">Turns product intent into production work — planning, generating, refactoring, testing, and iterating across infrastructure and integrations.</p>
+      <ul class="agent-uses">
+        <li>Accelerating platform development</li>
+        <li>Scaling vertical integrations</li>
+        <li>Reducing iteration cycles</li>
+      </ul>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-icon">📡</span>
+      <div class="agent-title">Time Series Forecasting Agents</div>
+      <p class="agent-desc">Agents designed for real forecasting environments where data is messy, regimes shift, and decisions must be made continuously.</p>
+      <ul class="agent-uses">
+        <li>Demand / load / operational forecasting</li>
+        <li>Scenario generation &amp; monitoring</li>
+        <li>Anomaly response &amp; adaptive reforecasting</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- VERTICALS -->
+<section id="verticals" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Vertical AI Solutions</div>
+  <div class="section-title">Built for industries where<br>prediction matters.</div>
+
+  <div class="verticals-grid">
+    <div class="vertical-card" style="--v-color: #7c3aed;">
+      <span class="vertical-icon">🏦</span>
+      <div class="vertical-title">Finance &amp; Markets</div>
+      <p class="vertical-desc">Decision agents for calibrated signals, risk-aware insights, and scenario-driven execution. From prediction market calibration to portfolio scenario trees.</p>
+    </div>
+
+    <div class="vertical-card" style="--v-color: #10b981;">
+      <span class="vertical-icon">⚡</span>
+      <div class="vertical-title">Energy &amp; Demand</div>
+      <p class="vertical-desc">Forecasting agents for load and demand planning, anomaly response, and resource optimization in systems where accuracy directly impacts cost and reliability.</p>
+    </div>
+
+    <div class="vertical-card" style="--v-color: #00d4ff;">
+      <span class="vertical-icon">🔧</span>
+      <div class="vertical-title">Operations</div>
+      <p class="vertical-desc">Agents that monitor systems, forecast bottlenecks, and recommend actions before failures happen — turning reactive ops into predictive ops.</p>
+    </div>
+
+    <div class="vertical-card" style="--v-color: #f59e0b;">
+      <span class="vertical-icon">🛠️</span>
+      <div class="vertical-title">Software &amp; Engineering</div>
+      <p class="vertical-desc">Agentic workflows that build and maintain the infrastructure required to ship vertical AI faster — from scaffolding to deployment and testing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="how-inner">
+    <div class="section-label">// How It Works</div>
+    <div class="section-title">A simple loop:<br>Forecast → Calibrate → Act.</div>
+    <p class="section-desc">
+      This is the operating model for post-assistant AI — a continuous cycle that turns signals into decisions and decisions into outcomes.
+    </p>
+
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">STEP 01</div>
+        <div class="how-title">Ingest</div>
+        <p class="how-desc">Ingest time series data, documents, and event streams from APIs, uploads, or live feeds.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">STEP 02</div>
+        <div class="how-title">Forecast</div>
+        <p class="how-desc">Run TSFM or hybrid models (Chronos, TimesFM, spline-LSTM) to predict the next state of the system.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">STEP 03</div>
+        <div class="how-title">Calibrate</div>
+        <p class="how-desc">Assess uncertainty, detect drift, normalize signals, and quantify reliability before acting.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">STEP 04</div>
+        <div class="how-title">Decide</div>
+        <p class="how-desc">Apply domain logic, constraints, and scenario analysis to select the best action.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">STEP 05</div>
+        <div class="how-title">Execute</div>
+        <p class="how-desc">Trigger actions through APIs, tools, workflows, or agent-to-agent protocols (A2A, MCP, LangChain).</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">STEP 06</div>
+        <div class="how-title">Learn &amp; Monitor</div>
+        <p class="how-desc">Track outcomes via SSE streams, Prometheus metrics, and usage telemetry — and adapt continuously.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPCOMING -->
+<section id="upcoming" class="section">
+  <div class="section-label">// Roadmap</div>
+  <div class="section-title">What's coming next.</div>
+  <p class="section-desc">
+    The next layer of the Tollama stack — expanding from local runtimes to cloud orchestration, evaluation, and multi-agent memory.
+  </p>
+
+  <div class="upcoming-grid">
+    <div class="upcoming-card">
+      <div class="upcoming-badge">UPCOMING</div>
+      <div class="upcoming-title">Tollama Cloud</div>
+      <p class="upcoming-desc">Hosted daemon with managed API gateway, model serving, and usage metering — no local setup required.</p>
+    </div>
+
+    <div class="upcoming-card">
+      <div class="upcoming-badge">UPCOMING</div>
+      <div class="upcoming-title">Forecasting Evaluator Agent</div>
+      <p class="upcoming-desc">Automated backtesting, leaderboard scoring, and model comparison across TSFM and hybrid architectures.</p>
+    </div>
+
+    <div class="upcoming-card">
+      <div class="upcoming-badge">UPCOMING</div>
+      <div class="upcoming-title">Domain Agent SDK</div>
+      <p class="upcoming-desc">A template kit for building new vertical agents with shared tool contracts, calibration primitives, and agent card discovery.</p>
+    </div>
+
+    <div class="upcoming-card">
+      <div class="upcoming-badge">UPCOMING</div>
+      <div class="upcoming-title">Unified Agent Orchestrator</div>
+      <p class="upcoming-desc">Cross-agent planning, shared memory, and task lifecycle management — connecting forecasting, calibration, and coding agents into coherent workflows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SOURCE -->
+<section id="opensource" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Open Source</div>
+  <div class="section-title">Built in the open.</div>
+  <p class="section-desc">
+    All Tollama products ship with MIT licenses — inspect, extend, and deploy with confidence.
+  </p>
+
+  <div class="os-grid">
+    <a class="os-card" href="https://github.com/tollama/tollama" target="_blank" rel="noreferrer">
+      <div class="os-name">tollama/tollama</div>
+      <p class="os-desc">Local-first TSFM runtime. CLI + FastAPI daemon + Python SDK. MCP, A2A, LangChain, Docker.</p>
+      <div class="os-cta">github.com/tollama/tollama →</div>
+    </a>
+
+    <a class="os-card" href="https://github.com/tollama/Market-Calibration-Agent" target="_blank" rel="noreferrer">
+      <div class="os-name">tollama/Market-Calibration-Agent</div>
+      <p class="os-desc">Prediction market reliability scoring. Brier score, ECE, log-loss calibration + TSFM inference with Streamlit dashboard.</p>
+      <div class="os-cta">github.com/tollama/Market-Calibration-Agent →</div>
+    </a>
+
+    <a class="os-card" href="https://github.com/tollama/spline-lstm" target="_blank" rel="noreferrer">
+      <div class="os-name">tollama/spline-lstm</div>
+      <p class="os-desc">Spline preprocessing + LSTM/GRU neural forecasting. Rolling-window CV, CLI runner, FastAPI + React, agent-ready.</p>
+      <div class="os-cta">github.com/tollama/spline-lstm →</div>
+    </a>
+  </div>
 </section>
 
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-glow"></div>
   <div class="section-label">// Get Started</div>
-  <h2>Time series AI,<br>running locally.</h2>
-  <p>Open source, MIT licensed, and ready for production workflows. Star the repo to follow along.</p>
-  <div class="hero-buttons" style="justify-content:center">
-    <a href="https://github.com/tollama/tollama" class="btn-primary">View on GitHub ↗</a>
-    <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" class="btn-secondary">Full Docs →</a>
+  <h2>Build the next generation<br>of agents — beyond chat.</h2>
+  <p>If you're building for markets, energy, operations, or developer workflows, we'd love to collaborate.</p>
+  <div class="hero-buttons" style="justify-content: center;">
+    <a href="https://github.com/tollama" class="btn-primary">View on GitHub ↗</a>
+    <a href="#products" class="btn-secondary">Explore Platform →</a>
   </div>
 </section>
 
@@ -1597,65 +1208,22 @@ bash scripts/install_mcp.sh --dry-run --base-url &quot;http://127.0.0.1:11435&qu
   <div class="footer-left">
     <div class="footer-logo">tollama</div>
     <ul class="footer-links">
-      <li><a href="https://github.com/tollama/tollama">GitHub</a></li>
-      <li><a href="https://github.com/tollama/tollama/blob/main/README.md">Docs</a></li>
+      <li><a href="https://github.com/tollama">GitHub</a></li>
+      <li><a href="/product/tollama.html">tollama product</a></li>
       <li><a href="https://github.com/tollama/tollama/blob/main/roadmap.md">Roadmap</a></li>
       <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE">License</a></li>
     </ul>
   </div>
   <div class="footer-right">
-    <span class="mit-badge">MIT</span>
-    &copy; 2026 Tollama Contributors
+    <div class="footer-right-row">
+      <span class="mit-badge">MIT</span>
+      &copy; 2026 Tollama Contributors
+    </div>
+    <div class="footer-disclaimer">
+      "Siri" is referenced as a category comparison only. Tollama is not affiliated with Apple.
+    </div>
   </div>
 </footer>
-
-
-<script>
-  // Copy buttons for Quickstart code panels
-  (function () {
-    function fallbackCopyText(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'absolute';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(ta);
-    }
-
-    async function copyToClipboard(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        fallbackCopyText(text);
-      }
-    }
-
-    document.querySelectorAll('.copy-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const codeEl = btn.parentElement.querySelector('code');
-        const text = (codeEl ? codeEl.innerText : '').trimEnd();
-        if (!text) return;
-
-        const original = btn.textContent;
-        try {
-          await copyToClipboard(text);
-          btn.textContent = 'Copied';
-          btn.classList.add('copied');
-          window.setTimeout(() => {
-            btn.textContent = original;
-            btn.classList.remove('copied');
-          }, 1200);
-        } catch (e) {
-          btn.textContent = 'Copy failed';
-          window.setTimeout(() => { btn.textContent = original; }, 1400);
-        }
-      });
-    });
-  })();
-</script>
 
 </body>
 </html>
