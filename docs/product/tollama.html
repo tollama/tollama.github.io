@@ -14,7 +14,9 @@
     --accent: #00d4ff;
     --accent2: #7c3aed;
     --accent3: #10b981;
-    --wordmark: #7dd3fc;
+    --wordmark: #0ea5e9;
+    --wordmark-soft: #38bdf8;
+    --wordmark-deep: #0284c7;
     --text: #e2e8f0;
     --muted: #64748b;
     --glow: rgba(0, 212, 255, 0.15);
@@ -175,6 +177,15 @@
     line-height: 1;
     letter-spacing: -3px;
     color: var(--wordmark);
+    background: linear-gradient(
+      100deg,
+      var(--wordmark-soft) 0%,
+      var(--wordmark) 70%,
+      var(--wordmark-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 12px;
     animation: slideUp 0.8s ease 0.1s both;
   }
