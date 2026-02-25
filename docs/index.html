@@ -485,6 +485,18 @@
 
   .agent-card:hover { border-color: #2d3748; }
 
+  .agent-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .agent-card-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--accent);
+  }
+
   .agent-icon {
     font-size: 30px;
     margin-bottom: 18px;
@@ -954,9 +966,9 @@
       <span class="product-icon">⚡</span>
       <div class="product-status"><span class="status-dot"></span> Production</div>
       <div class="product-name">tollama</div>
-      <div class="product-tagline">Ollama for Time Series</div>
+      <div class="product-tagline">Run SOTA Time Series Foundation Models with a single API.</div>
       <p class="product-desc">
-        A local-first forecasting daemon with unified REST + SDK interfaces. Pull, serve, and query Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API.
+        A forecasting daemon with unified CLI, REST, and SDK interfaces for pulling, serving, and querying Chronos, TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API.
       </p>
       <div class="product-tags">
         <span class="tag blue">TSFM Runtime</span>
@@ -1016,7 +1028,7 @@
   </p>
 
   <div class="agent-grid">
-    <div class="agent-card">
+    <a class="agent-card agent-card-link" href="/product/market-calibration-agent.html" aria-label="View Market Calibration Agent product page">
       <span class="agent-icon">📈</span>
       <div class="agent-title">Market Calibration Agent</div>
       <p class="agent-desc">Interprets, calibrates, and explains uncertainty in probabilistic market signals so teams can make better, risk-aware decisions.</p>
@@ -1025,7 +1037,7 @@
         <li>Calibration / normalization pipelines</li>
         <li>Decision support with uncertainty bounds</li>
       </ul>
-    </div>
+    </a>
 
     <div class="agent-card">
       <span class="agent-icon">💻</span>
