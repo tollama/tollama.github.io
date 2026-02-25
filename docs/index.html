@@ -492,9 +492,9 @@
   }
 
   .agent-card-link:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--agent-card-accent, var(--accent));
     outline-offset: 2px;
-    border-color: var(--accent);
+    border-color: var(--agent-card-accent, var(--accent));
   }
 
   .agent-icon {
@@ -1028,7 +1028,7 @@
   </p>
 
   <div class="agent-grid">
-    <a class="agent-card agent-card-link" href="/product/market-calibration-agent.html" aria-label="View Market Calibration Agent product page">
+    <a class="agent-card agent-card-link" href="/product/market-calibration-agent.html" aria-label="View Market Calibration Agent product page" style="--agent-card-accent: #7c3aed;">
       <span class="agent-icon">📈</span>
       <div class="agent-title">Market Calibration Agent</div>
       <p class="agent-desc">Interprets, calibrates, and explains uncertainty in probabilistic market signals so teams can make better, risk-aware decisions.</p>
