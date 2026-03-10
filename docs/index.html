@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tollama AI — AI Agents for Predictive Industries</title>
+  <title>Tollama AI — Open-Source Forecasting Stack</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
@@ -17,6 +17,7 @@
       --accent: #00d4ff;
       --accent2: #7c3aed;
       --accent3: #10b981;
+      --accent-amber: #f59e0b;
       --text: #e2e8f0;
       --muted: #64748b;
       --glow: rgba(0, 212, 255, 0.15);
@@ -55,15 +56,15 @@
 
     body::after {
       content: '';
-    position: fixed;
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
-    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* NAV */
@@ -102,13 +103,10 @@
     }
 
     @keyframes pulse {
-
-      0%,
-      100% {
+      0%, 100% {
         opacity: 1;
         transform: scale(1);
       }
-
       50% {
         opacity: 0.6;
         transform: scale(0.8);
@@ -208,16 +206,6 @@
       background-clip: text;
     }
 
-    .hero-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-      animation: slideUp 0.8s ease 0.15s both;
-    }
-
     .hero-headline {
       font-size: clamp(20px, 3vw, 32px);
       font-weight: 700;
@@ -232,7 +220,7 @@
     .hero-sub {
       font-size: 17px;
       color: var(--muted);
-      max-width: 580px;
+      max-width: 620px;
       line-height: 1.75;
       margin-bottom: 52px;
       animation: slideUp 0.8s ease 0.3s both;
@@ -326,8 +314,8 @@
       max-width: 620px;
     }
 
-    /* THE SHIFT */
-    .shift-section {
+    /* PROBLEM */
+    .problem-section {
       position: relative;
       z-index: 1;
       background: var(--surface);
@@ -336,36 +324,36 @@
       padding: 100px 40px;
     }
 
-    .shift-inner {
+    .problem-inner {
       max-width: 1100px;
       margin: 0 auto;
     }
 
-    .shift-grid {
+    .problem-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
       margin-top: 60px;
     }
 
-    .shift-card {
+    .problem-card {
       border-left: 2px solid var(--border);
       padding-left: 28px;
     }
 
-    .shift-card:nth-child(1) {
+    .problem-card:nth-child(1) {
       border-left-color: var(--accent);
     }
 
-    .shift-card:nth-child(2) {
+    .problem-card:nth-child(2) {
+      border-left-color: var(--accent-amber);
+    }
+
+    .problem-card:nth-child(3) {
       border-left-color: var(--accent2);
     }
 
-    .shift-card:nth-child(3) {
-      border-left-color: var(--accent3);
-    }
-
-    .shift-num {
+    .problem-num {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--muted);
@@ -373,68 +361,63 @@
       margin-bottom: 12px;
     }
 
-    .shift-title {
+    .problem-title {
       font-size: 20px;
       font-weight: 800;
       letter-spacing: -0.4px;
       margin-bottom: 12px;
     }
 
-    .shift-desc {
+    .problem-desc {
       font-size: 14px;
       color: var(--muted);
       line-height: 1.75;
     }
 
-    /* PRODUCTS */
-    .product-grid {
+    /* FLAGSHIP PRODUCTS */
+    .flagship-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 24px;
       margin-top: 56px;
     }
 
-    .product-card {
+    .flagship-card {
       display: block;
       text-decoration: none;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
+      padding: 40px 36px;
       transition: all 0.25s;
       position: relative;
       overflow: hidden;
     }
 
-    .product-card::before {
+    .flagship-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 2px;
+      height: 3px;
       background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .product-card:hover {
-      border-color: var(--card-accent, var(--accent));
-      transform: translateY(-4px);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 212, 255, 0.05);
-    }
-
-    .product-card:hover::before {
       opacity: 1;
     }
 
-    .product-icon {
+    .flagship-card:hover {
+      border-color: var(--card-accent, var(--accent));
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 60px var(--card-glow, rgba(0, 212, 255, 0.08));
+    }
+
+    .flagship-icon {
       font-size: 36px;
       margin-bottom: 20px;
       display: block;
     }
 
-    .product-status {
+    .flagship-status {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -455,271 +438,128 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    .product-name {
+    .flagship-name {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 16px;
+      font-size: 22px;
       font-weight: 500;
       color: var(--text);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .product-tagline {
-      font-size: 12px;
+    .flagship-tagline {
+      font-size: 13px;
       color: var(--muted);
       margin-bottom: 16px;
       letter-spacing: 0.02em;
     }
 
-    .product-desc {
-      font-size: 14px;
+    .flagship-desc {
+      font-size: 15px;
       color: var(--muted);
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 24px;
     }
 
-    .product-tags {
+    .flagship-stats {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
       margin-bottom: 24px;
     }
 
-    .tag {
+    .flagship-stat {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border);
+      font-size: 11px;
       color: var(--muted);
     }
 
-    .tag.blue {
-      border-color: rgba(0, 212, 255, 0.3);
-      color: var(--accent);
-      background: rgba(0, 212, 255, 0.06);
+    .flagship-stat strong {
+      color: var(--text);
+      font-weight: 500;
     }
 
-    .tag.green {
-      border-color: rgba(16, 185, 129, 0.3);
-      color: var(--accent3);
-      background: rgba(16, 185, 129, 0.06);
-    }
-
-    .tag.purple {
-      border-color: rgba(124, 58, 237, 0.3);
-      color: #a78bfa;
-      background: rgba(124, 58, 237, 0.06);
-    }
-
-    .tag.amber {
-      border-color: rgba(245, 158, 11, 0.3);
-      color: #fbbf24;
-      background: rgba(245, 158, 11, 0.06);
-    }
-
-    .product-cta {
+    .flagship-cta {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      color: var(--accent);
+      color: var(--card-accent, var(--accent));
       letter-spacing: 0.05em;
     }
 
-    /* AGENTS */
-    .agent-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 56px;
-    }
-
-    .agent-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 28px;
-      transition: border-color 0.2s;
-    }
-
-    .agent-card:hover {
-      border-color: #2d3748;
-    }
-
-    .agent-card-link {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .agent-card-link:focus-visible {
-      outline: 2px solid var(--agent-card-accent, var(--accent));
-      outline-offset: 2px;
-      border-color: var(--agent-card-accent, var(--accent));
-    }
-
-    .agent-icon {
-      font-size: 30px;
-      margin-bottom: 18px;
-      display: block;
-    }
-
-    .agent-title {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 8px;
-    }
-
-    .agent-desc {
-      font-size: 13.5px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-
-    .agent-uses {
-      list-style: none;
-    }
-
-    .agent-uses li {
-      font-size: 12.5px;
-      color: var(--muted);
-      padding: 4px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .agent-uses li::before {
-      content: '→';
-      color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-    }
-
-    /* VERTICALS */
-    .verticals-grid {
+    /* ECOSYSTEM */
+    .ecosystem-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-top: 56px;
+      gap: 16px;
+      margin-top: 40px;
     }
 
-    .vertical-card {
+    .ecosystem-card {
+      display: block;
+      text-decoration: none;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 0.2s;
     }
 
-    .vertical-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--v-color, var(--accent)), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+    .ecosystem-card:hover {
+      border-color: var(--card-accent, var(--accent));
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
     }
 
-    .vertical-card:hover {
-      border-color: var(--v-color, var(--accent));
+    .ecosystem-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
     }
 
-    .vertical-card:hover::after {
-      opacity: 1;
+    .ecosystem-icon {
+      font-size: 24px;
     }
 
-    .vertical-icon {
-      font-size: 28px;
-      margin-bottom: 16px;
-      display: block;
+    .ecosystem-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
     }
 
-    .vertical-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 8px;
+    .ecosystem-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--accent3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-left: auto;
     }
 
-    .vertical-desc {
-      font-size: 13.5px;
+    .ecosystem-status .status-dot {
+      width: 4px;
+      height: 4px;
+    }
+
+    .ecosystem-desc {
+      font-size: 13px;
       color: var(--muted);
       line-height: 1.7;
+      margin-bottom: 16px;
     }
 
-    /* HOW IT WORKS */
-    .how-section {
-      position: relative;
-      z-index: 1;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 100px 40px;
-      overflow: hidden;
-    }
-
-    .how-section::before {
-      content: '';
-      position: absolute;
-      inset: -200px -100px;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.12) 0%, transparent 55%),
-        radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .how-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-top: 60px;
-      background: var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    .how-step {
-      background: var(--bg);
-      padding: 32px 28px;
-      position: relative;
-    }
-
-    .how-num {
+    .ecosystem-cta {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.15em;
-      margin-bottom: 14px;
+      color: var(--card-accent, var(--accent));
     }
 
-    .how-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      margin-bottom: 8px;
-    }
-
-    .how-desc {
-      font-size: 13.5px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    /* UPCOMING */
+    /* UPCOMING / ROADMAP */
     .upcoming-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -773,51 +613,6 @@
       line-height: 1.65;
     }
 
-    /* OPEN SOURCE */
-    .os-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-top: 48px;
-    }
-
-    .os-card {
-      display: block;
-      text-decoration: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.2s;
-    }
-
-    .os-card:hover {
-      border-color: rgba(0, 212, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    }
-
-    .os-name {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      color: var(--text);
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .os-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .os-cta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-    }
-
     /* CTA */
     .cta-section {
       position: relative;
@@ -850,8 +645,28 @@
       font-size: 18px;
       color: var(--muted);
       max-width: 520px;
-      margin: 0 auto 48px;
+      margin: 0 auto 24px;
       line-height: 1.7;
+    }
+
+    .repo-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 20px;
+      margin-bottom: 48px;
+    }
+
+    .repo-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .repo-links a:hover {
+      color: var(--accent);
     }
 
     /* FOOTER */
@@ -903,14 +718,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-direction: column;
-      text-align: right;
-    }
-
-    .footer-right-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .mit-badge {
@@ -923,20 +730,11 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .footer-disclaimer {
-      font-size: 11px;
-      color: #374151;
-      max-width: 340px;
-      text-align: right;
-      line-height: 1.5;
-    }
-
     @keyframes fadeIn {
       from {
         opacity: 0;
         transform: translateY(10px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -948,7 +746,6 @@
         opacity: 0;
         transform: translateY(24px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -974,24 +771,16 @@
     }
 
     @media (max-width: 900px) {
-      .shift-grid {
+      .problem-grid {
         grid-template-columns: 1fr;
         gap: 32px;
       }
 
-      .product-grid {
+      .flagship-grid {
         grid-template-columns: 1fr;
       }
 
-      .verticals-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .how-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .os-grid {
+      .ecosystem-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -1010,28 +799,23 @@
         text-align: center;
       }
 
-      .footer-disclaimer {
-        text-align: center;
+      .footer-left {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- NAV -->
   <nav>
     <a href="/" class="nav-logo">
       <span class="dot"></span>
       Tollama AI
     </a>
     <ul class="nav-links">
-      <li><a href="#products">Platform</a></li>
-      <li><a href="#agents">Agents</a></li>
-      <li><a href="#verticals">Solutions</a></li>
-      <li><a href="#upcoming">Roadmap</a></li>
-      <li><a href="#opensource">Open Source</a></li>
-      <li><a href="https://github.com/tollama" class="nav-cta">GitHub ↗</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="https://github.com/tollama" class="nav-cta" target="_blank" rel="noreferrer">GitHub</a></li>
     </ul>
   </nav>
 
@@ -1039,297 +823,153 @@
   <section class="hero">
     <div class="badge">
       <span class="badge-dot"></span>
-      Autonomous AI Agents for Predictive Industries
+      Open Source · MIT Licensed · Python 3.11+
     </div>
-
-    <p class="hero-label">The Post-Siri Era of AI</p>
 
     <h1>
       <span class="toll">To</span><span class="llama">llama</span><span class="llama"> AI</span>
     </h1>
 
     <p class="hero-headline">
-      Autonomous AI Agents that Forecast,<br>Reason, and Execute.
+      The open-source stack that serves<br>forecasting models and picks the best one.
     </p>
 
     <p class="hero-sub">
-      Assistants like Siri helped people <strong>talk to devices</strong>.<br>
-      Tollama AI builds <strong>autonomous AI agents</strong> that operate inside real business workflows — predicting the
-      next state of the world and taking action.
+      Tollama AI combines <strong>time series model serving</strong> with <strong>rigorous evaluation</strong> —
+      powered by autonomous agents that forecast, benchmark, and select the right model for production.
     </p>
 
     <div class="hero-buttons">
-      <a href="#products" class="btn-primary">Explore the Platform</a>
-      <a href="https://github.com/tollama" class="btn-secondary">View on GitHub ↗</a>
+      <a href="#products" class="btn-primary">Get Started</a>
+      <a href="https://github.com/tollama" class="btn-secondary" target="_blank" rel="noreferrer">View on GitHub ↗</a>
     </div>
   </section>
 
-  <!-- THE SHIFT -->
-  <div class="shift-section">
-    <div class="shift-inner">
-      <div class="section-label">// The Shift</div>
-      <div class="section-title">From "answering"<br>to "operating."</div>
+  <!-- PROBLEM -->
+  <div class="problem-section">
+    <div class="problem-inner">
+      <div class="section-label">// The Problem</div>
+      <div class="section-title">Forecasting is<br>fragmented.</div>
       <p class="section-desc">
-        The first wave of assistants was built for conversation. The next wave is built for <strong
-          style="color: var(--text);">systems</strong>: markets, demand, operations, and software.
+        Teams waste weeks wiring up incompatible model runtimes, writing one-off evaluation notebooks, and guessing
+        which model works best. There is no standard way to serve, evaluate, or select time series models.
       </p>
 
-      <div class="shift-grid">
-        <div class="shift-card">
-          <div class="shift-num">01 / LLMs</div>
-          <div class="shift-title">Reasoning became cheap.</div>
-          <p class="shift-desc">Large language models democratized structured reasoning over unstructured data — turning
-            documents, signals, and intent into actionable understanding.</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-num">01 / Serving</div>
+          <div class="problem-title">Fragmented runtimes.</div>
+          <p class="problem-desc">Every TSFM ships its own install, APIs, and deployment patterns. Serving multiple
+            models means managing multiple stacks with conflicting dependencies.</p>
         </div>
-        <div class="shift-card">
-          <div class="shift-num">02 / Time Series</div>
-          <div class="shift-title">Prediction became scalable.</div>
-          <p class="shift-desc">Time Series Foundation Models made it possible to forecast any temporal signal — demand,
-            load, price, usage — without per-dataset retraining.</p>
+        <div class="problem-card">
+          <div class="problem-num">02 / Evaluation</div>
+          <div class="problem-title">Unfair evaluation.</div>
+          <p class="problem-desc">One-off notebooks with random splits, inconsistent metrics, and no reproducibility.
+            No standardized way to compare models on your data.</p>
         </div>
-        <div class="shift-card">
-          <div class="shift-num">03 / Agents</div>
-          <div class="shift-title">Execution became programmable.</div>
-          <p class="shift-desc">Agent frameworks let models take actions: calling APIs, orchestrating workflows,
-            calibrating signals, and closing the loop from forecast to decision.</p>
+        <div class="problem-card">
+          <div class="problem-num">03 / Selection</div>
+          <div class="problem-title">Guesswork in production.</div>
+          <p class="problem-desc">Without rigorous backtesting, teams deploy the wrong model — or never deploy at all.
+            Model selection stays manual and error-prone.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PRODUCTS -->
+  <!-- FLAGSHIP PRODUCTS -->
   <section id="products" class="section">
-    <div class="section-label">// Platform</div>
-    <div class="section-title">Four products.<br>One predictive stack.</div>
+    <div class="section-label">// The Stack</div>
+    <div class="section-title">Two products.<br>One complete platform.</div>
     <p class="section-desc">
-      Tollama AI builds the runtime infrastructure and vertical agents that power predictive AI — from local model serving
-      and model evaluation to calibration and decision support.
+      tollama serves the models. tollama-eval finds the best one. Together, they are the complete open-source
+      forecasting stack.
     </p>
 
-    <div class="product-grid">
+    <div class="flagship-grid">
       <!-- tollama -->
-      <a class="product-card" href="/product/tollama.html" style="--card-accent: #00d4ff;">
-        <span class="product-icon">⚡</span>
-        <div class="product-status"><span class="status-dot"></span> Production</div>
-        <div class="product-name">tollama</div>
-        <div class="product-tagline">Run SOTA Time Series Foundation Models with a single API.</div>
-        <p class="product-desc">
-          A forecasting daemon with unified CLI, REST, and SDK interfaces for pulling, serving, and querying Chronos,
-          TimesFM, Moirai, Sundial, Granite TTM, and Toto through one CLI and HTTP API.
+      <a class="flagship-card" href="/product/tollama.html"
+        style="--card-accent: #00d4ff; --card-glow: rgba(0, 212, 255, 0.08);">
+        <span class="flagship-icon">⚡</span>
+        <div class="flagship-status"><span class="status-dot"></span> Production</div>
+        <div class="flagship-name">tollama</div>
+        <div class="flagship-tagline">The runtime. Ollama for Time Series.</div>
+        <p class="flagship-desc">
+          Unifies 7 TSFMs and 4 neural baselines behind one daemon, one SDK, one REST API, and first-class agent
+          pathways. Pull, serve, and query Chronos, TimesFM, Moirai, and more through a single interface.
         </p>
-        <div class="product-tags">
-          <span class="tag blue">TSFM Runtime</span>
-          <span class="tag green">FastAPI</span>
-          <span class="tag green">MCP</span>
-          <span class="tag blue">A2A JSON-RPC</span>
-          <span class="tag">LangChain</span>
+        <div class="flagship-stats">
+          <span class="flagship-stat"><strong>11</strong> Models</span>
+          <span class="flagship-stat"><strong>42</strong> Endpoints</span>
+          <span class="flagship-stat"><strong>MCP</strong> + LangChain + A2A</span>
         </div>
-        <div class="product-cta">View product →</div>
+        <div class="flagship-cta">Learn more →</div>
       </a>
 
-      <!-- Spline-LSTM -->
-      <a class="product-card" href="/product/spline-lstm.html" style="--card-accent: #10b981;">
-        <span class="product-icon">🧠</span>
-        <div class="product-status"><span class="status-dot"></span> Production</div>
-        <div class="product-name">spline-lstm</div>
-        <div class="product-tagline">Spline + LSTM/GRU Forecasting Pipeline</div>
-        <p class="product-desc">
-          Combines spline-based preprocessing with LSTM and GRU neural networks to capture both short-term noise
-          patterns and long-term temporal dependencies in production environments.
-        </p>
-        <div class="product-tags">
-          <span class="tag green">TensorFlow</span>
-          <span class="tag blue">FastAPI</span>
-          <span class="tag blue">React</span>
-          <span class="tag">LSTM/GRU</span>
-          <span class="tag green">Agent-ready</span>
-        </div>
-        <div class="product-cta">View product →</div>
-      </a>
-
-      <!-- Market Calibration Agent -->
-      <a class="product-card" href="/product/market-calibration-agent.html" style="--card-accent: #7c3aed;">
-        <span class="product-icon">📊</span>
-        <div class="product-status"><span class="status-dot"></span> Production</div>
-        <div class="product-name">Market Calibration Agent</div>
-        <div class="product-tagline">Trust Score for Prediction Markets</div>
-        <p class="product-desc">
-          Assess the reliability of prediction market probabilities on Polymarket. Quantifies how trustworthy each
-          probability is through calibration analysis, statistical metrics, and TSFM inference.
-        </p>
-        <div class="product-tags">
-          <span class="tag purple">Calibration</span>
-          <span class="tag blue">Polymarket</span>
-          <span class="tag green">TSFM</span>
-          <span class="tag">Streamlit</span>
-        </div>
-        <div class="product-cta">View product →</div>
-      </a>
-
-      <!-- Forecasting Evaluator Agent -->
-      <a class="product-card" href="/product/forecasting-evaluator-agent.html" style="--card-accent: #f59e0b;">
-        <span class="product-icon">🔬</span>
-        <div class="product-status" style="color: #f59e0b;">
+      <!-- tollama-eval -->
+      <a class="flagship-card" href="/product/forecasting-evaluator-agent.html"
+        style="--card-accent: #f59e0b; --card-glow: rgba(245, 158, 11, 0.08);">
+        <span class="flagship-icon">🔬</span>
+        <div class="flagship-status" style="color: #f59e0b;">
           <span class="status-dot" style="background: #f59e0b; box-shadow: 0 0 6px #f59e0b;"></span> Beta
         </div>
-        <div class="product-name">tollama-eval</div>
-        <div class="product-tagline">Forecasting Evaluator Agent</div>
-        <p class="product-desc">
-          Automated backtesting, leaderboard scoring, and model comparison across statistical, ML, neural,
-          and Tollama-powered TSFM models. CLI, SDK, REST API, and campaign mode.
+        <div class="flagship-name">tollama-eval</div>
+        <div class="flagship-tagline">The evaluator. Know which model works.</div>
+        <p class="flagship-desc">
+          Benchmarks 36+ models with expanding-window cross-validation, AutoML, leaderboard scoring, and reproducible
+          HTML/PDF reports. CLI, SDK, REST API, and campaign mode.
         </p>
-        <div class="product-tags">
-          <span class="tag amber">Benchmarking</span>
-          <span class="tag blue">36+ Models</span>
-          <span class="tag green">AutoML</span>
-          <span class="tag">Reports</span>
+        <div class="flagship-stats">
+          <span class="flagship-stat"><strong>36+</strong> Models</span>
+          <span class="flagship-stat"><strong>Expanding-Window</strong> CV</span>
+          <span class="flagship-stat"><strong>AutoML</strong> + Reports</span>
         </div>
-        <div class="product-cta" style="color: #f59e0b;">View product &rarr;</div>
+        <div class="flagship-cta" style="color: #f59e0b;">Learn more →</div>
       </a>
     </div>
   </section>
 
-  <!-- AGENTS -->
-  <section id="agents" class="section" style="padding-top: 10px;">
-    <div class="section-label">// Agents We Build</div>
-    <div class="section-title">Domain agents for<br>high-stakes environments.</div>
+  <!-- ECOSYSTEM -->
+  <section class="section" style="padding-top: 10px;">
+    <div class="section-label">// Ecosystem</div>
+    <div class="section-title">Supporting tools.</div>
     <p class="section-desc">
-      Each Tollama AI agent is purpose-built for a domain where forecasting, uncertainty, and action are mission-critical.
+      Specialized forecasting and calibration tools built on the Tollama stack.
     </p>
 
-    <div class="agent-grid">
-      <a class="agent-card agent-card-link" href="/product/market-calibration-agent.html"
-        aria-label="View Market Calibration Agent product page" style="--agent-card-accent: #7c3aed;">
-        <span class="agent-icon">📈</span>
-        <div class="agent-title">Market Calibration Agent</div>
-        <p class="agent-desc">Interprets, calibrates, and explains uncertainty in probabilistic market signals so teams
-          can make better, risk-aware decisions.</p>
-        <ul class="agent-uses">
-          <li>Signal reliability &amp; drift detection</li>
-          <li>Calibration / normalization pipelines</li>
-          <li>Decision support with uncertainty bounds</li>
-        </ul>
+    <div class="ecosystem-grid">
+      <a class="ecosystem-card" href="/product/spline-lstm.html" style="--card-accent: #10b981;">
+        <div class="ecosystem-header">
+          <span class="ecosystem-icon">🧠</span>
+          <span class="ecosystem-name">spline-lstm</span>
+          <span class="ecosystem-status"><span class="status-dot"></span> Production</span>
+        </div>
+        <p class="ecosystem-desc">Spline + LSTM/GRU forecasting pipeline with rolling-window CV, FastAPI server, React
+          dashboard, and agent-ready integrations.</p>
+        <div class="ecosystem-cta">View product →</div>
       </a>
 
-      <div class="agent-card">
-        <span class="agent-icon">💻</span>
-        <div class="agent-title">Coding Agent</div>
-        <p class="agent-desc">Turns product intent into production work — planning, generating, refactoring, testing,
-          and iterating across infrastructure and integrations.</p>
-        <ul class="agent-uses">
-          <li>Accelerating platform development</li>
-          <li>Scaling vertical integrations</li>
-          <li>Reducing iteration cycles</li>
-        </ul>
-      </div>
-
-      <div class="agent-card">
-        <span class="agent-icon">📡</span>
-        <div class="agent-title">Time Series Forecasting Agents</div>
-        <p class="agent-desc">Agents designed for real forecasting environments where data is messy, regimes shift, and
-          decisions must be made continuously.</p>
-        <ul class="agent-uses">
-          <li>Demand / load / operational forecasting</li>
-          <li>Scenario generation &amp; monitoring</li>
-          <li>Anomaly response &amp; adaptive reforecasting</li>
-        </ul>
-      </div>
+      <a class="ecosystem-card" href="/product/market-calibration-agent.html" style="--card-accent: #7c3aed;">
+        <div class="ecosystem-header">
+          <span class="ecosystem-icon">📊</span>
+          <span class="ecosystem-name">Market Calibration Agent</span>
+          <span class="ecosystem-status"><span class="status-dot"></span> Production</span>
+        </div>
+        <p class="ecosystem-desc">Trust score for prediction markets. Calibration analysis, statistical metrics, and
+          TSFM inference on Polymarket probabilities.</p>
+        <div class="ecosystem-cta" style="color: #7c3aed;">View product →</div>
+      </a>
     </div>
   </section>
 
-  <!-- VERTICALS -->
-  <section id="verticals" class="section" style="padding-top: 10px;">
-    <div class="section-label">// Vertical AI Solutions</div>
-    <div class="section-title">Built for industries where<br>prediction matters.</div>
-
-    <div class="verticals-grid">
-      <div class="vertical-card" style="--v-color: #7c3aed;">
-        <span class="vertical-icon">🏦</span>
-        <div class="vertical-title">Finance &amp; Markets</div>
-        <p class="vertical-desc">Decision agents for calibrated signals, risk-aware insights, and scenario-driven
-          execution. From prediction market calibration to portfolio scenario trees.</p>
-      </div>
-
-      <div class="vertical-card" style="--v-color: #10b981;">
-        <span class="vertical-icon">⚡</span>
-        <div class="vertical-title">Energy &amp; Demand</div>
-        <p class="vertical-desc">Forecasting agents for load and demand planning, anomaly response, and resource
-          optimization in systems where accuracy directly impacts cost and reliability.</p>
-      </div>
-
-      <div class="vertical-card" style="--v-color: #00d4ff;">
-        <span class="vertical-icon">🔧</span>
-        <div class="vertical-title">Operations</div>
-        <p class="vertical-desc">Agents that monitor systems, forecast bottlenecks, and recommend actions before
-          failures happen — turning reactive ops into predictive ops.</p>
-      </div>
-
-      <div class="vertical-card" style="--v-color: #f59e0b;">
-        <span class="vertical-icon">🛠️</span>
-        <div class="vertical-title">Software &amp; Engineering</div>
-        <p class="vertical-desc">Agentic workflows that build and maintain the infrastructure required to ship vertical
-          AI faster — from scaffolding to deployment and testing.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <div class="how-section">
-    <div class="how-inner">
-      <div class="section-label">// How It Works</div>
-      <div class="section-title">A simple loop:<br>Forecast → Calibrate → Act.</div>
-      <p class="section-desc">
-        This is the operating model for post-assistant AI — a continuous cycle that turns signals into decisions and
-        decisions into outcomes.
-      </p>
-
-      <div class="how-grid">
-        <div class="how-step">
-          <div class="how-num">STEP 01</div>
-          <div class="how-title">Ingest</div>
-          <p class="how-desc">Ingest time series data, documents, and event streams from APIs, uploads, or live feeds.
-          </p>
-        </div>
-        <div class="how-step">
-          <div class="how-num">STEP 02</div>
-          <div class="how-title">Forecast</div>
-          <p class="how-desc">Run TSFM or hybrid models (Chronos, TimesFM, spline-LSTM) to predict the next state of the
-            system.</p>
-        </div>
-        <div class="how-step">
-          <div class="how-num">STEP 03</div>
-          <div class="how-title">Calibrate</div>
-          <p class="how-desc">Assess uncertainty, detect drift, normalize signals, and quantify reliability before
-            acting.</p>
-        </div>
-        <div class="how-step">
-          <div class="how-num">STEP 04</div>
-          <div class="how-title">Decide</div>
-          <p class="how-desc">Apply domain logic, constraints, and scenario analysis to select the best action.</p>
-        </div>
-        <div class="how-step">
-          <div class="how-num">STEP 05</div>
-          <div class="how-title">Execute</div>
-          <p class="how-desc">Trigger actions through APIs, tools, workflows, or agent-to-agent protocols (A2A, MCP,
-            LangChain).</p>
-        </div>
-        <div class="how-step">
-          <div class="how-num">STEP 06</div>
-          <div class="how-title">Learn &amp; Monitor</div>
-          <p class="how-desc">Track outcomes via SSE streams, Prometheus metrics, and usage telemetry — and adapt
-            continuously.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- UPCOMING -->
-  <section id="upcoming" class="section">
+  <!-- ROADMAP -->
+  <section id="roadmap" class="section">
     <div class="section-label">// Roadmap</div>
-    <div class="section-title">What's coming next.</div>
+    <div class="section-title">What's next.</div>
     <p class="section-desc">
-      The next layer of the Tollama AI stack — expanding from local runtimes to cloud orchestration, continuous monitoring,
-      and multi-agent memory.
+      The next layer of the Tollama AI stack — expanding from local runtimes to cloud orchestration, continuous
+      monitoring, and multi-agent memory.
     </p>
 
     <div class="upcoming-grid">
@@ -1363,53 +1003,22 @@
     </div>
   </section>
 
-  <!-- OPEN SOURCE -->
-  <section id="opensource" class="section" style="padding-top: 10px;">
-    <div class="section-label">// Open Source</div>
-    <div class="section-title">Built in the open.</div>
-    <p class="section-desc">
-      All Tollama AI products ship with MIT licenses — inspect, extend, and deploy with confidence.
-    </p>
-
-    <div class="os-grid">
-      <a class="os-card" href="https://github.com/tollama/tollama" target="_blank" rel="noreferrer">
-        <div class="os-name">tollama/tollama</div>
-        <p class="os-desc">Local-first TSFM runtime. CLI + FastAPI daemon + Python SDK. MCP, A2A, LangChain, Docker.</p>
-        <div class="os-cta">github.com/tollama/tollama →</div>
-      </a>
-
-      <a class="os-card" href="https://github.com/tollama/Market-Calibration-Agent" target="_blank" rel="noreferrer">
-        <div class="os-name">tollama/Market-Calibration-Agent</div>
-        <p class="os-desc">Prediction market reliability scoring. Brier score, ECE, log-loss calibration + TSFM
-          inference with Streamlit dashboard.</p>
-        <div class="os-cta">github.com/tollama/Market-Calibration-Agent →</div>
-      </a>
-
-      <a class="os-card" href="https://github.com/tollama/spline-lstm" target="_blank" rel="noreferrer">
-        <div class="os-name">tollama/spline-lstm</div>
-        <p class="os-desc">Spline preprocessing + LSTM/GRU neural forecasting. Rolling-window CV, CLI runner, FastAPI +
-          React, agent-ready.</p>
-        <div class="os-cta">github.com/tollama/spline-lstm →</div>
-      </a>
-
-      <a class="os-card" href="https://github.com/tollama/tollama-eval" target="_blank" rel="noreferrer">
-        <div class="os-name">tollama/tollama-eval</div>
-        <p class="os-desc">Forecast model benchmarking and selection. 36+ models, expanding-window CV, AutoML, HTML/PDF
-          reports, REST API, campaign mode.</p>
-        <div class="os-cta">github.com/tollama/tollama-eval →</div>
-      </a>
-    </div>
-  </section>
-
   <!-- CTA -->
   <section class="cta-section">
     <div class="cta-glow"></div>
     <div class="section-label">// Get Started</div>
-    <h2>Build the next generation<br>of agents — beyond chat.</h2>
-    <p>If you're building for markets, energy, operations, or developer workflows, we'd love to collaborate.</p>
+    <h2>Run forecasts locally.<br>Evaluate at scale.</h2>
+    <p>Every Tollama AI product is MIT-licensed and open source. Inspect, extend, and deploy with confidence.</p>
+    <div class="repo-links">
+      <a href="https://github.com/tollama/tollama" target="_blank" rel="noreferrer">tollama/tollama</a>
+      <a href="https://github.com/tollama/tollama-eval" target="_blank" rel="noreferrer">tollama/tollama-eval</a>
+      <a href="https://github.com/tollama/spline-lstm" target="_blank" rel="noreferrer">tollama/spline-lstm</a>
+      <a href="https://github.com/tollama/Market-Calibration-Agent" target="_blank"
+        rel="noreferrer">tollama/Market-Calibration-Agent</a>
+    </div>
     <div class="hero-buttons" style="justify-content: center;">
-      <a href="https://github.com/tollama" class="btn-primary">View on GitHub ↗</a>
-      <a href="#products" class="btn-secondary">Explore Platform →</a>
+      <a href="https://github.com/tollama" class="btn-primary" target="_blank" rel="noreferrer">View on GitHub ↗</a>
+      <a href="#products" class="btn-secondary">Explore Products →</a>
     </div>
   </section>
 
@@ -1418,23 +1027,19 @@
     <div class="footer-left">
       <div class="footer-logo">Tollama AI</div>
       <ul class="footer-links">
-        <li><a href="https://github.com/tollama">GitHub</a></li>
-        <li><a href="/product/tollama.html">tollama product</a></li>
+        <li><a href="https://github.com/tollama" target="_blank" rel="noreferrer">GitHub</a></li>
+        <li><a href="/product/tollama.html">tollama</a></li>
+        <li><a href="/product/forecasting-evaluator-agent.html">tollama-eval</a></li>
         <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
         <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
-        <li><a href="/product/forecasting-evaluator-agent.html">tollama-eval</a></li>
-        <li><a href="#upcoming">Roadmap</a></li>
-        <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE">License</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE" target="_blank"
+            rel="noreferrer">License</a></li>
       </ul>
     </div>
     <div class="footer-right">
-      <div class="footer-right-row">
-        <span class="mit-badge">MIT</span>
-        &copy; 2026 Tollama AI Contributors
-      </div>
-      <div class="footer-disclaimer">
-        "Siri" is referenced as a category comparison only. Tollama AI is not affiliated with Apple.
-      </div>
+      <span class="mit-badge">MIT</span>
+      &copy; 2026 Tollama AI Contributors
     </div>
   </footer>
 
