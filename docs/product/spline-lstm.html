@@ -17,6 +17,7 @@
     --accent3: #7c3aed;
     --text: #e2e8f0;
     --muted: #64748b;
+    --glow: rgba(16, 185, 129, 0.15);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,6 +28,7 @@
     color: var(--text);
     font-family: 'Syne', sans-serif;
     overflow-x: hidden;
+    cursor: default;
   }
 
   body::before {
@@ -34,8 +36,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(16,185,129,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16,185,129,0.025) 1px, transparent 1px);
+      linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
     z-index: 0;

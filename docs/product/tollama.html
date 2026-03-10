@@ -404,9 +404,9 @@
 
   .section-desc {
     color: var(--muted);
-    font-size: 17px;
-    line-height: 1.7;
-    max-width: 560px;
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 620px;
   }
 
   /* QUICKSTART + INTERFACES */
@@ -1084,14 +1084,19 @@
     .nav-cta { padding: 8px 14px; }
   }
 
+  @media (max-width: 900px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .arch-runtimes { grid-template-columns: repeat(2, 1fr); }
+    .endpoint-grid { grid-template-columns: 1fr; }
+    .stack-inner { grid-template-columns: 1fr; }
+    .api-inner { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 768px) {
     nav { padding: 16px 24px; }
     .nav-links { display: none; }
-    .problem-grid { grid-template-columns: 1fr; }
     .quickstart-grid { grid-template-columns: 1fr; }
-    .api-inner { grid-template-columns: 1fr; }
-    .stack-inner { grid-template-columns: 1fr; }
-    .endpoint-grid { grid-template-columns: 1fr; padding: 0 24px; }
+    .endpoint-grid { padding: 0 24px; }
     footer { flex-direction: column; gap: 20px; text-align: center; }
   }
 </style>
@@ -1703,10 +1708,10 @@ tollama dashboard</code></pre>
     <div class="footer-logo">Tollama AI</div>
     <ul class="footer-links">
       <li><a href="/">Home</a></li>
+      <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
+      <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
       <li><a href="https://github.com/tollama/tollama">GitHub</a></li>
-      <li><a href="https://github.com/tollama/tollama/blob/main/README.md">Docs</a></li>
       <li><a href="https://github.com/tollama/tollama/blob/main/roadmap.md">Roadmap</a></li>
-      <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE">License</a></li>
     </ul>
   </div>
   <div class="footer-right">
