@@ -1,213 +1,69 @@
-# tollama — Ollama for Time Series
+# Tollama AI Website
 
-`v0.1` · **Open Source** · **MIT License** · **OpenClaw Skills Ready**
+Static marketing site and product microsite bundle for Tollama AI.
 
-**Ollama for Time Series.**  
-Run state-of-the-art foundation models locally.
+This repository is the GitHub Pages site for [www.tollama.com](https://www.tollama.com). It contains the landing page plus product pages for the current Tollama AI stack:
 
-`tollama` is a local-first forecasting daemon with a unified REST API. Pull, serve, and query **Chronos**, **TimesFM**, **Moirai**, **Sundial**, **Granite TTM**, and **Toto** — all through one CLI and HTTP interface.
+- `tollama`: TSFM runtime and unified forecasting API
+- `spline-lstm`: spline + LSTM/GRU forecasting pipeline
+- `Market Calibration Agent`: prediction-market calibration and trust scoring
+- `tollama-eval`: forecasting evaluator and benchmarking layer
 
-`tollama-forecast` skill support is now available for [OpenClaw](https://openclaw.ai/) and was validated in end-to-end checks on **February 19, 2026**.
+The previous `README.md` described the `tollama` Python package. That is no longer what this repository contains. This repo is now the website source only.
 
-<p align="center">
-  <a href="#quickstart"><strong>Quickstart</strong></a> ·
-  <a href="#want-a-deeper-dive"><strong>Deeper dive</strong></a> ·
-  <a href="#openclaw-skill-support"><strong>Skills</strong></a> ·
-  <a href="#model-registry"><strong>Models</strong></a> ·
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#rest-api"><strong>API</strong></a> ·
-  <a href="#compatibility-matrix"><strong>Matrix</strong></a>
-</p>
+## Site Structure
 
----
+```text
+docs/
+  index.html
+  CNAME
+  product/
+    tollama.html
+    spline-lstm.html
+    market-calibration-agent.html
+    forecasting-evaluator-agent.html
+DEPLOY.md
+```
 
-## What is tollama?
+All pages are hand-authored static HTML with inline CSS. There is no build step, package manifest, or framework runtime in this repository.
 
-`tollama` runs a **FastAPI daemon** on `http://127.0.0.1:11435` by default and exposes an **Ollama-style API under `/api`**.
+## Current Content
 
-Typical workflow:
+The site currently presents Tollama AI as an AI platform for predictive industries with:
 
-1. **Serve** the daemon
-2. **Pull** a model from the registry
-3. **Forecast** via HTTP or the CLI
+- a landing page covering platform, agents, solutions, roadmap, and open source positioning
+- a `tollama` product page for the forecasting runtime
+- a `spline-lstm` product page for the neural forecasting pipeline
+- a `Market Calibration Agent` page for prediction-market trust scoring
+- a newly added `Forecasting Evaluator Agent` page for `tollama-eval`
 
----
+## Local Preview
 
-## Quickstart
-
-### 1) Install
-
-**Option A — pip**
+Because the site is static, any simple file server works:
 
 ```bash
-pip install tollama
+cd docs
+python3 -m http.server 8000
 ```
 
-**Option B — from source (dev)**
+Then open `http://localhost:8000`.
 
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
-```
+## Deployment
 
-### 2) Start the daemon
+Deploy with GitHub Pages from the `docs/` directory.
 
-```bash
-tollama serve
-# check:
-curl http://localhost:11435/api/version
-```
+1. Push this repository to GitHub.
+2. In GitHub, open `Settings -> Pages`.
+3. Set `Source` to `Deploy from a branch`.
+4. Select the default branch and the `/docs` folder.
+5. Save and wait for Pages to publish.
 
-### 3) Pull + forecast
+Custom domain is configured via [`docs/CNAME`](docs/CNAME) for `www.tollama.com`.
 
-**HTTP**
+Additional deployment notes live in [`DEPLOY.md`](DEPLOY.md).
 
-```bash
-# pull
-curl -s http://localhost:11435/api/pull   -H 'content-type: application/json'   -d '{ "name": "chronos2" }'
+## Notes
 
-# forecast (example payload)
-curl -s http://localhost:11435/api/forecast   -H 'content-type: application/json'   -d @examples/chronos2_request.json
-```
-
-**CLI**
-
-```bash
-tollama pull chronos2
-tollama run chronos2 --input request.json
-```
-
-OpenClaw users can install `skills/tollama-forecast` and run `scripts/e2e_skills_test.sh` to verify skill integration end-to-end.
-
----
-
-## Want a deeper dive?
-
-Documentation lives in the repo — it’s versioned, reviewable, and stays close to the code.
-
-- **Run guide:** [`docs/how-to-run.md`](docs/how-to-run.md)  
-  Install runner families, pull all TSFM registry models, and troubleshoot common issues.
-- **Covariates contract:** [`docs/covariates.md`](docs/covariates.md)  
-  Exact rules, family mappings, compatibility matrix, and strict vs best-effort behavior.
-- **OpenClaw skill guide:** [`README.md#openclaw-integration-skill-tollama-forecast`](https://github.com/tollama/tollama#openclaw-integration-skill-tollama-forecast)  
-  Install and run the `tollama-forecast` skill package with OpenClaw.
-- **Roadmap:** [`roadmap.md`](roadmap.md)  
-  Implementation-aware progress tracker and planned v1 hardening items.
-
----
-
-## OpenClaw skill support
-
-Tollama now ships an OpenClaw-ready skill package at `skills/tollama-forecast/` with:
-
-- `SKILL.md`
-- `bin/tollama-health.sh`
-- `bin/tollama-models.sh`
-- `bin/tollama-forecast.sh`
-- `examples/*.json`
-
-Validation status:
-
-- OpenClaw skill integration E2E: `pass` on **2026-02-19**
-- Validation command: `scripts/e2e_skills_test.sh`
-- Skill platform: [openclaw.ai](https://openclaw.ai/)
-
----
-
-## Model registry
-
-Six foundation models are highlighted in the landing page.
-
-| Registry name | Vendor / family |
-|---|---|
-| `chronos2` | Amazon · Chronos-2 |
-| `granite-ttm-r2` | IBM · Granite TTM |
-| `timesfm-2.5-200m` | Google · TimesFM 2.5 |
-| `moirai-2.0-R-small` | Salesforce · Uni2TS / Moirai |
-| `sundial-base-128m` | THUML · Sundial |
-| `toto-open-base-1.0` | Datadog · Toto |
-
-Pull any model with:
-
-```bash
-tollama pull chronos2
-```
-
----
-
-## Features
-
-- **⚡ Ollama-style UX**  
-  Familiar `pull`, `run`, `serve`, `list`, `rm` commands for managing time series models locally — no cloud required.
-- **🔒 Isolated runtimes**  
-  Each model family gets its own venv under `~/.tollama/runtimes/`. No dependency conflicts.
-- **📡 Unified HTTP API**  
-  FastAPI daemon with consistent `/api/*` endpoints — drop-in across all supported model families.
-- **📊 Rich covariates**  
-  Unified past + future covariates contract across runners. Best-effort or strict validation modes.
-- **🤗 Hugging Face integration**  
-  Snapshot pull with progress streaming, proxy support, offline mode, and HF token auth.
-- **🧩 OpenClaw skill integration**  
-  Built-in support for the `tollama-forecast` skill package, validated with OpenClaw E2E checks.
-- **🔭 Diagnostics built-in**  
-  `tollama info` output with daemon health, loaded models, runner statuses, and pull defaults.
-
----
-
-## REST API
-
-### Forecast with a single POST
-
-Send time series data with covariates, receive probabilistic forecasts. Consistent request/response schema across model families.
-
-Example request body for `POST /api/forecast`:
-
-```json
-{
-  "model": "timesfm-2.5-200m",
-  "horizon": 7,
-  "series": [{
-    "id": "store_001",
-    "freq": "D",
-    "target": [120, 135, 142],
-    "past_covariates": {
-      "promo": [0, 1, 0]
-    },
-    "future_covariates": {
-      "promo": [1, 1, 0, 0, 1, 0, 1]
-    }
-  }],
-  "parameters": {
-    "covariates_mode": "best_effort"
-  }
-}
-```
-
----
-
-## Compatibility matrix
-
-| Model family | Past numeric | Past categorical | Known-future numeric | Known-future categorical |
-|---|:---:|:---:|:---:|:---:|
-| Chronos-2 | ✓ | ✓ | ✓ | ✓ |
-| Granite TTM | ✓ | — | ✓ | — |
-| TimesFM 2.5 | ✓ | — | ✓ | — |
-| Uni2TS / Moirai | ✓ | — | ✓ | — |
-| Sundial | — | — | — | — |
-| Toto Open Base | ✓ | — | — | — |
-
----
-
-## Landing page
-
-This repo can ship a nice GitHub Pages landing page from `docs/index.html`.
-
-GitHub → **Settings → Pages** → **Deploy from a branch** → Branch: `main` (or default) / Folder: **`/docs`**
-
----
-
-## License
-
-MIT — see [`LICENSE`](LICENSE).
+- This repository does not contain the application code for the linked products.
+- Product pages link out to their respective GitHub repositories under the Tollama organization.
+- If you are looking for the `tollama` runtime itself, use the product link on [`docs/product/tollama.html`](docs/product/tollama.html).
