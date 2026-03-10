@@ -1130,18 +1130,18 @@
 
   <div class="badge">
     <span class="badge-dot"></span>
-    MIT License · Open Source · 6 TSFM Models
+    MIT License · Open Source · 11 Models · Python 3.11+
   </div>
 
   <h1>tollama</h1>
 
   <p class="hero-tagline">
     <strong>Ollama for Time Series.</strong><br>
-    Run SOTA Time Series Foundation Models with a single API.
+    Run TSFMs and neural baselines with a single API.
   </p>
 
   <p class="hero-sub">
-    Time series foundation models are fragmented — incompatible libraries, conflicting dependencies, inconsistent APIs. tollama unifies 6 SOTA TSFMs into a single daemon with isolated runtimes, one REST API, and first-class agent integration.
+    Time series forecasting is still fragmented across incompatible runtimes, conflicting dependencies, and per-model wrappers. tollama now unifies 7 TSFMs and 4 neural baselines behind one daemon, one SDK, one REST API, and first-class agent pathways.
   </p>
 
   <div class="hero-buttons">
@@ -1220,7 +1220,7 @@
 <section id="quickstart" class="section quickstart-section">
   <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
   <p class="section-desc" style="max-width: 820px;">
-    Install tollama, start the daemon, and run your first forecast in under a minute.
+    Install tollama, start the daemon, and run the built-in pull plus forecast demo in under five minutes.
   </p>
 
   <div class="quickstart-grid">
@@ -1230,6 +1230,9 @@
         <button class="copy-btn" type="button">Copy</button>
         <pre><code>python -m pip install tollama
 
+# optional dashboard extras:
+python -m pip install "tollama[tui]"
+
 # from source (dev):
 python -m pip install -e ".[dev]"</code></pre>
       </div>
@@ -1237,34 +1240,36 @@ python -m pip install -e ".[dev]"</code></pre>
       <div class="qs-step-title" style="margin-top: 22px;">2) Start the daemon</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama serve
-# check:
+        <pre><code># terminal 1
+tollama serve
+
+# check health + diagnostics
 curl http://localhost:11435/api/version
+tollama doctor
 tollama info --json</code></pre>
       </div>
     </div>
 
     <div class="qs-card">
-      <div class="qs-step-title">3) Pull + forecast</div>
+      <div class="qs-step-title">3) Run the guided demo</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code># pull a model
+        <pre><code># terminal 2
+tollama quickstart
+
+# or pull and run manually
 tollama pull chronos2
+tollama run chronos2 --input examples/chronos2_request.json
 
-# direct forecast
-curl -s http://localhost:11435/api/forecast \
-  -H 'content-type: application/json' \
-  -d @examples/chronos2_request.json
-
-# progressive SSE stream
-curl -N http://localhost:11435/api/forecast/progressive \
+# stable API route
+curl -s http://localhost:11435/v1/forecast \
   -H 'content-type: application/json' \
   -d @examples/chronos2_request.json</code></pre>
       </div>
 
       <p class="qs-note">
-        Full walkthrough including runtime isolation, data ingest, SDK usage, and agent integrations:
-        <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" target="_blank" rel="noreferrer">docs/how-to-run.md</a>.
+        Human-friendly progress is enabled automatically on interactive terminals. Full setup, models, troubleshooting, and API docs live in the upstream repo:
+        <a href="https://github.com/tollama/tollama/blob/main/README.md" target="_blank" rel="noreferrer">README.md</a>.
       </p>
     </div>
   </div>
@@ -1275,7 +1280,7 @@ curl -N http://localhost:11435/api/forecast/progressive \
   <div class="section-label">// Developer Interfaces</div>
   <div class="section-title">4 ways to access.<br>One unified platform.</div>
   <p class="section-desc" style="max-width: 820px;">
-    Python SDK, REST API, CLI, and dashboards — pick the interface that fits your workflow.
+    Python SDK, REST API, CLI, and dashboards all sit on the same daemon and canonical forecast contract.
   </p>
 
   <div class="quickstart-grid">
@@ -1285,44 +1290,45 @@ curl -N http://localhost:11435/api/forecast/progressive \
         <button class="copy-btn" type="button">Copy</button>
         <pre><code>from tollama import Tollama
 
-client = Tollama()
-result = client.forecast(
-    model="chronos2",
-    series=[{"target": [120, 135, 142]}],
-    horizon=7
-)
-print(result["forecast"])</code></pre>
+with Tollama() as sdk:
+    flow = (
+        sdk.workflow(series={"target": [10, 11, 12, 13, 14], "freq": "D"})
+        .analyze()
+        .auto_forecast(horizon=3)
+    )
+
+print(flow.auto_forecast_result.selection.chosen_model)</code></pre>
       </div>
-      <p class="qs-note">High-level client for forecast, auto-forecast, what-if, pipeline, and generate workflows.</p>
+      <p class="qs-note">The upstream SDK now exposes 16 methods, DataFrame conversion, chained workflows, and follow-on helpers like <code class="inline-code">then_compare()</code>.</p>
     </div>
 
     <div class="qs-card">
       <span class="interface-badge">HTTP API · 42 endpoints</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>curl -s http://localhost:11435/api/forecast \
+        <pre><code>curl -s http://localhost:11435/v1/forecast \
   -H 'content-type: application/json' \
   -d '{
     "model": "chronos2",
-    "horizon": 7,
-    "series": [{"target": [120, 135, 142]}]
+    "series": [{"target": [120, 135, 142], "freq": "D"}],
+    "horizon": 7
   }'</code></pre>
       </div>
-      <p class="qs-note">FastAPI daemon with OpenAPI docs at <code class="inline-code">/docs</code> and <code class="inline-code">/redoc</code>.</p>
+      <p class="qs-note">Beyond forecasting, the current API surface covers analyze, generate, compare, report, what-if, counterfactual, scenario-tree, modelfiles, ingest, A2A, and dashboard bootstrap routes.</p>
     </div>
 
     <div class="qs-card">
       <span class="interface-badge">CLI</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama serve          # start daemon
-tollama pull chronos2  # download model
-tollama run chronos2   # forecast
-tollama list           # show models
-tollama rm chronos2    # remove model
-tollama explain chronos2  # model info</code></pre>
+        <pre><code>tollama serve
+tollama quickstart
+tollama explain chronos2
+tollama runtime install --all
+tollama modelfile list
+tollama config keys</code></pre>
       </div>
-      <p class="qs-note">Ollama-style commands. Shell completion via <code class="inline-code">tollama --install-completion</code>.</p>
+      <p class="qs-note">Recent CLI additions include <code class="inline-code">doctor</code>, <code class="inline-code">open</code>, <code class="inline-code">dashboard</code>, <code class="inline-code">runtime</code>, <code class="inline-code">modelfile</code>, and <code class="inline-code">dev scaffold</code>.</p>
     </div>
 
     <div class="qs-card">
@@ -1335,10 +1341,10 @@ tollama open
 # → http://127.0.0.1:11435/dashboard
 
 # Terminal TUI
-pip install tollama[tui]
+python -m pip install "tollama[tui]"
 tollama dashboard</code></pre>
       </div>
-      <p class="qs-note">Bundled web GUI and Textual TUI with model selectors, forecast visualization, and auth-aware routes.</p>
+      <p class="qs-note">The bundled dashboard now ships with packaged static assets, auth-aware API routes, and an aggregated <code class="inline-code">/api/dashboard/state</code> bootstrap endpoint.</p>
     </div>
   </div>
 </section>
@@ -1346,8 +1352,8 @@ tollama dashboard</code></pre>
 <!-- MODELS -->
 <section id="models" class="section">
   <div class="section-label">// Model Registry</div>
-  <div class="section-title">6 foundation models.<br>One unified API.</div>
-  <p class="section-desc">Pull any supported TSFM from Hugging Face with a single command. Each model runs in its own isolated runtime to prevent dependency conflicts.</p>
+  <div class="section-title">11 forecasting backends.<br>One unified API.</div>
+  <p class="section-desc">The current upstream registry spans 7 TSFMs and 4 neural baselines. They all share the same CLI, SDK, HTTP, MCP, and A2A surface, while family runtimes stay isolated under <code class="inline-code">~/.tollama/runtimes/</code>.</p>
 
   <div class="models-grid">
     <div class="model-card" style="--card-color: #f59e0b;">
@@ -1411,6 +1417,59 @@ tollama dashboard</code></pre>
         <span class="tag">open-base</span>
       </div>
     </div>
+
+    <div class="model-card" style="--card-color: #14b8a6;">
+      <div class="model-status"><span class="status-dot"></span> PASSING</div>
+      <div class="model-name">lag-llama</div>
+      <div class="model-vendor">TSFM Community · Lag-Llama</div>
+      <div class="model-tags">
+        <span class="tag">target-only</span>
+        <span class="tag blue">zero-shot</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #60a5fa;">
+      <div class="model-status"><span class="status-dot"></span> BASELINE</div>
+      <div class="model-name">patchtst</div>
+      <div class="model-vendor">IBM Granite · PatchTST</div>
+      <div class="model-tags">
+        <span class="tag">neural-baseline</span>
+        <span class="tag">target-only</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #f472b6;">
+      <div class="model-status"><span class="status-dot"></span> BASELINE</div>
+      <div class="model-name">tide</div>
+      <div class="model-vendor">Unit8 / Darts · TiDE</div>
+      <div class="model-tags">
+        <span class="tag">neural-baseline</span>
+        <span class="tag green">past-numeric</span>
+        <span class="tag blue">known-future</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #fb7185;">
+      <div class="model-status"><span class="status-dot"></span> BASELINE</div>
+      <div class="model-name">n-hits</div>
+      <div class="model-vendor">Nixtla / NeuralForecast · N-HiTS</div>
+      <div class="model-tags">
+        <span class="tag">neural-baseline</span>
+        <span class="tag">target-only</span>
+        <span class="tag purple">auto-fit</span>
+      </div>
+    </div>
+
+    <div class="model-card" style="--card-color: #a78bfa;">
+      <div class="model-status"><span class="status-dot"></span> BASELINE</div>
+      <div class="model-name">n-beatsx</div>
+      <div class="model-vendor">Nixtla / NeuralForecast · N-BEATSx</div>
+      <div class="model-tags">
+        <span class="tag">neural-baseline</span>
+        <span class="tag">target-only</span>
+        <span class="tag purple">auto-fit</span>
+      </div>
+    </div>
   </div>
 
   <table class="matrix-table">
@@ -1430,6 +1489,10 @@ tollama dashboard</code></pre>
       <tr><td>Uni2TS / Moirai</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
       <tr><td>Sundial</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
       <tr><td>Toto Open Base</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>Lag-Llama</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>PatchTST</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>TiDE</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>N-HiTS / N-BEATSx</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
     </tbody>
   </table>
 </section>
@@ -1438,7 +1501,7 @@ tollama dashboard</code></pre>
 <section id="agents" class="section">
   <div class="section-label">// AI Agent Integrations</div>
   <div class="section-title">Built for agents.<br>5 integration pathways.</div>
-  <p class="section-desc">tollama exposes forecasting capabilities to AI agents through multiple protocols — from MCP to LangChain to A2A.</p>
+  <p class="section-desc">The upstream project explicitly targets both developers and AI agents: forecasts, analysis, comparison, and planning can all be invoked as tools over MCP, A2A, LangChain, or framework adapters.</p>
 
   <div class="metrics-row">
     <div class="metric-chip">
@@ -1450,8 +1513,8 @@ tollama dashboard</code></pre>
       <span class="metric-label">LangChain Tools</span>
     </div>
     <div class="metric-chip">
-      <span class="metric-value">5</span>
-      <span class="metric-label">Agent Frameworks</span>
+      <span class="metric-value">5+</span>
+      <span class="metric-label">Agent Pathways</span>
     </div>
     <div class="metric-chip">
       <span class="metric-value">42</span>
@@ -1473,7 +1536,7 @@ tollama dashboard</code></pre>
     <div class="feature-card">
       <span class="feature-icon">🤖</span>
       <div class="feature-title">CrewAI / AutoGen / smolagents</div>
-      <p class="feature-desc">Adapter modules for multi-agent frameworks. Register tollama tools in CrewAI crews, AutoGen group chats, or Hugging Face smolagents pipelines.</p>
+      <p class="feature-desc">Framework adapters now ship directly in the package: CrewAI tools, AutoGen tool specs plus function maps, and smolagents-compatible tool wrappers.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🧩</span>
@@ -1483,7 +1546,7 @@ tollama dashboard</code></pre>
     <div class="feature-card">
       <span class="feature-icon">🤝</span>
       <div class="feature-title">A2A Protocol (JSON-RPC)</div>
-      <p class="feature-desc">Google's Agent-to-Agent protocol via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /a2a</code>. Agent Card discovery at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/.well-known/agent-card.json</code>, with message/send, message/stream, and task lifecycle methods.</p>
+      <p class="feature-desc">Authenticated discovery plus task lifecycle support via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">POST /a2a</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/.well-known/agent-card.json</code>, including <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">message/stream</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/get</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/query</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tasks/cancel</code>.</p>
     </div>
   </div>
 </section>
@@ -1494,15 +1557,15 @@ tollama dashboard</code></pre>
     <div>
       <div class="section-label">// Architecture</div>
       <div class="section-title" style="font-size: 40px;">A daemon that<br>manages everything.</div>
-      <p class="section-desc" style="margin-top: 16px;">The <code class="inline-code">tollamad</code> daemon orchestrates isolated virtual environments per model family, communicating via JSON-lines stdio protocol.</p>
+      <p class="section-desc" style="margin-top: 16px;">The <code class="inline-code">tollamad</code> daemon supervises worker-per-family runtimes, keeps the public contract stable, and auto-bootstrap installs isolated venvs per backend when needed.</p>
 
       <ul class="tech-list">
-        <li class="tech-item"><span class="tech-badge">tollamad</span> Daemon managing model lifecycle and requests</li>
-        <li class="tech-item"><span class="tech-badge">runners/</span> Per-family isolated venvs under ~/.tollama/runtimes/</li>
-        <li class="tech-item"><span class="tech-badge">JSON-lines</span> stdio protocol between daemon and runners</li>
-        <li class="tech-item"><span class="tech-badge">SSE</span> Server-Sent Events for progressive streaming</li>
-        <li class="tech-item"><span class="tech-badge">Prometheus</span> /metrics endpoint for observability</li>
-        <li class="tech-item"><span class="tech-badge">API-key</span> Optional authentication + usage metering</li>
+        <li class="tech-item"><span class="tech-badge">tollamad</span> Public daemon for forecast, analysis, pipeline, and lifecycle requests</li>
+        <li class="tech-item"><span class="tech-badge">runtimes/</span> Per-family isolated venvs with auto-bootstrap under <code class="inline-code">~/.tollama/runtimes/</code></li>
+        <li class="tech-item"><span class="tech-badge">JSON-lines</span> stdio RPC between daemon and runners</li>
+        <li class="tech-item"><span class="tech-badge">SQLite</span> Per-key usage metering at <code class="inline-code">/api/usage</code></li>
+        <li class="tech-item"><span class="tech-badge">SSE</span> Progressive forecasts and daemon events via <code class="inline-code">/api/events</code></li>
+        <li class="tech-item"><span class="tech-badge">API keys</span> Optional auth for daemon, docs, dashboard, and A2A</li>
       </ul>
     </div>
     <div class="arch-diagram">
@@ -1514,7 +1577,7 @@ tollama dashboard</code></pre>
         <span class="arch-tag">FastAPI</span>
         <span class="arch-tag">42 endpoints</span>
         <span class="arch-tag">SSE</span>
-        <span class="arch-tag">Prometheus</span>
+        <span class="arch-tag">Dashboard</span>
       </div>
       <div class="arch-runtimes">
         <div class="arch-venv" style="--venv-color: #f59e0b;">
@@ -1529,9 +1592,13 @@ tollama dashboard</code></pre>
           <div class="arch-venv-label">venv</div>
           <div class="arch-venv-name">moirai</div>
         </div>
+        <div class="arch-venv" style="--venv-color: #14b8a6;">
+          <div class="arch-venv-label">venv</div>
+          <div class="arch-venv-name">lag-llama</div>
+        </div>
         <div class="arch-venv arch-venv-more">
           <div class="arch-venv-label">venv</div>
-          <div class="arch-venv-name">...</div>
+          <div class="arch-venv-name">+ baselines</div>
         </div>
       </div>
       <div class="arch-protocol">
@@ -1550,42 +1617,47 @@ tollama dashboard</code></pre>
     <div class="feature-card">
       <span class="feature-icon">🧠</span>
       <div class="feature-title">Structured Intelligence</div>
-      <p class="feature-desc">Combined analysis + forecast in a single call via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>. Returns narrative and quantitative results in one structured response.</p>
+      <p class="feature-desc">Combined analysis, recommendation, and forecast in a single call via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/report</code>, with optional narrative blocks.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">📡</span>
       <div class="feature-title">Progressive Forecasting</div>
-      <p class="feature-desc">Real-time forecast refinement via SSE. Watch forecasts improve through stages via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/forecast/progressive</code>.</p>
+      <p class="feature-desc">Real-time forecast refinement and daemon event feeds over SSE via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/forecast/progressive</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/events</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <div class="feature-title">Analyze + Generate</div>
+      <p class="feature-desc">Model-free descriptive analysis at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/analyze</code> and synthetic series generation at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/generate</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">📥</span>
-      <div class="feature-title">Data Ingest</div>
-      <p class="feature-desc">Upload CSV or Parquet files via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code> parameter or dedicated upload endpoints. No manual data formatting required.</p>
+      <div class="feature-title">Upload + Ingest</div>
+      <p class="feature-desc">Forecast directly from CSV or Parquet using <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">data_url</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/forecast/upload</code>, or <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/ingest/upload</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔗</span>
-      <div class="feature-title">Workflow Chaining</div>
-      <p class="feature-desc">Multi-step orchestration via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/pipeline</code>. Chain forecasts, comparisons, what-if scenarios, and report generation.</p>
+      <div class="feature-title">Workflow + Compare</div>
+      <p class="feature-desc">Chain benchmarks, comparisons, and end-to-end plans through <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/compare</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/pipeline</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔮</span>
-      <div class="feature-title">What-if Scenarios</div>
-      <p class="feature-desc">Explore alternative futures via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/what-if</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>.</p>
+      <div class="feature-title">What-if + Counterfactual + Trees</div>
+      <p class="feature-desc">Explore alternative futures with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/what-if</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/counterfactual</code>, and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/scenario-tree</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚖️</span>
+      <div class="feature-title">Auto-Forecast + Ensemble</div>
+      <p class="feature-desc">Zero-config model selection via <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/auto-forecast</code>, with ensemble <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">mean</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">median</code> strategies available today.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📄</span>
+      <div class="feature-title">TSModelfiles + Config</div>
+      <p class="feature-desc">Create named forecast profiles with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama modelfile</code> and manage pull or routing defaults with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">tollama config</code>.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔒</span>
-      <div class="feature-title">Isolated Runtimes</div>
-      <p class="feature-desc">Each model family gets its own venv under <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">~/.tollama/runtimes/</code>. No dependency conflicts. Ever.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">⚡</span>
-      <div class="feature-title">Auto-Forecast &amp; Comparison</div>
-      <p class="feature-desc">Run all pulled models against the same data with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/auto-forecast</code>. Automatic metric comparison and best-model selection.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🐳</span>
-      <div class="feature-title">Docker + Auth + Metrics</div>
-      <p class="feature-desc">Containerized deployment with Docker Compose, optional API-key auth, usage metering at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/usage</code>, and Prometheus <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/metrics</code>.</p>
+      <div class="feature-title">Auth + Metrics + Diagnostics</div>
+      <p class="feature-desc">Optional API-key auth, docs protection, usage metering at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/usage</code>, Prometheus at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/metrics</code>, and full diagnostics at <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">/api/info</code>.</p>
     </div>
   </div>
 </section>
@@ -1596,7 +1668,7 @@ tollama dashboard</code></pre>
     <div>
       <div class="section-label">// REST API</div>
       <div class="section-title" style="font-size: 40px;">42 endpoints.<br>One daemon.</div>
-      <p class="section-desc" style="margin-top: 16px;">Send time series data with covariates and get probabilistic forecasts. The REST API covers forecast, auto-forecast, pipeline orchestration, what-if analysis, and structured reporting.</p>
+      <p class="section-desc" style="margin-top: 16px;">The current endpoint inventory spans system diagnostics, model lifecycle, upload plus ingest, stable <code class="inline-code">v1</code> routes, structured analysis, scenario workflows, TSModelfiles, observability, and A2A discovery.</p>
     </div>
     <div class="code-block">
       <div class="code-header">
@@ -1635,28 +1707,28 @@ tollama dashboard</code></pre>
 <!-- ENDPOINT CATEGORIES -->
 <div class="endpoint-grid" style="position: relative; z-index: 1; padding-top: 40px; padding-bottom: 60px;">
   <div class="endpoint-card">
-    <div class="endpoint-card-title">Core Forecasting</div>
-    <div class="endpoint-card-desc">/api/forecast<br>/api/forecast/progressive<br>/api/auto-forecast</div>
+    <div class="endpoint-card-title">System</div>
+    <div class="endpoint-card-desc">/api/version<br>/api/info<br>/v1/health</div>
   </div>
   <div class="endpoint-card">
-    <div class="endpoint-card-title">Planning &amp; Analysis</div>
-    <div class="endpoint-card-desc">/api/pipeline<br>/api/report<br>/api/what-if</div>
+    <div class="endpoint-card-title">Forecasting</div>
+    <div class="endpoint-card-desc">/api/validate<br>/api/forecast<br>/api/forecast/progressive<br>/v1/forecast<br>/api/auto-forecast</div>
   </div>
   <div class="endpoint-card">
-    <div class="endpoint-card-title">Scenarios</div>
-    <div class="endpoint-card-desc">/api/counterfactual<br>/api/scenario-tree<br>/api/compare</div>
+    <div class="endpoint-card-title">Structured Analysis</div>
+    <div class="endpoint-card-desc">/api/analyze<br>/api/generate<br>/api/compare<br>/api/report<br>/api/pipeline</div>
   </div>
   <div class="endpoint-card">
     <div class="endpoint-card-title">Model Management</div>
-    <div class="endpoint-card-desc">/api/pull<br>/api/list<br>/api/show · /api/rm</div>
+    <div class="endpoint-card-desc">/api/tags<br>/api/show<br>/api/pull<br>/api/delete<br>/api/ps<br>/v1/models</div>
   </div>
   <div class="endpoint-card">
-    <div class="endpoint-card-title">Data &amp; Health</div>
-    <div class="endpoint-card-desc">/api/ingest/upload<br>/api/version<br>/api/health</div>
+    <div class="endpoint-card-title">Upload + Profiles</div>
+    <div class="endpoint-card-desc">/api/ingest/upload<br>/api/forecast/upload<br>/api/modelfiles<br>/api/modelfiles/{name}</div>
   </div>
   <div class="endpoint-card">
-    <div class="endpoint-card-title">Observability</div>
-    <div class="endpoint-card-desc">/metrics<br>/api/usage<br>/api/info</div>
+    <div class="endpoint-card-title">Observability + Agents</div>
+    <div class="endpoint-card-desc">/api/usage<br>/api/events<br>/metrics<br>/.well-known/agent-card.json<br>/a2a</div>
   </div>
 </div>
 
@@ -1664,28 +1736,28 @@ tollama dashboard</code></pre>
 <section id="roadmap" class="section">
   <div class="section-label">// Roadmap</div>
   <div class="section-title">What's next.</div>
-  <p class="section-desc">Implementation-aware roadmap tracked alongside the codebase.</p>
+  <p class="section-desc">The upstream roadmap is now implementation-aware and explicitly tracks what is shipped versus what remains for v1 hardening.</p>
 
   <div class="roadmap-grid">
     <div class="roadmap-card">
       <span class="roadmap-badge completed">COMPLETED</span>
       <div class="roadmap-title">Auto Model Comparison</div>
-      <div class="roadmap-desc">Run all pulled models against the same dataset. Automatic metric comparison, leaderboard ranking, and best-model selection.</div>
+      <div class="roadmap-desc">Basic auto model comparison and selection are shipped, including ensemble <code class="inline-code">mean</code> and <code class="inline-code">median</code> strategies.</div>
+    </div>
+    <div class="roadmap-card">
+      <span class="roadmap-badge completed">COMPLETED</span>
+      <div class="roadmap-title">Auto Data Preprocessing</div>
+      <div class="roadmap-desc">Basic preprocessing is now implemented with validation, spline interpolation, smoothing, train-fit scaling, and sliding-window generation in <code class="inline-code">tollama.preprocess</code>.</div>
     </div>
     <div class="roadmap-card">
       <span class="roadmap-badge in-progress">IN PROGRESS</span>
-      <div class="roadmap-title">Ensemble Strategies</div>
-      <div class="roadmap-desc">Combine forecasts from multiple models using weighted averaging, stacking, or selection-based ensemble methods.</div>
+      <div class="roadmap-title">Runtime Hardening</div>
+      <div class="roadmap-desc">Current TODOs center on VRAM reclaim policy, idle strategy, crash recovery behavior, and stronger runner lifecycle controls.</div>
     </div>
     <div class="roadmap-card">
       <span class="roadmap-badge planned">PLANNED</span>
-      <div class="roadmap-title">Fine-tuning</div>
-      <div class="roadmap-desc">Adapt foundation models to domain-specific datasets. LoRA and full fine-tuning support with managed checkpointing.</div>
-    </div>
-    <div class="roadmap-card">
-      <span class="roadmap-badge planned">PLANNED</span>
-      <div class="roadmap-title">Preprocessing Automation</div>
-      <div class="roadmap-desc">Automatic frequency detection, missing value imputation, outlier handling, and feature engineering before model inference.</div>
+      <div class="roadmap-title">Local + Cloud Execution</div>
+      <div class="roadmap-desc">The project remains local-first for v1; future packaging work is focused on better Docker and cloud deployment guidance rather than distributed training.</div>
     </div>
   </div>
 </section>
@@ -1694,11 +1766,11 @@ tollama dashboard</code></pre>
 <section class="cta-section">
   <div class="cta-glow"></div>
   <div class="section-label">// Get Started</div>
-  <h2>Time series AI,<br>made simple.</h2>
-  <p>Open source, MIT licensed, and ready for production workflows. Star the repo to follow along.</p>
+  <h2>Forecast, compare,<br>and serve locally.</h2>
+  <p>Open source, MIT licensed, and now broader than a single forecast endpoint: runtime management, analysis, ingest, dashboards, and agent integration all ship in the same platform.</p>
   <div class="hero-buttons" style="justify-content:center">
     <a href="https://github.com/tollama/tollama" class="btn-primary">View on GitHub ↗</a>
-    <a href="https://github.com/tollama/tollama/blob/main/docs/how-to-run.md" class="btn-secondary">Full Docs →</a>
+    <a href="https://github.com/tollama/tollama/blob/main/docs/api-reference.md" class="btn-secondary">API Reference →</a>
   </div>
 </section>
 
