@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forecasting Evaluator Agent | Tollama AI</title>
+<meta name="description" content="Benchmark forecasting models, compare 36+ statistical, ML, neural, and TSFM options, and select the right model for production with reproducible reports.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --border: #1e2733;
+    --accent: #f59e0b;
+    --accent-rgb: 245, 158, 11;
+    --accent2: #00d4ff;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: rgba(245, 158, 11, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(245,158,11,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 16, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 0 20px rgba(245,158,11,0.3);
+  }
+
+  .nav-cta:hover {
+    box-shadow: 0 0 30px rgba(245,158,11,0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 140px 40px 80px;
+    text-align: center;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb span { color: var(--border); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #fbbf24;
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease 0.1s both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2.5px;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #fbbf24, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(17px, 2.2vw, 22px);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.22s both;
+    max-width: 640px;
+  }
+
+  .hero-tagline strong { color: var(--text); font-weight: 600; }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(245,158,11,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(245,158,11,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: #fbbf24;
+    background: rgba(245,158,11,0.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fbbf24;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 620px;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 52px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: rgba(245,158,11,0.4); }
+
+  .feature-icon { font-size: 30px; margin-bottom: 18px; display: block; }
+  .feature-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* METRIC CHIPS */
+  .metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+
+  .metric-chip {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 10px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fbbf24;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* PROBLEM SECTION */
+  .problem-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 40px;
+  }
+
+  .problem-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+  }
+
+  .problem-card {
+    border-left: 2px solid var(--border);
+    padding-left: 28px;
+  }
+
+  .problem-card:nth-child(1) { border-left-color: var(--accent); }
+  .problem-card:nth-child(2) { border-left-color: var(--accent2); }
+  .problem-card:nth-child(3) { border-left-color: var(--accent3); }
+  .problem-card:nth-child(4) { border-left-color: #a78bfa; }
+
+  .problem-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .problem-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+  }
+
+  .problem-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* PIPELINE STEPS */
+  .pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 52px;
+  }
+
+  .pipeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+
+  .pipeline-card:hover { border-color: rgba(245,158,11,0.4); }
+
+  .pipeline-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #fbbf24;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
+  .pipeline-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .pipeline-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* STACK SECTION */
+  .stack-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+  }
+
+  .stack-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .tech-list {
+    list-style: none;
+    margin-top: 24px;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(30,39,51,0.5);
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .tech-item:last-child { border-bottom: none; }
+
+  .tech-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    color: #fbbf24;
+    white-space: nowrap;
+  }
+
+  .code-block {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: #0d1117;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .code-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: #94a3b8;
+    overflow-x: auto;
+  }
+
+  .code-body .cm { color: #475569; }
+  .code-body .kw { color: #a78bfa; }
+  .code-body .str { color: #86efac; }
+  .code-body .key { color: #00d4ff; }
+  .code-body .num { color: #fdba74; }
+
+  /* ROADMAP */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .roadmap-card {
+    background: rgba(13,17,23,0.6);
+    border: 1px solid rgba(30,39,51,0.8);
+    border-radius: 14px;
+    padding: 26px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+
+  .roadmap-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);
+  }
+
+  .roadmap-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    border-radius: 100px;
+    padding: 2px 10px;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+
+  .roadmap-badge.in-progress {
+    color: #fbbf24;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+
+  .roadmap-badge.planned {
+    color: #a78bfa;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+  }
+
+  .roadmap-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .roadmap-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(245,158,11,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-left { display: flex; align-items: center; gap: 20px; }
+  .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-right { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  .mit-badge {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: var(--accent3);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1160px) {
+    nav { padding: 16px 30px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 12px; }
+  }
+
+  @media (max-width: 900px) {
+    .stack-inner { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="dot"></span>
+    Tollama AI
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">← Tollama AI</a></li>
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#workflow">How It Works</a></li>
+    <li><a href="#interfaces">Interfaces</a></li>
+    <li><a href="#stack">Tech Stack</a></li>
+    <li><a href="https://github.com/tollama/tollama-eval" class="nav-cta">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="/">Tollama AI</a>
+    <span>/</span>
+    <span style="color: #fbbf24;">Forecasting Evaluator Agent</span>
+  </div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    MIT License &middot; Beta &middot; 36+ Models &middot; Tollama-native
+  </div>
+
+  <h1>
+    <span class="grad">Forecasting Evaluator</span><br>
+    Agent
+  </h1>
+
+  <p class="hero-tagline">
+    <strong>Benchmark forecasting models. Select the right one for production.</strong><br>
+    Expanding-window CV, AutoML, leaderboard scoring, and reproducible reports.
+  </p>
+
+  <p class="hero-sub">
+    Forecasting Evaluator Agent is the evaluation layer of the Tollama stack. It benchmarks statistical, ML, neural, and Tollama-powered foundation models with expanding-window cross-validation, structured scoring, and reproducible reporting.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="https://github.com/tollama/tollama-eval" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="#workflow" class="btn-secondary">
+      How It Works →
+    </a>
+  </div>
+</section>
+
+<!-- METRIC OVERVIEW -->
+<section class="section" style="padding-top: 20px;">
+  <div class="section-label">// What It Evaluates</div>
+  <div class="section-title">36+ models.<br>One evaluation pipeline.</div>
+  <p class="section-desc">
+    Compare statistical baselines, intermittent-demand methods, ML models, neural architectures, and Tollama-served TSFMs under the same benchmarking protocol.
+  </p>
+
+  <div class="metrics-row">
+    <div class="metric-chip">
+      <span class="metric-value">36+</span>
+      <span class="metric-label">Supported Models</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">CV</span>
+      <span class="metric-label">Expanding-window</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">AutoML</span>
+      <span class="metric-label">Best-model selection</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">HTML/PDF</span>
+      <span class="metric-label">Rich evaluation reports</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">REST</span>
+      <span class="metric-label">API + Campaign mode</span>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section id="problem" class="problem-section">
+  <div class="problem-inner">
+    <div class="section-label">// The Problem</div>
+    <div class="section-title">Why another evaluation tool?</div>
+    <p class="section-desc">Forecasting teams repeat the same evaluation loop on every dataset — ingestion, fold design, model fitting, scoring, and reporting. The work is slow, manual, and difficult to standardize.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-num">01 / NOTEBOOK SPRAWL</div>
+        <div class="problem-title">Every benchmark becomes a one-off project.</div>
+        <div class="problem-desc">Custom scripts, inconsistent preprocessing, and ad hoc metrics make results hard to compare and harder to trust.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">02 / UNFAIR EVALUATION</div>
+        <div class="problem-title">Models are not tested the same way.</div>
+        <div class="problem-desc">When folds, metrics, or data handling change per experiment, leaderboards stop being defensible.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">03 / MODEL SELECTION GUESSWORK</div>
+        <div class="problem-title">The best model is dataset-dependent.</div>
+        <div class="problem-desc">Dense demand, intermittent demand, multiseries retail, and TSFM-friendly workloads need different model families.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">04 / REPORTING FRICTION</div>
+        <div class="problem-title">Results do not flow downstream.</div>
+        <div class="problem-desc">Teams need outputs they can share, audit, version, and wire into production checks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL CATEGORIES -->
+<section id="models" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Model Coverage</div>
+  <div class="section-title">Four model families.<br>One consistent benchmark.</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Statistical Models</div>
+      <p class="feature-desc">Fast baselines and established forecasting methods for robust comparison across standard workloads. ARIMA, ETS, Theta, CES, MSTL, and more.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌲</span>
+      <div class="feature-title">ML Models</div>
+      <p class="feature-desc">Feature-based forecasters for tabular-style time-series problems and operational datasets. LightGBM, XGBoost, and gradient boosting frameworks.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">Neural Models</div>
+      <p class="feature-desc">Deep forecasting architectures for higher-capacity sequence modeling and multiseries learning. LSTM, N-BEATS, TFT, PatchTST, TimesNet.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Foundation Models via tollama</div>
+      <p class="feature-desc">Benchmark Chronos, TimesFM, Moirai, Granite TTM, and other Tollama-served TSFMs in the same loop as classical and neural baselines.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="workflow" class="section">
+  <div class="section-label">// How It Works</div>
+  <div class="section-title">Drop in a CSV.<br>Get a ranked leaderboard.</div>
+  <p class="section-desc">
+    Run one command or call the API. The evaluator profiles the data, runs expanding-window cross-validation, scores each model, and exports reproducible artifacts.
+  </p>
+
+  <div class="pipeline-grid">
+    <div class="pipeline-card">
+      <div class="pipeline-num">STEP 01</div>
+      <div class="pipeline-title">Ingest</div>
+      <p class="pipeline-desc">Auto-detect long and wide CSV layouts, normalize the data, and profile frequency, series length, missingness, and intermittency.</p>
+    </div>
+    <div class="pipeline-card">
+      <div class="pipeline-num">STEP 02</div>
+      <div class="pipeline-title">Benchmark</div>
+      <p class="pipeline-desc">Run expanding-window cross-validation with consistent folds, metrics, and timeouts across selected model families.</p>
+    </div>
+    <div class="pipeline-card">
+      <div class="pipeline-num">STEP 03</div>
+      <div class="pipeline-title">Rank</div>
+      <p class="pipeline-desc">Aggregate accuracy, uncertainty, runtime, and stability into a structured leaderboard.</p>
+    </div>
+    <div class="pipeline-card">
+      <div class="pipeline-num">STEP 04</div>
+      <div class="pipeline-title">Recommend</div>
+      <p class="pipeline-desc">Use AutoML to narrow the candidate set based on data profile and intermittent-demand behavior.</p>
+    </div>
+    <div class="pipeline-card">
+      <div class="pipeline-num">STEP 05</div>
+      <div class="pipeline-title">Export</div>
+      <p class="pipeline-desc">Write machine-readable outputs and visual reports for reviews, audits, and regression tracking.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUTS -->
+<section class="section" style="padding-top: 10px;">
+  <div class="section-label">// Outputs</div>
+  <div class="section-title">Structured outputs.<br>Ready for teams and systems.</div>
+  <p class="section-desc">Each run produces files that work both for humans and downstream tooling.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <div class="feature-title">results.json</div>
+      <p class="feature-desc">Machine-readable benchmark results with a stable schema for dashboards and pipelines.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔍</span>
+      <div class="feature-title">details.json</div>
+      <p class="feature-desc">Forecast traces and diagnostics for reproducibility and postmortem analysis.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">report.html</div>
+      <p class="feature-desc">Interactive visual report with leaderboard, per-fold breakdown, and per-series views.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📄</span>
+      <div class="feature-title">report.pdf</div>
+      <p class="feature-desc">Optional export for review workflows and stakeholder sharing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPER INTERFACES -->
+<section id="interfaces" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Developer Interfaces</div>
+  <div class="section-title">4 ways to access.<br>One evaluation layer.</div>
+  <p class="section-desc">Use the interface that fits your workflow — from one-off local benchmarking to remote execution across multiple datasets.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">⌨️</span>
+      <div class="feature-title">CLI</div>
+      <p class="feature-desc">Run reproducible benchmarks from a single command, with model filters, config files, report generation, and diagnostics.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🐍</span>
+      <div class="feature-title">Python SDK</div>
+      <p class="feature-desc">Embed evaluation workflows in notebooks, services, and internal tooling with a fluent Python interface.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌐</span>
+      <div class="feature-title">REST API</div>
+      <p class="feature-desc">Start a benchmark server and trigger remote runs through structured endpoints for benchmark, status, results, and health.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔄</span>
+      <div class="feature-title">Campaign Mode</div>
+      <p class="feature-desc">Evaluate a directory of datasets and generate portfolio-level summaries across many benchmark jobs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<div id="stack" class="stack-section">
+  <div class="stack-inner">
+    <div>
+      <div class="section-label">// Tech Stack</div>
+      <div class="section-title" style="font-size: 36px;">Python-first evaluation<br>infrastructure.</div>
+      <p class="section-desc">Built on the Tollama ecosystem with production-grade Python tooling for reproducible, scalable model evaluation.</p>
+
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-badge">Python 3.10+</span> Core runtime</li>
+        <li class="tech-item"><span class="tech-badge">PyPI</span> pip install tollama-eval</li>
+        <li class="tech-item"><span class="tech-badge">StatsForecast</span> Statistical model families</li>
+        <li class="tech-item"><span class="tech-badge">NeuralForecast</span> Deep learning model families</li>
+        <li class="tech-item"><span class="tech-badge">Tollama</span> TSFM runtime integration</li>
+        <li class="tech-item"><span class="tech-badge">FastAPI</span> REST API for evaluation jobs</li>
+        <li class="tech-item"><span class="tech-badge">Jinja2 + WeasyPrint</span> HTML &amp; PDF reports</li>
+        <li class="tech-item"><span class="tech-badge">MIT License</span> Open source</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="section-label" style="margin-bottom: 20px;">// Quick Start</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span>bash &middot; tollama-eval CLI</span>
+          <span style="color: #fbbf24;">CLI</span>
+        </div>
+        <div class="code-body">
+<span class="cm"># Install</span><br>
+pip install tollama-eval<br><br>
+<span class="cm"># Run evaluation on a dataset</span><br>
+tollama-eval run \<br>
+&nbsp;&nbsp;--data sales.csv \<br>
+&nbsp;&nbsp;--horizon <span class="num">7</span> \<br>
+&nbsp;&nbsp;--models auto \<br>
+&nbsp;&nbsp;--cv expanding \<br>
+&nbsp;&nbsp;--folds <span class="num">5</span><br><br>
+<span class="cm"># Generate report</span><br>
+tollama-eval report \<br>
+&nbsp;&nbsp;--run results/run_001 \<br>
+&nbsp;&nbsp;--format html pdf<br><br>
+<span class="cm"># Campaign mode (batch)</span><br>
+tollama-eval campaign \<br>
+&nbsp;&nbsp;--config campaigns/q1_eval.yaml
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILT ON TOLLAMA -->
+<section class="section">
+  <div class="section-label">// Tollama Integration</div>
+  <div class="section-title">tollama is the runtime.<br>This is the evaluation layer.</div>
+  <p class="section-desc">
+    Use tollama to pull and serve TSFMs through one API. Use Forecasting Evaluator Agent to compare those models against statistical, ML, and neural alternatives — then select the right model for production.
+  </p>
+
+  <div class="features-grid" style="margin-top: 40px;">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Unified TSFM Access</div>
+      <p class="feature-desc">Pass a tollama server URL and model list to include foundation models in the same benchmark run.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚖️</span>
+      <div class="feature-title">Fair Comparison</div>
+      <p class="feature-desc">Evaluate TSFMs beside non-foundation baselines under the same folds, metrics, and report format.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚀</span>
+      <div class="feature-title">Production Selection</div>
+      <p class="feature-desc">Turn model comparison into a repeatable workflow with config files, API endpoints, and version-stable outputs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section">
+  <div class="section-label">// Roadmap</div>
+  <div class="section-title">What comes next.</div>
+  <p class="section-desc">The next step is continuous evaluation — moving from one-off benchmarking to persistent model governance.</p>
+
+  <div class="roadmap-grid">
+    <div class="roadmap-card">
+      <span class="roadmap-badge in-progress">IN PROGRESS</span>
+      <div class="roadmap-title">Continuous Evaluation</div>
+      <div class="roadmap-desc">Scheduled regression checks, benchmark baselines, and release gating for forecasting systems.</div>
+    </div>
+    <div class="roadmap-card">
+      <span class="roadmap-badge planned">PLANNED</span>
+      <div class="roadmap-title">Evaluator Cloud</div>
+      <div class="roadmap-desc">Hosted runs, team workspaces, and shareable leaderboard views.</div>
+    </div>
+    <div class="roadmap-card">
+      <span class="roadmap-badge planned">PLANNED</span>
+      <div class="roadmap-title">Evaluation Narratives</div>
+      <div class="roadmap-desc">Auto-generated benchmark summaries for engineers, analysts, and decision-makers.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label">// Get Started</div>
+  <h2>Know which model<br>actually works.</h2>
+  <p>Open source, MIT licensed, and production-ready for rigorous forecasting model evaluation.</p>
+  <div class="hero-buttons" style="justify-content: center;">
+    <a href="https://github.com/tollama/tollama-eval" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub ↗
+    </a>
+    <a href="/" class="btn-secondary">← Back to Tollama AI</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">Tollama AI</div>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/product/tollama.html">tollama product</a></li>
+      <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
+      <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
+      <li><a href="https://github.com/tollama/tollama-eval">GitHub</a></li>
+    </ul>
+  </div>
+  <div class="footer-right">
+    <span class="mit-badge">MIT</span>
+    &copy; 2026 Tollama AI Contributors
+  </div>
+</footer>
+
+</body>
+</html>

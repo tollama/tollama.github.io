@@ -389,7 +389,7 @@
     /* PRODUCTS */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
       margin-top: 56px;
     }
@@ -510,6 +510,12 @@
       border-color: rgba(124, 58, 237, 0.3);
       color: #a78bfa;
       background: rgba(124, 58, 237, 0.06);
+    }
+
+    .tag.amber {
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.06);
     }
 
     .product-cta {
@@ -770,7 +776,7 @@
     /* OPEN SOURCE */
     .os-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
       margin-top: 48px;
     }
@@ -1093,10 +1099,10 @@
   <!-- PRODUCTS -->
   <section id="products" class="section">
     <div class="section-label">// Platform</div>
-    <div class="section-title">Three products.<br>One forecasting stack.</div>
+    <div class="section-title">Four products.<br>One predictive stack.</div>
     <p class="section-desc">
       Tollama AI builds the runtime infrastructure and vertical agents that power predictive AI — from local model serving
-      to production-grade calibration systems.
+      and model evaluation to calibration and decision support.
     </p>
 
     <div class="product-grid">
@@ -1157,6 +1163,27 @@
           <span class="tag">Streamlit</span>
         </div>
         <div class="product-cta">View product →</div>
+      </a>
+
+      <!-- Forecasting Evaluator Agent -->
+      <a class="product-card" href="/product/forecasting-evaluator-agent.html" style="--card-accent: #f59e0b;">
+        <span class="product-icon">🔬</span>
+        <div class="product-status" style="color: #f59e0b;">
+          <span class="status-dot" style="background: #f59e0b; box-shadow: 0 0 6px #f59e0b;"></span> Beta
+        </div>
+        <div class="product-name">tollama-eval</div>
+        <div class="product-tagline">Forecasting Evaluator Agent</div>
+        <p class="product-desc">
+          Automated backtesting, leaderboard scoring, and model comparison across statistical, ML, neural,
+          and Tollama-powered TSFM models. CLI, SDK, REST API, and campaign mode.
+        </p>
+        <div class="product-tags">
+          <span class="tag amber">Benchmarking</span>
+          <span class="tag blue">36+ Models</span>
+          <span class="tag green">AutoML</span>
+          <span class="tag">Reports</span>
+        </div>
+        <div class="product-cta" style="color: #f59e0b;">View product &rarr;</div>
       </a>
     </div>
   </section>
@@ -1300,8 +1327,8 @@
     <div class="section-label">// Roadmap</div>
     <div class="section-title">What's coming next.</div>
     <p class="section-desc">
-      The next layer of the Tollama AI stack — expanding from local runtimes to cloud orchestration, evaluation, and
-      multi-agent memory.
+      The next layer of the Tollama AI stack — expanding from local runtimes to cloud orchestration, continuous monitoring,
+      and multi-agent memory.
     </p>
 
     <div class="upcoming-grid">
@@ -1314,9 +1341,9 @@
 
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
-        <div class="upcoming-title">Forecasting Evaluator Agent</div>
-        <p class="upcoming-desc">Automated backtesting, leaderboard scoring, and model comparison across TSFM and hybrid
-          architectures.</p>
+        <div class="upcoming-title">Continuous Evaluation</div>
+        <p class="upcoming-desc">Scheduled benchmark runs, regression checks, and release gating for forecasting
+          systems.</p>
       </div>
 
       <div class="upcoming-card">
@@ -1363,6 +1390,13 @@
           React, agent-ready.</p>
         <div class="os-cta">github.com/tollama/spline-lstm →</div>
       </a>
+
+      <a class="os-card" href="https://github.com/tollama/tollama-eval" target="_blank" rel="noreferrer">
+        <div class="os-name">tollama/tollama-eval</div>
+        <p class="os-desc">Forecast model benchmarking and selection. 36+ models, expanding-window CV, AutoML, HTML/PDF
+          reports, REST API, campaign mode.</p>
+        <div class="os-cta">github.com/tollama/tollama-eval →</div>
+      </a>
     </div>
   </section>
 
@@ -1385,6 +1419,7 @@
       <ul class="footer-links">
         <li><a href="https://github.com/tollama">GitHub</a></li>
         <li><a href="/product/tollama.html">tollama product</a></li>
+        <li><a href="/product/forecasting-evaluator-agent.html">tollama-eval</a></li>
         <li><a href="https://github.com/tollama/tollama/blob/main/roadmap.md">Roadmap</a></li>
         <li><a href="https://github.com/tollama/tollama/blob/main/LICENSE">License</a></li>
       </ul>
