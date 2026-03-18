@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trust Intelligence | Tollama AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --border: #1e2733;
+    --accent: #7c3aed;
+    --accent-rgb: 124, 58, 237;
+    --accent2: #00d4ff;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: rgba(124, 58, 237, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 16, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 0 20px rgba(124,58,237,0.3);
+  }
+
+  .nav-cta:hover {
+    box-shadow: 0 0 30px rgba(124,58,237,0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 140px 40px 80px;
+    text-align: center;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb span { color: var(--border); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #a78bfa;
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease 0.1s both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent3);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2.5px;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #a78bfa, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(17px, 2.2vw, 22px);
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 20px;
+    animation: slideUp 0.8s ease 0.22s both;
+    max-width: 640px;
+  }
+
+  .hero-tagline strong { color: var(--text); font-weight: 600; }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.8s ease 0.4s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(124,58,237,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(124,58,237,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: #a78bfa;
+    background: rgba(124,58,237,0.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 620px;
+  }
+
+  /* PROBLEM CARDS */
+  .problem-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 40px;
+  }
+
+  .problem-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 52px;
+  }
+
+  .problem-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .problem-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .problem-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .problem-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .problem-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 52px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .feature-icon { font-size: 30px; margin-bottom: 18px; display: block; }
+  .feature-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* METRIC CHIPS */
+  .metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+
+  .metric-chip {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 10px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: #a78bfa;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ARCHITECTURE LIST */
+  .arch-list {
+    list-style: none;
+    margin-top: 32px;
+  }
+
+  .arch-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(30,39,51,0.5);
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .arch-item:last-child { border-bottom: none; }
+
+  .arch-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.25);
+    color: #a78bfa;
+    white-space: nowrap;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .arch-badge.frontier {
+    background: rgba(16,185,129,0.1);
+    border-color: rgba(16,185,129,0.25);
+    color: #6ee7b7;
+  }
+
+  /* STACK SECTION */
+  .stack-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+  }
+
+  .stack-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .tech-list {
+    list-style: none;
+    margin-top: 24px;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(30,39,51,0.5);
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .tech-item:last-child { border-bottom: none; }
+
+  .tech-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.25);
+    color: #a78bfa;
+    white-space: nowrap;
+  }
+
+  /* COMPLIANCE */
+  .compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 52px;
+  }
+
+  .compliance-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    transition: border-color 0.2s;
+  }
+
+  .compliance-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .compliance-flag { font-size: 36px; margin-bottom: 16px; display: block; }
+  .compliance-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; }
+  .compliance-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent3);
+    margin-bottom: 8px;
+  }
+  .compliance-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* INTEGRATION */
+  .integration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 52px;
+  }
+
+  .integration-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .integration-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .integration-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .integration-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .integration-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* INSTALL */
+  .install-block {
+    margin-top: 52px;
+  }
+
+  .code-block {
+    background: #050810;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 560px;
+  }
+
+  .code-header {
+    background: #0d1117;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .code-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #94a3b8;
+    overflow-x: auto;
+  }
+
+  .code-body .kw { color: #a78bfa; }
+  .code-body .str { color: #86efac; }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-left { display: flex; align-items: center; gap: 20px; }
+  .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-right { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1160px) {
+    nav { padding: 16px 30px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 12px; }
+  }
+
+  @media (max-width: 900px) {
+    .stack-inner { grid-template-columns: 1fr; }
+    .compliance-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="dot"></span>
+    Tollama AI
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">&#8592; Tollama AI</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="https://github.com/tollama/tollama-trust-intelligence" class="nav-cta">GitHub &#8599;</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="/">Tollama AI</a>
+    <span>/</span>
+    <span style="color: #a78bfa;">Trust Intelligence</span>
+  </div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Production &middot; Decision Trust OS
+  </div>
+
+  <h1>
+    <span class="grad">Trust</span><br>
+    Intelligence
+  </h1>
+
+  <p class="hero-tagline">
+    <strong>Every AI decision, verified.</strong><br>
+    10-layer Decision Trust OS for production AI systems.
+  </p>
+
+  <p class="hero-sub">
+    A production-grade trust layer that wraps any AI decision with uncertainty quantification, attribution, formal verification, and constitutional guardrails — ready for EU AI Act and Korean AI Basic Act compliance.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="https://github.com/tollama/tollama-trust-intelligence" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub &#8599;
+    </a>
+    <a href="#features" class="btn-secondary">
+      Explore Features &#8594;
+    </a>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section" style="padding-top: 20px;">
+  <div class="metrics-row">
+    <div class="metric-chip">
+      <span class="metric-value">10</span>
+      <span class="metric-label">Trust Layers</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">EU AI Act</span>
+      <span class="metric-label">Ready</span>
+    </div>
+    <div class="metric-chip">
+      <span class="metric-value">MCP</span>
+      <span class="metric-label">+ SDK</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM: 5 TRUST GAPS -->
+<div class="problem-section">
+  <div class="problem-inner">
+    <div class="section-label">// The Problem</div>
+    <div class="section-title">5 Trust Gaps.</div>
+    <p class="section-desc">
+      AI systems produce decisions. But decisions without trust are liabilities. These are the five gaps that separate AI outputs from defensible decisions.
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-num">01 / Opacity</div>
+        <div class="problem-title">Opacity</div>
+        <p class="problem-desc">AI가 뭘 보고 판단한 건지 모르겠다</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">02 / Unreliability</div>
+        <div class="problem-title">Unreliability</div>
+        <p class="problem-desc">설명은 들었다. 근데 맞는가?</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">03 / Blindness</div>
+        <div class="problem-title">Blindness</div>
+        <p class="problem-desc">맞다고 치자. 틀렸으면 얼마나 위험한가?</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">04 / Indefensibility</div>
+        <div class="problem-title">Indefensibility</div>
+        <p class="problem-desc">이사회 앞에서 방어할 수 없다</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">05 / Stagnation</div>
+        <div class="problem-title">Stagnation</div>
+        <p class="problem-desc">지금은 괜찮다. 다음에도 괜찮을까?</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="section">
+  <div class="section-label">// Architecture</div>
+  <div class="section-title">10-Layer<br>Decision Trust OS.</div>
+  <p class="section-desc">
+    Each layer adds a distinct trust dimension. Together, they form a complete verification stack from policy enforcement to mechanistic interpretability.
+  </p>
+
+  <ul class="arch-list">
+    <li class="arch-item">
+      <span class="arch-badge">L0</span>
+      Control Plane (Foundation)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge">L1</span>
+      Sensing (Entropy + Drift)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge">L2</span>
+      Uncertainty (Conformal Prediction)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge">L3</span>
+      Attribution (SHAP)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge">L4</span>
+      Verification (Z3 + Constitutional Guard)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge">L5</span>
+      Trust Aggregation (Bayesian)
+    </li>
+    <li class="arch-item">
+      <span class="arch-badge frontier">L6&#8211;L9</span>
+      Frontier (Causal, PRM, Ontology, Mechanistic)
+    </li>
+  </ul>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section" style="padding-top: 10px;">
+  <div class="section-label">// Key Features</div>
+  <div class="section-title">Everything you need to<br>trust an AI decision.</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">&#9881;&#65039;</span>
+      <div class="feature-title">L0 Control Plane</div>
+      <p class="feature-desc">Policy-as-Code enforcement, 3-tier identity management, and action approval gates. The foundation that governs every trust operation.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#128225;</span>
+      <div class="feature-title">Semantic Drift Detection</div>
+      <p class="feature-desc">Embedding-based drift monitoring that detects when input distributions shift away from training baselines, before predictions degrade.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#128202;</span>
+      <div class="feature-title">Conformal Prediction</div>
+      <p class="feature-desc">Distribution-free statistical guarantees with 3 prediction engines. Know the uncertainty of every output without distributional assumptions.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#128269;</span>
+      <div class="feature-title">SHAP Attribution</div>
+      <p class="feature-desc">Feature contribution analysis with dual-seed stability. Understand exactly which inputs drove each decision and verify attribution consistency.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#128737;&#65039;</span>
+      <div class="feature-title">Constitutional Guard</div>
+      <p class="feature-desc">Value-based guardrails beyond formal rules. Fairness, transparency, and human oversight verification through constitutional AI principles.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#128260;</span>
+      <div class="feature-title">Production Loop</div>
+      <p class="feature-desc">Trace, Eval, Improve — a continuous production loop with calibration monitoring that keeps trust scores accurate over time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section id="compliance" class="section">
+  <div class="section-label">// Compliance</div>
+  <div class="section-title">Regulatory readiness,<br>built in.</div>
+  <p class="section-desc">
+    Trust Intelligence maps directly to regulatory requirements — not as an afterthought, but as a core design constraint.
+  </p>
+
+  <div class="compliance-grid">
+    <div class="compliance-card">
+      <span class="compliance-flag">&#127466;&#127482;</span>
+      <div class="compliance-title">EU AI Act</div>
+      <div class="compliance-status">D-137 &middot; Art.13/14/15 Mapped</div>
+      <p class="compliance-desc">Transparency (Art.13), human oversight (Art.14), and accuracy/robustness (Art.15) requirements mapped to trust layers with automated evidence collection.</p>
+    </div>
+    <div class="compliance-card">
+      <span class="compliance-flag">&#127472;&#127479;</span>
+      <div class="compliance-title">Korean AI Basic Act</div>
+      <div class="compliance-status">Active &middot; &#167;31/32/23 Compliant</div>
+      <p class="compliance-desc">Reliability assessment (&#167;31), transparency obligations (&#167;32), and impact assessment (&#167;23) compliance with continuous monitoring and audit trails.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATION -->
+<section class="section">
+  <div class="section-label">// Integration</div>
+  <div class="section-title">Works with your<br>agent framework.</div>
+  <p class="section-desc">
+    Native integration wrappers for the leading agent frameworks. Add trust to any agent pipeline in minutes.
+  </p>
+
+  <div class="integration-grid">
+    <div class="integration-card">
+      <span class="integration-icon">&#128268;</span>
+      <div class="integration-name">MCP Server</div>
+      <p class="integration-desc">Model Context Protocol server for tool-based trust verification.</p>
+    </div>
+    <div class="integration-card">
+      <span class="integration-icon">&#129302;</span>
+      <div class="integration-name">OpenAI Agents SDK</div>
+      <p class="integration-desc">Trust pipeline as OpenAI agent tools and guardrails.</p>
+    </div>
+    <div class="integration-card">
+      <span class="integration-icon">&#128172;</span>
+      <div class="integration-name">Claude Agent SDK</div>
+      <p class="integration-desc">Native Anthropic agent integration with trust verification.</p>
+    </div>
+    <div class="integration-card">
+      <span class="integration-icon">&#128736;&#65039;</span>
+      <div class="integration-name">LangGraph</div>
+      <p class="integration-desc">Trust nodes and edges for LangGraph agent workflows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="section" style="padding-top: 10px;">
+  <div class="section-label">// Install</div>
+  <div class="section-title">Get started in<br>one command.</div>
+
+  <div class="install-block">
+    <div class="code-block">
+      <div class="code-header">
+        <span>terminal</span>
+        <span style="color: var(--accent3);">pip</span>
+      </div>
+      <div class="code-body">
+<span class="kw">$</span> pip install <span class="str">tollama-trust-intelligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label" style="color: #a78bfa;">// Get Started</div>
+  <h2>Every AI decision,<br>verified.</h2>
+  <p>Production-ready trust layer for AI systems. Open source.</p>
+  <div class="hero-buttons" style="justify-content: center;">
+    <a href="https://github.com/tollama/tollama-trust-intelligence" class="btn-primary" target="_blank" rel="noreferrer">
+      View on GitHub &#8599;
+    </a>
+    <a href="/" class="btn-secondary">&#8592; Back to Tollama AI</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">Tollama AI</div>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/product/tollama.html">tollama product</a></li>
+      <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
+      <li><a href="/product/forecasting-evaluator-agent.html">tollama-eval</a></li>
+      <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
+      <li><a href="https://github.com/tollama/tollama-trust-intelligence">GitHub</a></li>
+    </ul>
+  </div>
+  <div class="footer-right">
+    &copy; 2026 Tollama AI
+  </div>
+</footer>
+
+</body>
+</html>
