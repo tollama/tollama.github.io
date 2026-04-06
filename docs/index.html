@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tollama AI — Forecasting Stack</title>
+  <title>Tollama AI — Core + Trust for Forecast-Driven Workflows</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
@@ -814,7 +814,7 @@
   <section class="hero">
     <div class="badge">
       <span class="badge-dot"></span>
-      AI-Powered Forecasting · Python 3.11+
+      Core + Trust · Forecast-Driven Workflows
     </div>
 
     <h1>
@@ -822,12 +822,14 @@
     </h1>
 
     <p class="hero-headline">
-      The AI stack that serves<br>forecasting models and picks the best one.
+      Forecast-driven decisions<br>need evidence first.
     </p>
 
     <p class="hero-sub">
-      Tollama AI combines <strong>time series model serving</strong> with <strong>rigorous evaluation</strong> —
-      powered by autonomous agents that forecast, benchmark, and select the right model for production.
+      <strong>Tollama Core</strong> preprocesses irregular series, runs forecasts,
+      benchmarks models, and routes future requests from evidence.
+      <strong>Tollama Trust</strong> decides whether those outputs are reliable
+      enough to act on in production workflows.
     </p>
 
     <div class="hero-buttons">
@@ -842,8 +844,9 @@
       <div class="section-label">// The Problem</div>
       <div class="section-title">Forecasting is<br>fragmented.</div>
       <p class="section-desc">
-        Teams waste weeks wiring up incompatible model runtimes, writing one-off evaluation notebooks, and guessing
-        which model works best. There is no standard way to serve, evaluate, or select time series models.
+        Teams still stitch together preprocessing, model serving, one-off
+        benchmarks, and trust decisions by hand. There is rarely one clear path
+        from irregular series to an auditable production action.
       </p>
 
       <div class="problem-grid">
@@ -860,10 +863,10 @@
             No standardized way to compare models on your data.</p>
         </div>
         <div class="problem-card">
-          <div class="problem-num">03 / Selection</div>
-          <div class="problem-title">Guesswork in production.</div>
-          <p class="problem-desc">Without rigorous backtesting, teams deploy the wrong model — or never deploy at all.
-            Model selection stays manual and error-prone.</p>
+          <div class="problem-num">03 / Decision Risk</div>
+          <div class="problem-title">Low-confidence outputs still reach action.</div>
+          <p class="problem-desc">Even when a forecast exists, teams often lack a consistent way to score trust,
+            trigger review, or write an audit trail before acting on it.</p>
         </div>
       </div>
     </div>
@@ -871,11 +874,13 @@
 
   <!-- FLAGSHIP PRODUCTS -->
   <section id="products" class="section">
-    <div class="section-label">// The Stack</div>
-    <div class="section-title">Two products.<br>One complete platform.</div>
+    <div class="section-label">// Products</div>
+    <div class="section-title">Two products.<br>One forecast-decision stack.</div>
     <p class="section-desc">
-      tollama serves the models. tollama-eval finds the best one. Together, they are the complete
-      forecasting stack.
+      <strong>Tollama Core</strong> is the OSS front door for
+      <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">preprocess -&gt; forecast -&gt; benchmark -&gt; route</code>.
+      <strong>Tollama Trust</strong> decides whether those outputs are ready for
+      production action.
     </p>
 
     <div class="flagship-grid">
@@ -884,52 +889,36 @@
         style="--card-accent: #00d4ff; --card-glow: rgba(0, 212, 255, 0.08);">
         <span class="flagship-icon">⚡</span>
         <div class="flagship-status"><span class="status-dot"></span> Production</div>
-        <div class="flagship-name">tollama</div>
-        <div class="flagship-tagline">The runtime. Ollama for Time Series.</div>
+        <div class="flagship-name">Tollama Core</div>
+        <div class="flagship-tagline">The OSS front door for forecast evidence.</div>
         <p class="flagship-desc">
-          Unifies 7 TSFMs and 4 neural baselines behind one daemon, one SDK, one REST API, and first-class agent
-          pathways. Pull, serve, and query Chronos, TimesFM, Moirai, and more through a single interface.
+          Local-first time-series forecasting core for irregular-series
+          preprocessing, unified forecasting, benchmark artifacts, and
+          benchmark-backed routing defaults.
         </p>
         <div class="flagship-stats">
-          <span class="flagship-stat"><strong>11</strong> Models</span>
-          <span class="flagship-stat"><strong>42</strong> Endpoints</span>
-          <span class="flagship-stat"><strong>MCP</strong> + LangChain + A2A</span>
+          <span class="flagship-stat"><strong>Core</strong> OSS</span>
+          <span class="flagship-stat"><strong>Thin</strong> artifact bundle</span>
+          <span class="flagship-stat"><strong>Route</strong> from evidence</span>
         </div>
         <div class="flagship-cta">Learn more →</div>
-      </a>
-
-      <!-- tollama-eval -->
-      <a class="flagship-card" href="/product/forecasting-evaluator-agent.html"
-        style="--card-accent: #f59e0b; --card-glow: rgba(245, 158, 11, 0.08);">
-        <span class="flagship-icon">🔬</span>
-        <div class="flagship-status" style="color: #f59e0b;">
-          <span class="status-dot" style="background: #f59e0b; box-shadow: 0 0 6px #f59e0b;"></span> Beta
-        </div>
-        <div class="flagship-name">tollama-eval</div>
-        <div class="flagship-tagline">The evaluator. Know which model works.</div>
-        <p class="flagship-desc">
-          Benchmarks 36+ models with expanding-window cross-validation, AutoML, leaderboard scoring, and reproducible
-          HTML/PDF reports. CLI, SDK, REST API, and campaign mode.
-        </p>
-        <div class="flagship-stats">
-          <span class="flagship-stat"><strong>36+</strong> Models</span>
-          <span class="flagship-stat"><strong>Expanding-Window</strong> CV</span>
-          <span class="flagship-stat"><strong>AutoML</strong> + Reports</span>
-        </div>
-        <div class="flagship-cta" style="color: #f59e0b;">Learn more →</div>
       </a>
 
       <!-- trust-intelligence -->
       <a class="flagship-card" href="/product/trust-intelligence.html" style="--card-accent: #7c3aed;">
         <span class="flagship-icon">🛡️</span>
         <div class="flagship-status" style="color: #7c3aed;"><span class="status-dot" style="background: #7c3aed;"></span> Production</div>
-        <div class="flagship-name">trust-intelligence</div>
-        <div class="flagship-tagline">The trust layer. Every AI decision, verified.</div>
-        <p class="flagship-desc">10-layer Decision Trust OS. L0 Control Plane, Conformal Prediction, SHAP, Constitutional Guard, Bayesian Trust Aggregation. EU AI Act + Korean AI Basic Act ready.</p>
+        <div class="flagship-name">Tollama Trust</div>
+        <div class="flagship-tagline">The decision-trust layer for forecast workflows.</div>
+        <p class="flagship-desc">Scores whether outputs are reliable enough to act on,
+          applies policy gates such as <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2)">allow</code>,
+          <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2)">review</code>,
+          and <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2)">block</code>,
+          and writes auditable trust records.</p>
         <div class="flagship-stats">
-          <span class="flagship-stat"><strong>10</strong> Layers</span>
-          <span class="flagship-stat"><strong>EU AI Act</strong> Ready</span>
-          <span class="flagship-stat"><strong>MCP</strong> + SDK</span>
+          <span class="flagship-stat"><strong>Trust</strong> scores</span>
+          <span class="flagship-stat"><strong>Policy</strong> gates</span>
+          <span class="flagship-stat"><strong>Audit</strong> trail</span>
         </div>
         <div class="flagship-cta" style="color: #7c3aed;">Learn more →</div>
       </a>
@@ -938,21 +927,33 @@
 
   <!-- ECOSYSTEM -->
   <section class="section" style="padding-top: 10px;">
-    <div class="section-label">// Ecosystem</div>
-    <div class="section-title">Supporting tools.</div>
+    <div class="section-label">// Supporting Assets</div>
+    <div class="section-title">Supporting layers.<br>Not separate products.</div>
     <p class="section-desc">
-      Specialized forecasting and calibration tools built on the Tollama stack.
+      These assets strengthen the Core + Trust story, but they are not the
+      primary product entry points.
     </p>
 
     <div class="ecosystem-grid">
+      <a class="ecosystem-card" href="/product/forecasting-evaluator-agent.html" style="--card-accent: #f59e0b;">
+        <div class="ecosystem-header">
+          <span class="ecosystem-icon">🔬</span>
+          <span class="ecosystem-name">tollama-eval</span>
+          <span class="ecosystem-status"><span class="status-dot" style="background:#f59e0b;"></span> Beta</span>
+        </div>
+        <p class="ecosystem-desc">The richer benchmark layer behind Core artifacts. Use it when Core needs
+          broader model sweeps, richer reports, and deeper evaluation evidence.</p>
+        <div class="ecosystem-cta" style="color: #f59e0b;">View product →</div>
+      </a>
+
       <a class="ecosystem-card" href="/product/spline-lstm.html" style="--card-accent: #10b981;">
         <div class="ecosystem-header">
           <span class="ecosystem-icon">🧠</span>
           <span class="ecosystem-name">spline-lstm</span>
           <span class="ecosystem-status"><span class="status-dot"></span> Production</span>
         </div>
-        <p class="ecosystem-desc">Spline + LSTM/GRU forecasting pipeline with rolling-window CV, FastAPI server, React
-          dashboard, and agent-ready integrations.</p>
+        <p class="ecosystem-desc">Preprocessing lineage and spline differentiation for irregular-series cleanup,
+          interpolation, and window preparation.</p>
         <div class="ecosystem-cta">View product →</div>
       </a>
 
@@ -962,8 +963,8 @@
           <span class="ecosystem-name">Market Calibration Agent</span>
           <span class="ecosystem-status"><span class="status-dot"></span> Production</span>
         </div>
-        <p class="ecosystem-desc">Trust score for prediction markets. Calibration analysis, statistical metrics, and
-          TSFM inference on Polymarket probabilities.</p>
+        <p class="ecosystem-desc">Hero wedge for trust-aware market workflows. Calibration analysis and market signal
+          trust scoring connect Core forecasts to real decision contexts.</p>
         <div class="ecosystem-cta" style="color: #7c3aed;">View product →</div>
       </a>
     </div>
@@ -974,42 +975,41 @@
     <div class="section-label">// Roadmap</div>
     <div class="section-title">What's next.</div>
     <p class="section-desc">
-      The next layer of the Tollama AI stack — expanding from local runtimes to cloud orchestration, continuous
-      monitoring, and multi-agent memory.
+      The next priority is not more breadth. It is making Core easier to demo,
+      Trust easier to attach, and benchmark evidence easier to operationalize.
     </p>
 
     <div class="upcoming-grid">
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
-        <div class="upcoming-title">Tollama Cloud</div>
-        <p class="upcoming-desc">Hosted daemon with managed API gateway, model serving, and usage metering — no local
-          setup required.</p>
+        <div class="upcoming-title">Core Workflow Hardening</div>
+        <p class="upcoming-desc">Fewer steps from install to first successful
+          <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">preprocess -&gt; forecast -&gt; benchmark -&gt; route</code>
+          run.</p>
       </div>
 
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
         <div class="upcoming-title">Continuous Evaluation</div>
-        <p class="upcoming-desc">Scheduled benchmark runs, regression checks, and release gating for forecasting
-          systems.</p>
+        <p class="upcoming-desc">Scheduled benchmark runs, regression checks, and release gating for forecast systems.</p>
       </div>
 
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
-        <div class="upcoming-title">Agent Framework SDKs</div>
-        <p class="upcoming-desc">MCP Server, OpenAI Agents SDK, Claude Agent SDK, LangGraph integration wrappers for trust pipeline.</p>
+        <div class="upcoming-title">Trust Attach-On</div>
+        <p class="upcoming-desc">A smaller, clearer Trust surface that reads as a decision layer on top of Core evidence.</p>
       </div>
 
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
-        <div class="upcoming-title">Constitutional Guard</div>
-        <p class="upcoming-desc">Value-based guardrails beyond formal rules. Fairness, transparency, and human oversight verification.</p>
+        <div class="upcoming-title">Hero Market Demo</div>
+        <p class="upcoming-desc">A visible end-to-end demo that connects preprocessing quality, forecast output, trust score, and gate result.</p>
       </div>
 
       <div class="upcoming-card">
         <div class="upcoming-badge">UPCOMING</div>
-        <div class="upcoming-title">Unified Agent Orchestrator</div>
-        <p class="upcoming-desc">Cross-agent planning, shared memory, and task lifecycle management — connecting
-          forecasting, calibration, and coding agents into coherent workflows.</p>
+        <div class="upcoming-title">Website and One-Pager Alignment</div>
+        <p class="upcoming-desc">Keep the public story pinned to Core + Trust and demote anything that reads like portfolio sprawl.</p>
       </div>
     </div>
   </section>
@@ -1018,8 +1018,8 @@
   <section class="cta-section">
     <div class="cta-glow"></div>
     <div class="section-label">// Get Started</div>
-    <h2>Run forecasts, simply.<br>Evaluate at scale.</h2>
-    <p>Start building with the Tollama AI stack. Deploy forecasting agents with confidence.</p>
+    <h2>Start with Core.<br>Attach Trust when ready.</h2>
+    <p>Build forecast-driven workflows from benchmark-backed evidence first, then add decision trust where action risk matters.</p>
     <div class="repo-links">
       <a href="https://github.com/tollama/tollama" target="_blank" rel="noreferrer">tollama/tollama</a>
       <a href="https://github.com/tollama/tollama-eval" target="_blank" rel="noreferrer">tollama/tollama-eval</a>
@@ -1039,7 +1039,8 @@
       <div class="footer-logo">Tollama AI</div>
       <ul class="footer-links">
         <li><a href="https://github.com/tollama" target="_blank" rel="noreferrer">GitHub</a></li>
-        <li><a href="/product/tollama.html">tollama</a></li>
+        <li><a href="/product/tollama.html">Tollama Core</a></li>
+        <li><a href="/product/trust-intelligence.html">Tollama Trust</a></li>
         <li><a href="/product/forecasting-evaluator-agent.html">tollama-eval</a></li>
         <li><a href="/product/spline-lstm.html">spline-lstm</a></li>
         <li><a href="/product/market-calibration-agent.html">Market Calibration Agent</a></li>
