@@ -1128,15 +1128,16 @@
   <h1>tollama</h1>
 
   <p class="hero-tagline">
-    <strong>Local-first time series forecasting core.</strong><br>
-    Preprocess irregular series, benchmark models, and route forecast workloads through one API.
+    <strong>Benchmark-backed hourly demand forecasting core.</strong><br>
+    Preprocess irregular series, benchmark models, and route operational forecast workloads through one API.
   </p>
 
   <p class="hero-sub">
     Time-series forecasting is still fragmented across incompatible runtimes,
     ad hoc preprocessing, and weak production evidence. tollama Core turns that
-    into one workflow: preprocess, forecast, benchmark, and route from
-    benchmark-backed evidence.
+    into one opinionated workflow for operations teams: preprocess, forecast,
+    benchmark, and route from benchmark-backed evidence, with a checked-in
+    hourly-demand demo path and a thin artifact bundle.
   </p>
 
   <div class="hero-buttons">
@@ -1201,12 +1202,12 @@
       </div>
       <div class="output">Pulling model, running forecast demo, printing next Core steps...</div>
       <br>
-      <div class="comment"># Benchmark and write routing evidence</div>
+      <div class="comment"># Run the hourly-demand concrete solution path</div>
       <div class="cmd-line">
         <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> benchmark examples/benchmark_data.json --models mock --horizon 4 --folds 1 --output artifacts/benchmarks/demo</span>
+        <span class="cmd">USE_CHECKED_IN_INPUT=1 MODELS=mock <span class="highlight-cmd">bash</span> examples/core_concrete_solution_demo.sh</span>
       </div>
-      <div class="success">result.json · routing.json · leaderboard.csv</div>
+      <div class="success">result.json · routing.json · leaderboard.csv · summary.md</div>
     </div>
   </div>
 </div>
@@ -1215,7 +1216,7 @@
 <section id="quickstart" class="section quickstart-section">
   <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
   <p class="section-desc" style="max-width: 820px;">
-    Install the Core path, start the daemon, and run the full evidence loop in under five minutes.
+    Install the Core path, start the daemon, and run the hourly-demand concrete solution in under five minutes.
   </p>
 
   <div class="quickstart-grid">
@@ -1243,19 +1244,20 @@ tollama info --json</code></pre>
     </div>
 
     <div class="qs-card">
-      <div class="qs-step-title">3) Run the guided demo</div>
+      <div class="qs-step-title">3) Run the concrete-solution demo</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
         <pre><code># terminal 2
 tollama quickstart
-tollama benchmark examples/benchmark_data.json --models mock --horizon 4 --folds 1 --output artifacts/benchmarks/demo
-tollama routing apply artifacts/benchmarks/demo/result.json
-tollama routing show</code></pre>
+USE_CHECKED_IN_INPUT=1 MODELS=mock bash examples/core_concrete_solution_demo.sh
+tollama routing show artifacts/core-solution/benchmark/result.json --json</code></pre>
       </div>
 
       <p class="qs-note">
-        Human-friendly progress is enabled automatically on interactive terminals. Full setup, models, troubleshooting, and the canonical Core workflow live in the upstream repo:
-        <a href="https://github.com/tollama/tollama/blob/main/README.md" target="_blank" rel="noreferrer">README.md</a>.
+        Human-friendly progress is enabled automatically on interactive terminals. The upstream repo now includes a checked-in hourly benchmark input, a concrete-solution walkthrough, and an expected artifact bundle:
+        <a href="https://github.com/tollama/tollama/blob/main/docs/concrete-solution.md" target="_blank" rel="noreferrer">docs/concrete-solution.md</a>
+        and
+        <a href="https://github.com/tollama/tollama/tree/main/examples/core_solution_expected_output" target="_blank" rel="noreferrer">examples/core_solution_expected_output</a>.
       </p>
     </div>
   </div>
@@ -1309,27 +1311,28 @@ print(forecast.to_df())</code></pre>
       <span class="interface-badge">Benchmark</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama benchmark examples/benchmark_data.json \
-  --models mock \
-  --horizon 4 \
-  --folds 1 \
-  --output artifacts/benchmarks/demo</code></pre>
+        <pre><code>tollama benchmark examples/core_solution_hourly_input.json \
+  --models chronos2,granite-ttm-r2,timesfm-2.5-200m,moirai-2.0-R-small \
+  --horizon 24 \
+  --folds 2 \
+  --output artifacts/core-solution/benchmark</code></pre>
       </div>
-      <p class="qs-note">Core benchmark output is intentionally thin: <code class="inline-code">result.json</code>, <code class="inline-code">routing.json</code>, and <code class="inline-code">leaderboard.csv</code>.</p>
+      <p class="qs-note">Core benchmark output is intentionally thin: <code class="inline-code">result.json</code>, <code class="inline-code">routing.json</code>, <code class="inline-code">leaderboard.csv</code>, and the operator-facing <code class="inline-code">summary.md</code>.</p>
     </div>
 
     <div class="qs-card">
       <span class="interface-badge">Route</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama routing apply artifacts/benchmarks/demo/result.json
+        <pre><code>tollama routing apply artifacts/core-solution/benchmark/result.json
+tollama routing show artifacts/core-solution/benchmark/result.json --json
 
 python -c "from tollama import Tollama; \
 sdk = Tollama(); \
 resp = sdk.auto_forecast(series={'target':[10,11,12,13,14],'freq':'D'}, horizon=3, mode='high_accuracy'); \
 print(resp.selection.chosen_model)"</code></pre>
       </div>
-      <p class="qs-note">Routing turns benchmark evidence into reusable defaults like <code class="inline-code">default</code>, <code class="inline-code">fast_path</code>, and <code class="inline-code">high_accuracy</code>.</p>
+      <p class="qs-note">Routing turns benchmark evidence into reusable defaults like <code class="inline-code">default</code>, <code class="inline-code">fast_path</code>, and <code class="inline-code">high_accuracy</code>, while preserving lane rationale for later Trust attachment.</p>
     </div>
   </div>
 </section>

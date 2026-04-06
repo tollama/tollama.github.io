@@ -33,6 +33,7 @@ The site is being aligned to present Tollama as `Core + Trust` for
 forecast-driven time-series workflows, with:
 
 - a landing page and product pages centered on the Core-first workflow
+- a public `Tollama Core` story centered on benchmark-backed hourly demand forecasting
 - a `tollama` product page for the OSS Core front door
 - a `spline-lstm` page for preprocessing differentiation and lineage
 - a `Market Calibration Agent` page for the hero trust wedge
