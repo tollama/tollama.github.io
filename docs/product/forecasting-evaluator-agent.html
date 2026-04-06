@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forecasting Evaluator Agent | Tollama AI</title>
+<title>tollama-eval | Tollama AI</title>
 <meta name="description" content="Benchmark forecasting models, compare 36+ statistical, ML, neural, and TSFM options, and select the right model for production with reproducible reports.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -705,26 +705,32 @@
   <div class="breadcrumb">
     <a href="/">Tollama AI</a>
     <span>/</span>
-    <span style="color: #fbbf24;">Forecasting Evaluator Agent</span>
+    <span style="color: #fbbf24;">tollama-eval</span>
   </div>
 
   <div class="badge">
     <span class="badge-dot"></span>
-    Beta &middot; 36+ Models &middot; Tollama-native
+    Benchmark Engine &middot; 36+ Models &middot; Tollama-native
   </div>
 
   <h1>
-    <span class="grad">Forecasting Evaluator</span><br>
-    Agent
+    <span class="grad">tollama-eval</span><br>
+    benchmark engine
   </h1>
 
   <p class="hero-tagline">
-    <strong>Benchmark forecasting models. Select the right one for production.</strong><br>
-    Expanding-window CV, AutoML, leaderboard scoring, and reproducible reports.
+    <strong>Deeper benchmark evidence for Tollama Core.</strong><br>
+    Cross-validated leaderboards, rich reports, and stable artifacts for model selection.
   </p>
 
   <p class="hero-sub">
-    Forecasting Evaluator Agent is the evaluation layer of the Tollama stack. It benchmarks statistical, ML, neural, and Tollama-powered foundation models with expanding-window cross-validation, structured scoring, and reproducible reporting.
+    <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">tollama-eval</code>
+    is the richer benchmark layer behind the Tollama Core workflow. Use Core
+    for the thin
+    <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">preprocess -&gt; forecast -&gt; benchmark -&gt; route</code>
+    loop. Use <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">tollama-eval</code>
+    when you need broader model coverage, richer artifacts, and deeper
+    evaluation analysis.
   </p>
 
   <div class="hero-buttons">
@@ -900,8 +906,8 @@
 <!-- DEVELOPER INTERFACES -->
 <section id="interfaces" class="section" style="padding-top: 10px;">
   <div class="section-label">// Developer Interfaces</div>
-  <div class="section-title">4 ways to access.<br>One evaluation layer.</div>
-  <p class="section-desc">Use the interface that fits your workflow — from one-off local benchmarking to remote execution across multiple datasets.</p>
+  <div class="section-title">Use when Core needs<br>deeper evidence.</div>
+  <p class="section-desc">The thin Core bundle is enough for routing and local evidence loops. Reach for <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">tollama-eval</code> when you need larger model sweeps, richer reports, and campaign-style benchmarking.</p>
 
   <div class="features-grid">
     <div class="feature-card">
@@ -979,9 +985,14 @@ tollama-eval campaign \<br>
 <!-- BUILT ON TOLLAMA -->
 <section class="section">
   <div class="section-label">// Tollama Integration</div>
-  <div class="section-title">tollama is the runtime.<br>This is the evaluation layer.</div>
+  <div class="section-title">tollama is the Core runtime.<br>This is the richer benchmark layer.</div>
   <p class="section-desc">
-    Use tollama to pull and serve TSFMs through one API. Use Forecasting Evaluator Agent to compare those models against statistical, ML, and neural alternatives — then select the right model for production.
+    Use tollama Core to preprocess, forecast, benchmark, and route with the thin
+    artifact set. Use <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">tollama-eval</code> to compare those models against
+    statistical, ML, and neural alternatives with richer outputs like
+    <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">results.json</code>,
+    <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">details.json</code>,
+    and <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">report.html</code>.
   </p>
 
   <div class="features-grid" style="margin-top: 40px;">
@@ -1007,7 +1018,7 @@ tollama-eval campaign \<br>
 <section class="section">
   <div class="section-label">// Roadmap</div>
   <div class="section-title">What comes next.</div>
-  <p class="section-desc">The next step is continuous evaluation — moving from one-off benchmarking to persistent model governance.</p>
+  <p class="section-desc">The next step is continuous evaluation — moving from one-off benchmarking to persistent benchmark evidence and release gating.</p>
 
   <div class="roadmap-grid">
     <div class="roadmap-card">

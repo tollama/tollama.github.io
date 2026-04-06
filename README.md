@@ -1,13 +1,13 @@
 # Tollama AI Website
 
-Static marketing site and product microsite bundle for Tollama AI.
+Static marketing site and product microsite bundle for Tollama Core + Trust.
 
-This repository is the GitHub Pages site for [www.tollama.com](https://www.tollama.com). It contains the landing page plus product pages for the current Tollama AI stack:
+This repository is the GitHub Pages site for [www.tollama.com](https://www.tollama.com). It contains the landing page plus product pages for the current Tollama Core + Trust story:
 
-- `tollama`: TSFM runtime and unified forecasting API
-- `spline-lstm`: spline + LSTM/GRU forecasting pipeline
-- `Market Calibration Agent`: prediction-market calibration and trust scoring
-- `tollama-eval`: forecasting evaluator and benchmarking layer
+- `tollama`: the Core OSS front door for preprocess, forecast, benchmark, and route
+- `spline-lstm`: preprocessing lineage and spline differentiation
+- `Market Calibration Agent`: hero wedge for trust-aware market workflows
+- `tollama-eval`: the richer benchmarking and evaluation layer behind Core artifacts
 
 The previous `README.md` described the `tollama` Python package. That is no longer what this repository contains. This repo is now the website source only.
 
@@ -29,13 +29,14 @@ All pages are hand-authored static HTML with inline CSS. There is no build step,
 
 ## Current Content
 
-The site currently presents Tollama AI as an AI platform for predictive industries with:
+The site is being aligned to present Tollama as `Core + Trust` for
+forecast-driven time-series workflows, with:
 
-- a landing page covering platform, agents, solutions, roadmap, and open source positioning
-- a `tollama` product page for the forecasting runtime
-- a `spline-lstm` product page for the neural forecasting pipeline
-- a `Market Calibration Agent` page for prediction-market trust scoring
-- a newly added `Forecasting Evaluator Agent` page for `tollama-eval`
+- a landing page and product pages centered on the Core-first workflow
+- a `tollama` product page for the OSS Core front door
+- a `spline-lstm` page for preprocessing differentiation and lineage
+- a `Market Calibration Agent` page for the hero trust wedge
+- a `Forecasting Evaluator Agent` page that explains `tollama-eval` as the deeper benchmark layer
 
 ## Local Preview
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tollama — Ollama for Time Series | Tollama AI</title>
+<title>tollama Core | Tollama AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1122,18 +1122,21 @@
 
   <div class="badge">
     <span class="badge-dot"></span>
-    11 Models · Python 3.11+
+    Core Workflow · Python 3.11+
   </div>
 
   <h1>tollama</h1>
 
   <p class="hero-tagline">
-    <strong>Ollama for Time Series.</strong><br>
-    Run TSFMs and neural baselines with a single API.
+    <strong>Local-first time series forecasting core.</strong><br>
+    Preprocess irregular series, benchmark models, and route forecast workloads through one API.
   </p>
 
   <p class="hero-sub">
-    Time series forecasting is still fragmented across incompatible runtimes, conflicting dependencies, and per-model wrappers. tollama now unifies 7 TSFMs and 4 neural baselines behind one daemon, one SDK, one REST API, and first-class agent pathways.
+    Time-series forecasting is still fragmented across incompatible runtimes,
+    ad hoc preprocessing, and weak production evidence. tollama Core turns that
+    into one workflow: preprocess, forecast, benchmark, and route from
+    benchmark-backed evidence.
   </p>
 
   <div class="hero-buttons">
@@ -1166,9 +1169,9 @@
         <div class="problem-desc">torch 2.x and JAX fight over GPU memory allocation. Different CUDA requirements per family make unified environments impossible without isolation.</div>
       </div>
       <div class="problem-card">
-        <div class="problem-num">04 / AGENT FRICTION</div>
-        <div class="problem-title">LLMs can't call forecast models.</div>
-        <div class="problem-desc">No standard tool interface for AI agents to discover, invoke, and chain time series forecasts. MCP, LangChain, A2A integrations must be built per model.</div>
+        <div class="problem-num">04 / NO EVIDENCE LOOP</div>
+        <div class="problem-title">Teams still guess which model to trust.</div>
+        <div class="problem-desc">Without repeatable benchmarks and routing artifacts, production model choice becomes a manual judgment call instead of an evidence-backed workflow.</div>
       </div>
     </div>
   </div>
@@ -1191,19 +1194,19 @@
       </div>
       <div class="success">✓ Daemon running at http://127.0.0.1:11435</div>
       <br>
-      <div class="comment"># Pull a model from the registry</div>
+      <div class="comment"># Pull and validate the Core path</div>
       <div class="cmd-line">
         <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> pull chronos2</span>
+        <span class="cmd"><span class="highlight-cmd">tollama</span> quickstart</span>
       </div>
-      <div class="output">Pulling chronos2 from Hugging Face... ████████████ 100%</div>
+      <div class="output">Pulling model, running forecast demo, printing next Core steps...</div>
       <br>
-      <div class="comment"># Run a forecast</div>
+      <div class="comment"># Benchmark and write routing evidence</div>
       <div class="cmd-line">
         <span class="prompt">$</span>
-        <span class="cmd"><span class="highlight-cmd">tollama</span> run chronos2 --input request.json</span>
+        <span class="cmd"><span class="highlight-cmd">tollama</span> benchmark examples/benchmark_data.json --models mock --horizon 4 --folds 1 --output artifacts/benchmarks/demo</span>
       </div>
-      <div class="success">{"forecast": [[12.4, 13.1, 11.8, 14.2, 13.6, 12.9, 14.8]]}</div>
+      <div class="success">result.json · routing.json · leaderboard.csv</div>
     </div>
   </div>
 </div>
@@ -1212,7 +1215,7 @@
 <section id="quickstart" class="section quickstart-section">
   <div class="section-title" style="font-size: 44px; margin-bottom: 14px;">Quickstart</div>
   <p class="section-desc" style="max-width: 820px;">
-    Install tollama, start the daemon, and run the built-in pull plus forecast demo in under five minutes.
+    Install the Core path, start the daemon, and run the full evidence loop in under five minutes.
   </p>
 
   <div class="quickstart-grid">
@@ -1220,10 +1223,7 @@
       <div class="qs-step-title">1) Install</div>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>python -m pip install tollama
-
-# optional dashboard extras:
-python -m pip install "tollama[tui]"
+        <pre><code>python -m pip install "tollama[eval,preprocess]"
 
 # from source (dev):
 python -m pip install -e ".[dev]"</code></pre>
@@ -1248,19 +1248,13 @@ tollama info --json</code></pre>
         <button class="copy-btn" type="button">Copy</button>
         <pre><code># terminal 2
 tollama quickstart
-
-# or pull and run manually
-tollama pull chronos2
-tollama run chronos2 --input examples/chronos2_request.json
-
-# stable API route
-curl -s http://localhost:11435/v1/forecast \
-  -H 'content-type: application/json' \
-  -d @examples/chronos2_request.json</code></pre>
+tollama benchmark examples/benchmark_data.json --models mock --horizon 4 --folds 1 --output artifacts/benchmarks/demo
+tollama routing apply artifacts/benchmarks/demo/result.json
+tollama routing show</code></pre>
       </div>
 
       <p class="qs-note">
-        Human-friendly progress is enabled automatically on interactive terminals. Full setup, models, troubleshooting, and API docs live in the upstream repo:
+        Human-friendly progress is enabled automatically on interactive terminals. Full setup, models, troubleshooting, and the canonical Core workflow live in the upstream repo:
         <a href="https://github.com/tollama/tollama/blob/main/README.md" target="_blank" rel="noreferrer">README.md</a>.
       </p>
     </div>
@@ -1269,74 +1263,73 @@ curl -s http://localhost:11435/v1/forecast \
 
 <!-- DEVELOPER INTERFACES -->
 <section id="interfaces" class="section quickstart-section" style="padding-top: 20px;">
-  <div class="section-label">// Developer Interfaces</div>
-  <div class="section-title">4 ways to access.<br>One unified platform.</div>
+  <div class="section-label">// Core Workflow</div>
+  <div class="section-title">4 Core actions.<br>One evidence loop.</div>
   <p class="section-desc" style="max-width: 820px;">
-    Python SDK, REST API, CLI, and dashboards all sit on the same daemon and canonical forecast contract.
+    The first-touch story is not platform breadth. It is one operational loop:
+    preprocess irregular series, forecast, benchmark, and route future requests.
   </p>
 
   <div class="quickstart-grid">
     <div class="qs-card">
-      <span class="interface-badge">Python SDK</span>
+      <span class="interface-badge">Preprocess</span>
+      <div class="code-panel">
+        <button class="copy-btn" type="button">Copy</button>
+        <pre><code>import numpy as np
+from tollama.preprocess import PreprocessConfig, run_pipeline
+
+x = np.arange(48, dtype=float)
+y = np.sin(x * 0.15) * 10
+y[[7, 19, 33]] = np.nan
+
+result = run_pipeline(x, y, config=PreprocessConfig(lookback=12, horizon=4))
+print(result.X.shape, result.y.shape)</code></pre>
+      </div>
+      <p class="qs-note">Spline-based preprocessing is the Core differentiator for irregular series with gaps, smoothing needs, and leakage-safe window generation.</p>
+    </div>
+
+    <div class="qs-card">
+      <span class="interface-badge">Forecast</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
         <pre><code>from tollama import Tollama
 
-with Tollama() as sdk:
-    flow = (
-        sdk.workflow(series={"target": [10, 11, 12, 13, 14], "freq": "D"})
-        .analyze()
-        .auto_forecast(horizon=3)
-    )
-
-print(flow.auto_forecast_result.selection.chosen_model)</code></pre>
+sdk = Tollama()
+forecast = sdk.forecast(
+    model="chronos2",
+    series={"target": [10, 11, 12, 13, 14], "freq": "D"},
+    horizon=3,
+)
+print(forecast.to_df())</code></pre>
       </div>
-      <p class="qs-note">The upstream SDK now exposes 16 methods, DataFrame conversion, chained workflows, and follow-on helpers like <code class="inline-code">then_compare()</code>.</p>
+      <p class="qs-note">Core keeps the forecast contract stable across TSFMs and neural baselines, even when runtime dependencies differ per family.</p>
     </div>
 
     <div class="qs-card">
-      <span class="interface-badge">HTTP API · 42 endpoints</span>
+      <span class="interface-badge">Benchmark</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>curl -s http://localhost:11435/v1/forecast \
-  -H 'content-type: application/json' \
-  -d '{
-    "model": "chronos2",
-    "series": [{"target": [120, 135, 142], "freq": "D"}],
-    "horizon": 7
-  }'</code></pre>
+        <pre><code>tollama benchmark examples/benchmark_data.json \
+  --models mock \
+  --horizon 4 \
+  --folds 1 \
+  --output artifacts/benchmarks/demo</code></pre>
       </div>
-      <p class="qs-note">Beyond forecasting, the current API surface covers analyze, generate, compare, report, what-if, counterfactual, scenario-tree, modelfiles, ingest, A2A, and dashboard bootstrap routes.</p>
+      <p class="qs-note">Core benchmark output is intentionally thin: <code class="inline-code">result.json</code>, <code class="inline-code">routing.json</code>, and <code class="inline-code">leaderboard.csv</code>.</p>
     </div>
 
     <div class="qs-card">
-      <span class="interface-badge">CLI</span>
+      <span class="interface-badge">Route</span>
       <div class="code-panel">
         <button class="copy-btn" type="button">Copy</button>
-        <pre><code>tollama serve
-tollama quickstart
-tollama explain chronos2
-tollama runtime install --all
-tollama modelfile list
-tollama config keys</code></pre>
-      </div>
-      <p class="qs-note">Recent CLI additions include <code class="inline-code">doctor</code>, <code class="inline-code">open</code>, <code class="inline-code">dashboard</code>, <code class="inline-code">runtime</code>, <code class="inline-code">modelfile</code>, and <code class="inline-code">dev scaffold</code>.</p>
-    </div>
+        <pre><code>tollama routing apply artifacts/benchmarks/demo/result.json
 
-    <div class="qs-card">
-      <span class="interface-badge">Dashboards</span>
-      <div class="code-panel">
-        <button class="copy-btn" type="button">Copy</button>
-        <pre><code># Web dashboard (browser)
-tollama serve
-tollama open
-# → http://127.0.0.1:11435/dashboard
-
-# Terminal TUI
-python -m pip install "tollama[tui]"
-tollama dashboard</code></pre>
+python -c "from tollama import Tollama; \
+sdk = Tollama(); \
+resp = sdk.auto_forecast(series={'target':[10,11,12,13,14],'freq':'D'}, horizon=3, mode='high_accuracy'); \
+print(resp.selection.chosen_model)"</code></pre>
       </div>
-      <p class="qs-note">The bundled dashboard now ships with packaged static assets, auth-aware API routes, and an aggregated <code class="inline-code">/api/dashboard/state</code> bootstrap endpoint.</p>
+      <p class="qs-note">Routing turns benchmark evidence into reusable defaults like <code class="inline-code">default</code>, <code class="inline-code">fast_path</code>, and <code class="inline-code">high_accuracy</code>.</p>
     </div>
   </div>
 </section>
@@ -1344,8 +1337,8 @@ tollama dashboard</code></pre>
 <!-- MODELS -->
 <section id="models" class="section">
   <div class="section-label">// Model Registry</div>
-  <div class="section-title">11 forecasting backends.<br>One unified API.</div>
-  <p class="section-desc">The current upstream registry spans 7 TSFMs and 4 neural baselines. They all share the same CLI, SDK, HTTP, MCP, and A2A surface, while family runtimes stay isolated under <code class="inline-code">~/.tollama/runtimes/</code>.</p>
+  <div class="section-title">Forecasting backends.<br>One Core contract.</div>
+  <p class="section-desc">The upstream registry spans TSFMs and neural baselines that share the same Core CLI, SDK, and HTTP forecast contract while family runtimes stay isolated under <code class="inline-code">~/.tollama/runtimes/</code>.</p>
 
   <div class="models-grid">
     <div class="model-card" style="--card-color: #f59e0b;">
@@ -1491,9 +1484,9 @@ tollama dashboard</code></pre>
 
 <!-- AGENT INTEGRATIONS -->
 <section id="agents" class="section">
-  <div class="section-label">// AI Agent Integrations</div>
-  <div class="section-title">Built for agents.<br>5 integration pathways.</div>
-  <p class="section-desc">The upstream project explicitly targets both developers and AI agents: forecasts, analysis, comparison, and planning can all be invoked as tools over MCP, A2A, LangChain, or framework adapters.</p>
+  <div class="section-label">// Additional Integrations</div>
+  <div class="section-title">Available after Core.<br>5 integration pathways.</div>
+  <p class="section-desc">These integrations remain available, but they are intentionally secondary to the Core workflow. Start with preprocess, forecast, benchmark, and route first.</p>
 
   <div class="metrics-row">
     <div class="metric-chip">
@@ -1552,7 +1545,7 @@ tollama dashboard</code></pre>
       <p class="section-desc" style="margin-top: 16px;">The <code class="inline-code">tollamad</code> daemon supervises worker-per-family runtimes, keeps the public contract stable, and auto-bootstrap installs isolated venvs per backend when needed.</p>
 
       <ul class="tech-list">
-        <li class="tech-item"><span class="tech-badge">tollamad</span> Public daemon for forecast, analysis, pipeline, and lifecycle requests</li>
+        <li class="tech-item"><span class="tech-badge">tollamad</span> Public daemon for forecast, benchmark, routing, and lifecycle requests</li>
         <li class="tech-item"><span class="tech-badge">runtimes/</span> Per-family isolated venvs with auto-bootstrap under <code class="inline-code">~/.tollama/runtimes/</code></li>
         <li class="tech-item"><span class="tech-badge">JSON-lines</span> stdio RPC between daemon and runners</li>
         <li class="tech-item"><span class="tech-badge">SQLite</span> Per-key usage metering at <code class="inline-code">/api/usage</code></li>
